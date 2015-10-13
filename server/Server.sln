@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.ServiceInterface", "HomerunLeague.ServiceInterface\HomerunLeague.ServiceInterface.csproj", "{3D8A1683-9571-4EAE-B02C-56E29259C518}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.SelfHost", "HomerunLeague.SelfHost\HomerunLeague.SelfHost.csproj", "{72715423-8786-4697-930C-565FC598A716}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.ServiceModel", "HomerunLeague.ServiceModel\HomerunLeague.ServiceModel.csproj", "{6980A1AB-82BF-49DD-9857-A22A85B28153}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D8A1683-9571-4EAE-B02C-56E29259C518}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3D8A1683-9571-4EAE-B02C-56E29259C518}.Debug|x86.Build.0 = Debug|Any CPU
+		{3D8A1683-9571-4EAE-B02C-56E29259C518}.Release|x86.ActiveCfg = Release|Any CPU
+		{3D8A1683-9571-4EAE-B02C-56E29259C518}.Release|x86.Build.0 = Release|Any CPU
+		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Debug|x86.Build.0 = Debug|Any CPU
+		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Release|x86.ActiveCfg = Release|Any CPU
+		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Release|x86.Build.0 = Release|Any CPU
+		{72715423-8786-4697-930C-565FC598A716}.Debug|x86.ActiveCfg = Debug|x86
+		{72715423-8786-4697-930C-565FC598A716}.Debug|x86.Build.0 = Debug|x86
+		{72715423-8786-4697-930C-565FC598A716}.Release|x86.ActiveCfg = Release|x86
+		{72715423-8786-4697-930C-565FC598A716}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+EndGlobal

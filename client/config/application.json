@@ -1,0 +1,11 @@
+{
+    "name": "Homerun League",
+    "api": {
+        "endpoint": "http://localhost/api/"
+    },
+    "development": {
+        "api": {
+            "endpoint": "http://localhost:9001/api/"
+        }
+    }
+}

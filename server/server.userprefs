@@ -1,0 +1,12 @@
+﻿<Properties StartupItem="HomerunLeague.SelfHost/HomerunLeague.SelfHost.csproj" RefactoringSettings.EnableRefactorings="True">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HomerunLeague.SelfHost/SelfHost.cs">
+    <Files>
+      <File FileName="HomerunLeague.SelfHost/SelfHost.cs" Line="7" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
