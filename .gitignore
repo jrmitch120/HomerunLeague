@@ -6,6 +6,7 @@ Thumbs.db
 [Oo]bj/
 [Bb]in/
 *.user
+*.userprefs
 target/
 *.suo
 *.cache

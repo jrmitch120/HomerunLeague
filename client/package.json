@@ -1,18 +1,14 @@
 {
-  "name": "aurelia-skeleton-navigation",
-  "version": "0.18.1",
-  "description": "A starter kit for building a standard navigation-style app with Aurelia.",
+  "name": "Homerun League",
+  "version": "0.1.0",
+  "description": "Homerun league",
   "keywords": [
     "aurelia",
     "navigation",
     "skeleton"
   ],
-  "homepage": "http://aurelia.io",
-  "bugs": {
-    "url": "https://github.com/aurelia/skeleton-navigation/issues"
-  },
+  "homepage": "",
   "license": "MIT",
-  "author": "Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)",
   "main": "dist/main.js",
   "repository": {
     "type": "git",
@@ -55,10 +51,10 @@
   "jspm": {
     "dependencies": {
       "aurelia-animator-css": "github:aurelia/animator-css@^0.17.0",
-      "aurelia-binding": "github:aurelia/binding@^0.10.0",
+      "aurelia-binding": "github:aurelia/binding@^0.10.1",
       "aurelia-bootstrapper": "github:aurelia/bootstrapper@^0.18.0",
-      "aurelia-configuration": "github:vheissu/aurelia-configuration@^1.0.3",
-      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.11.0",
+      "aurelia-configuration": "github:derekpitt/Aurelia-Configuration@^1.0.4",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.11.2",
       "aurelia-event-aggregator": "github:aurelia/event-aggregator@^0.9.0",
       "aurelia-fetch-client": "github:aurelia/fetch-client@^0.3.0",
       "aurelia-framework": "github:aurelia/framework@^0.17.0",
@@ -66,7 +62,7 @@
       "aurelia-history-browser": "github:aurelia/history-browser@^0.9.0",
       "aurelia-http-client": "github:aurelia/http-client@^0.12.0",
       "aurelia-loader": "github:aurelia/loader@^0.10.0",
-      "aurelia-loader-default": "github:aurelia/loader-default@^0.11.0",
+      "aurelia-loader-default": "github:aurelia/loader-default@^0.11.2",
       "aurelia-logging": "github:aurelia/logging@^0.8.0",
       "aurelia-metadata": "github:aurelia/metadata@^0.9.0",
       "aurelia-path": "github:aurelia/path@^0.10.0",
@@ -74,8 +70,8 @@
       "aurelia-router": "github:aurelia/router@^0.13.0",
       "aurelia-task-queue": "github:aurelia/task-queue@^0.8.0",
       "aurelia-templating": "github:aurelia/templating@^0.16.0",
-      "aurelia-templating-binding": "github:aurelia/templating-binding@^0.16.0",
-      "aurelia-templating-resources": "github:aurelia/templating-resources@^0.16.0",
+      "aurelia-templating-binding": "github:aurelia/templating-binding@^0.16.1",
+      "aurelia-templating-resources": "github:aurelia/templating-resources@^0.16.1",
       "aurelia-templating-router": "github:aurelia/templating-router@^0.17.0",
       "bootstrap": "github:twbs/bootstrap@^3.3.4",
       "core-js": "npm:core-js@^0.9.4",

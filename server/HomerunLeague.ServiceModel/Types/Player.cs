@@ -10,7 +10,11 @@ namespace HomerunLeague.ServiceModel.Types
         [AutoIncrement]
         public int Id { get; set; }
 
+        [ForeignKey(typeof(Division))]
+        public int? DivisionId { get; set; }
+
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
     }
 }

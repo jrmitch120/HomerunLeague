@@ -38,6 +38,8 @@
     <Compile Include="Types\Player.cs" />
     <Compile Include="Players.cs" />
     <Compile Include="Types\Division.cs" />
+    <Compile Include="Divisions.cs" />
+    <Compile Include="Paging.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
