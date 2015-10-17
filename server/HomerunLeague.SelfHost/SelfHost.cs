@@ -21,7 +21,7 @@ namespace HomerunLeague.SelfHost
                 Plugins.Add(new CorsFeature());
 
                 container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory("../../../Database/leaguedata.sqlite",SqliteDialect.Provider));
-                container.Register<Paging>(new Paging(RequestContext.Instance.ToAbsoluteUri));
+                container.Register(new Paging(RequestContext.Instance.ToAbsoluteUri()));
 
                 using (var db = container.Resolve<IDbConnectionFactory>().Open())
                 {
