@@ -9,9 +9,9 @@ namespace HomerunLeague.GameEngine
 {
     public class GameEngine
     {
-        private IPlayerData _playerData;
+        private readonly IPlayerData _playerData;
 
-        private Services _services;
+        private readonly Services _services;
 
         public GameEngine(IPlayerData playerData, Services services)
         {

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ServiceStack;
-
+﻿using System.Collections.Generic;
 using HomerunLeague.ServiceModel.Types;
+using ServiceStack;
 
 namespace HomerunLeague.ServiceModel
 {

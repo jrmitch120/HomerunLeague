@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.OrmLite;
-
-using HomerunLeague.ServiceModel;
-using HomerunLeague.ServiceModel.Types;
 
 namespace HomerunLeague.ServiceInterface
 {

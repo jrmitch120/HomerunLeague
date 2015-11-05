@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.ServiceInterface", "HomerunLeague.ServiceInterface\HomerunLeague.ServiceInterface.csproj", "{3D8A1683-9571-4EAE-B02C-56E29259C518}"
@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.SelfHost", "H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.ServiceModel", "HomerunLeague.ServiceModel\HomerunLeague.ServiceModel.csproj", "{6980A1AB-82BF-49DD-9857-A22A85B28153}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunerLeauge.GameEngine", "HomerunerLeauge.GameEngine\HomerunerLeauge.GameEngine.csproj", "{C59690F9-3A59-4A72-84D1-60CC8C96F6C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.GameEngine", "HomerunLeague.GameEngine\HomerunLeague.GameEngine.csproj", "{C59690F9-3A59-4A72-84D1-60CC8C96F6C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
