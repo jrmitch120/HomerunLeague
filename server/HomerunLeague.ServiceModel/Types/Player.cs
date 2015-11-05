@@ -10,12 +10,28 @@ namespace HomerunLeague.ServiceModel.Types
         [AutoIncrement]
         public int Id { get; set; }
 
-        [ForeignKey(typeof(Division))]
-        public int? DivisionId { get; set; }
+        [Index(Unique=true)]
+        public int MlbId { get; set; }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        public int Weight { get; set; }
+
+        public int HeightFeet { get; set; }
+
+        public int HeightInches { get; set; }
+
+        public int JerseyNumber { get; set; }
+
+        public char Bats { get; set; }
+
+        public string PrimaryPosition { get; set; }
+
+        public bool Active { get; set; }
     }
 }
 

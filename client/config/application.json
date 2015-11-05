@@ -1,5 +1,6 @@
 {
     "name": "Homerun League",
+    "year": 2015,
     "api": {
         "endpoint": "http://localhost/api/"
     },

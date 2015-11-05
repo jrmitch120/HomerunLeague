@@ -32,6 +32,7 @@
     <Reference Include="ServiceStack.Interfaces">
       <HintPath>..\lib\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -39,7 +40,13 @@
     <Compile Include="Players.cs" />
     <Compile Include="Types\Division.cs" />
     <Compile Include="Divisions.cs" />
-    <Compile Include="Paging.cs" />
+    <Compile Include="Types\Team.cs" />
+    <Compile Include="Types\Teamate.cs" />
+    <Compile Include="Teams.cs" />
+    <Compile Include="Meta.cs" />
+    <Compile Include="Types\DivisionalPlayer.cs" />
+    <Compile Include="Admin.cs" />
+    <Compile Include="Types\ProcessingRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

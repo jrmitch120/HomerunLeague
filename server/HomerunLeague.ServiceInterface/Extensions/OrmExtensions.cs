@@ -11,17 +11,10 @@ namespace HomerunLeague.ServiceInterface
     {
         public static SqlExpression<T> PageTo<T>(this SqlExpression<T> expression, int page)
         {
-            expression.Offset = (page - 1)*Paging.PageSize;
-            expression.Rows = Paging.PageSize;
+            expression.Offset = (page - 1)*Meta.PageSize;
+            expression.Rows = Meta.PageSize;
 
             return expression;
-        }
-
-        public static string ToPagedSql<TNewPoco, TBasePoco>(
-            this JoinSqlBuilder<TNewPoco, TBasePoco> builder, int page)
-        {
-            // Hackaroo.
-            return (builder.ToSql() + " LIMIT {0} OFFSET {1}").Fmt(Paging.PageSize, (page - 1) * Paging.PageSize);
         }
 
         public static bool Search(this string target, string search)

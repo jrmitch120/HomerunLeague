@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using ServiceStack;
 using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel
 {
-    public class Paging
+    public abstract class PageableRequest
+    {
+        public int? Page { get; set; }
+    }
+
+    public class Meta
     {
         private readonly string _currentUrl;
 
-        public Paging(string currentUrl)
+        public Meta(string currentUrl)
         {
             _currentUrl = currentUrl;
         }
 
-        public static int PageSize = 1;
+        public static int PageSize = 2;
 
         [Description("Current page")]
         public int Page { get; set; }
@@ -22,7 +28,7 @@ namespace HomerunLeague.ServiceModel
         public long TotalCount { get; set; }
 
         [Description("Total pages")]
-        public long TotalPages { get { return (TotalCount + PageSize - 1) / PageSize; } }
+        public long TotalPages { get { return TotalCount == 0 ? 1 : (TotalCount + PageSize - 1) / PageSize; } }
 
         [Description("Link to next page of items [if available]")]
         public string NextPage 

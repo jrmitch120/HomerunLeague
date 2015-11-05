@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using ServiceStack;
 using ServiceStack.OrmLite;
 
@@ -9,22 +12,33 @@ namespace HomerunLeague.ServiceInterface
 {
     public class DivisionServices : Service
     {
-        private Paging _paging;
-
-        public DivisionServices(Paging paging)
+        
+        public GetDivisionsResponse Get(GetDivisions request) 
         {
-            _paging = paging;
-        }
-
-        public object Get(GetDivisions request) 
-        {
+            
             int page = request.Page ?? 1;
 
-            //var test = Db.Select<Division>(q => q.PageTo(page));
+            var query = Db.From<Division>().Where(q => q.Year == request.Year);
+
+            if (!request.IncludeInactive)
+                query.And(q => q.Active);
+
+            var divisions = Db.Select(query.PageTo(page));
+
+            divisions.ForEach(division =>
+                {   
+                    Db.Select<Player>(q => q.Join<Player,DivisionalPlayer>((player, divPlayer) => player.Id == divPlayer.PlayerId)
+                                            .Where<DivisionalPlayer>(divPlayer => divPlayer.DivisionId == division.Id))
+                                            .ForEach(player =>
+                                                {
+                                                    division.Players.Add(player);
+                                                });
+                });
+                    
             return new GetDivisionsResponse
             {
-                Divisions = Db.Select<Division>(q => q.PageTo(page)),
-                Paging = new Paging(Request.AbsoluteUri) { Page = page, TotalCount = Db.Count<Division>() }
+                Divisions = divisions,
+                Meta = new Meta(Request.AbsoluteUri) { Page = page, TotalCount = Db.Count<Division>(query) }
             };
         }
     }

@@ -2,4 +2,13 @@
 	<div class="container">
 		Team creation placeholder.
 	</div>
+	<div repeat.for="division of divisions">
+		<div>${division.Name}</div>
+		<div repeat.for="player of division.Players">		
+			<div>
+				<img src="http://m.mlb.com/shared/images/logos/32x32_cap/112@2x.png" style="padding:5px; border-radius:50%; border: 2px solid black; background-color: grey;" />
+				<button disabled.bind="$parent.division.selectedCount >= $parent.division.PlayerRequirment && !player.selected" class="btn btn-default btn-lg glyphicon" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'" click.delegate="$parent.$parent.togglePlayer($parent.division, player)"></button>${player.FirstName} ${player.LastName}
+			</div>
+		</div>
+	</div>
 </template>

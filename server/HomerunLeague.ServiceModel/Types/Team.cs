@@ -4,9 +4,9 @@ using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel.Types
 {
-    public class Division
+    public class Team
     {
-        public Division()
+        public Team()
         {
             Players = new List<Player>();
         }
@@ -18,13 +18,11 @@ namespace HomerunLeague.ServiceModel.Types
 
         public int Year { get; set; }
 
-        public string Description { get; set; }
+        public string Email { get; set; }
 
-        public int PlayerRequirment { get; set; }
+        public bool Paid { get; set; }
 
-        public bool Active { get; set; }
-
-        public int Order { get; set; }
+        public DateTime Created { get; set; }
 
         [Reference]
         public List<Player> Players { get; set; }
