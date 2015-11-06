@@ -13,12 +13,32 @@ namespace HomerunLeague.ServiceInterface
 {
     public class AdminServices : Service
     {
-        public AdminServices(PlayerServices playerServices)
+        public AdminServices()
         {
+
         }
 
-        public void Post(CreateProcessingRequest request)
+        public GetGameEventsResponse Get(GetGameEvents request)
         {
+            int page = request.Page ?? 1;
+
+            var query = Db.From<GameEvent>();
+
+            if (!request.IncludeCompleted)
+                query.And(q => q.Completed == null);
+
+            query.OrderByDescending(q => q.Created);
+
+            return new GetGameEventsResponse
+            {
+                GameEvents = Db.Select(query.PageTo(page)),
+                Meta = new Meta(Request != null ? Request.AbsoluteUri : string.Empty) { Page = page, TotalCount = Db.Count(query) }
+            };
+        }
+
+        public void Post(CreateGameEvent request)
+        {
+
         }
     }
 }

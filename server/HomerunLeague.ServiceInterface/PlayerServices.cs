@@ -35,15 +35,20 @@ namespace HomerunLeague.ServiceInterface
 
             var query = Db.From<Player>();
 
-            if (request.Active != null) 
-                query.And(q => q.Active == request.Active);
-
+            if (!request.IncludeInactive)
+                query.And(q => q.Active);
 
             return new GetPlayersResponse
             {
                 Players = Db.Select(query.PageTo(page)),
-                Meta = new Meta(Request.AbsoluteUri) { Page = page, TotalCount = Db.Count<Player>(query) }
+                Meta = new Meta(Request != null ? Request.AbsoluteUri : string.Empty) { Page = page, TotalCount = Db.Count(query) }
             };
+        }
+
+        public HttpResult Put(PutPlayers request)
+        {
+            Db.SaveAll(request.Players);
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
 	}
 }

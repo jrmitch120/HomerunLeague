@@ -1,9 +1,6 @@
-﻿using System;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack.DataAnnotations;
 
-using HomerunLeague.ServiceModel.Types;
-
-namespace HomerunLeague.ServiceModel
+namespace HomerunLeague.ServiceModel.Types
 {
     [CompositeIndex("PlayerId", "DivisionId", Unique = true)]
     public class DivisionalPlayer

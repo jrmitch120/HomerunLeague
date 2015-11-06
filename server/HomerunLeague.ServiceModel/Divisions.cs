@@ -13,7 +13,7 @@ namespace HomerunLeague.ServiceModel
         public bool IncludeInactive { get; set; }
     }
 
-    public class GetDivisionsResponse : IHasResponseStatus 
+    public class GetDivisionsResponse : IHasResponseStatus, IMeta
     {
         public Meta Meta { get; set; }
         public List<Division> Divisions { get; set; }

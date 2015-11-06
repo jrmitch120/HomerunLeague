@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -60,6 +60,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\HomerunLeague.GameEngine\HomerunLeague.GameEngine.csproj">
+      <Project>{C59690F9-3A59-4A72-84D1-60CC8C96F6C5}</Project>
+      <Name>HomerunLeague.GameEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomerunLeague.ServiceInterface\HomerunLeague.ServiceInterface.csproj">
       <Project>{3D8A1683-9571-4EAE-B02C-56E29259C518}</Project>
       <Name>HomerunLeague.ServiceInterface</Name>
@@ -70,6 +74,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sqlite3.dll" />
+    <None Include="sqlite3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

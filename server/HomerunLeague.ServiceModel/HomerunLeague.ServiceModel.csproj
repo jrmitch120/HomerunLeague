@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -46,10 +46,8 @@
     <Compile Include="Meta.cs" />
     <Compile Include="Types\DivisionalPlayer.cs" />
     <Compile Include="Admin.cs" />
-    <Compile Include="Types\ProcessingRequest.cs" />
+    <Compile Include="Types\GameEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Types\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

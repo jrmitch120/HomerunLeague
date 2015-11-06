@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Funq;
+using HomerunLeague.GameEngine;
+using HomerunLeague.GameEngine.Bios;
+using HomerunLeague.ServiceInterface;
+using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
-using HomerunLeague.ServiceInterface;
-using HomerunLeague.ServiceModel;
-using HomerunLeague.ServiceModel.Types;
 
 namespace HomerunLeague.SelfHost
 {
@@ -15,16 +20,24 @@ namespace HomerunLeague.SelfHost
 			public AppHost() 
                 : base("HttpListener Self-Host", typeof(PlayerServices).Assembly) {}
 
-			public override void Configure(Funq.Container container) 
-			{ 
+			public override void Configure(Container container)
+			{
                 Plugins.Add(new CorsFeature());
-
-                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory("../../../Database/leaguedata.sqlite",SqliteDialect.Provider));
+                
+                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../../Database/leaguedata.sqlite",SqliteDialect.Provider));
+                container.RegisterAutoWiredAs<MlbBioProvider, IBioData>();
 
                 using (var db = container.Resolve<IDbConnectionFactory>().Open())
                 {
-                    //db.CreateTableIfNotExists<Player>();
-                    db.DropAndCreateTables(new []{typeof(Division), typeof(Player), typeof(Team), typeof(Teamate), typeof(DivisionalPlayer)});
+                    //var tables =
+                        //Assembly.GetAssembly(typeof(Player))
+                        //    .GetTypes()
+                        //    .Where(t => t.IsClass && t.Namespace == "HomerunLeague.ServiceModel.Types");
+                            
+                    //db.DropAndCreateTables(tables.ToArray());
+
+                    db.DropAndCreateTables(typeof (Division), typeof (Player), typeof (Team), typeof (Teamate),
+                        typeof (DivisionalPlayer), typeof (GameEvent));
 
                     var divId1 = 
                     db.Insert(new Division{Name = "Ron Santo", PlayerRequirment = 2, Description = "First division test.", Year = DateTime.Now.Year, Order = 1, Active = true}, selectIdentity:true);                    
@@ -48,6 +61,12 @@ namespace HomerunLeague.SelfHost
                     db.Insert(new DivisionalPlayer{ DivisionId = (int)divId2, PlayerId = (int)pid4 });
                     db.Insert(new DivisionalPlayer{ DivisionId = (int)divId2, PlayerId = (int)pid5 });
 
+                    db.Insert(new GameEvent
+                    {
+                        Created = DateTime.Now,
+                        Action = GameAction.BioUpdate,
+                        Options = new BioUpdateOptions { IncludeInactive = true }
+                    });
 
                     var tid1 = db.Insert(new Team{ Name = "Test test 1", Year = DateTime.Now.Year });
                     tid1 = Convert.ToInt32(tid1);
@@ -55,6 +74,10 @@ namespace HomerunLeague.SelfHost
                     db.Insert(new Teamate{ PlayerId = (int)pid2, TeamId = (int)tid1 });
                 }
 
+                var game = new LeagueEngine(container.Resolve<IBioData>(),
+                    new Services(Container.Resolve<AdminServices>(), Container.Resolve<PlayerServices>()));
+
+                game.Start();
 			}
 
 		}

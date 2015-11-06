@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using ServiceStack;
 using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel
@@ -8,6 +7,11 @@ namespace HomerunLeague.ServiceModel
     public abstract class PageableRequest
     {
         public int? Page { get; set; }
+    }
+
+    public interface IMeta
+    {
+        Meta Meta { get; set; }
     }
 
     public class Meta
