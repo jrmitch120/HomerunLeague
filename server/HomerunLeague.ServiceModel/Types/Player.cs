@@ -5,7 +5,7 @@ namespace HomerunLeague.ServiceModel.Types
 {
     // Basic player data
     // http://m.mlb.com/lookup/json/named.player.bam?player_id=572140
-    public class Player 
+    public class Player : IAudit
     {
         [AutoIncrement]
         public int Id { get; set; }
@@ -32,6 +32,12 @@ namespace HomerunLeague.ServiceModel.Types
         public string PrimaryPosition { get; set; }
 
         public bool Active { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public DateTime Modified { get; set; }
+
+        
     }
 }
 

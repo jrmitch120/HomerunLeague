@@ -24,7 +24,7 @@ namespace HomerunLeague.GameEngine
             _bioData = bioData;
             _services = services;
 
-            _timer = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
+            _timer = new Timer(TimeSpan.FromSeconds(15).TotalMilliseconds);
             _timer.Elapsed += Run;
             _timer.AutoReset = true;
 

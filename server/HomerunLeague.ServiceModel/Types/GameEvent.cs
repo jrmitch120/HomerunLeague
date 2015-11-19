@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel.Types
 {
     // Game events carry meta about and action to be executed through the league engine.
-    public class GameEvent
+    public class GameEvent : IAudit
     {
         [AutoIncrement]
         public int Id { get; set; }
@@ -15,6 +14,8 @@ namespace HomerunLeague.ServiceModel.Types
         public object Options { get; set; }
 
         public DateTime Created { get; set; }
+
+        public DateTime Modified { get; set; }
 
         public DateTime? Completed { get; set; }
     }

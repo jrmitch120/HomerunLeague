@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Funq;
 using HomerunLeague.GameEngine;
 using HomerunLeague.GameEngine.Bios;
@@ -10,6 +7,7 @@ using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
+using ServiceStack.Text;
 
 namespace HomerunLeague.SelfHost
 {
@@ -22,20 +20,29 @@ namespace HomerunLeague.SelfHost
 
 			public override void Configure(Container container)
 			{
-                Plugins.Add(new CorsFeature());
                 
-                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../../Database/leaguedata.sqlite",SqliteDialect.Provider));
+                Plugins.Add(new CorsFeature());
+
+                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../../Database/leaguedata.sqlite", SqliteDialect.Provider));
                 container.RegisterAutoWiredAs<MlbBioProvider, IBioData>();
+			    JsConfig.IncludeTypeInfo = true;
+
+                OrmLiteConfig.InsertFilter = (dbCmd, row) =>
+                {
+                    var auditRow = row as IAudit;
+                    if (auditRow != null)
+                        auditRow.Created = auditRow.Modified = DateTime.UtcNow;
+                };
+
+                OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
+                {
+                    var auditRow = row as IAudit;
+                    if (auditRow != null)
+                        auditRow.Modified = DateTime.UtcNow;
+                };
 
                 using (var db = container.Resolve<IDbConnectionFactory>().Open())
                 {
-                    //var tables =
-                        //Assembly.GetAssembly(typeof(Player))
-                        //    .GetTypes()
-                        //    .Where(t => t.IsClass && t.Namespace == "HomerunLeague.ServiceModel.Types");
-                            
-                    //db.DropAndCreateTables(tables.ToArray());
-
                     db.DropAndCreateTables(typeof (Division), typeof (Player), typeof (Team), typeof (Teamate),
                         typeof (DivisionalPlayer), typeof (GameEvent));
 
