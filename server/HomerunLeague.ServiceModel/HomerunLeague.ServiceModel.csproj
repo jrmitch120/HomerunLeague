@@ -36,11 +36,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stats.cs" />
+    <Compile Include="Types\GameStat.cs" />
     <Compile Include="Types\IAudit.cs" />
     <Compile Include="Types\Player.cs" />
     <Compile Include="Players.cs" />
     <Compile Include="Types\Division.cs" />
     <Compile Include="Divisions.cs" />
+    <Compile Include="Types\PlayerStats.cs" />
+    <Compile Include="Types\SeasonTotals.cs" />
     <Compile Include="Types\Team.cs" />
     <Compile Include="Types\Teamate.cs" />
     <Compile Include="Teams.cs" />

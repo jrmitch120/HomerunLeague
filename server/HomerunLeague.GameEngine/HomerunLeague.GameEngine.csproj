@@ -49,6 +49,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LeagueEngine.cs" />
     <Compile Include="Services.cs" />
+    <Compile Include="Stats\IStatData.cs" />
+    <Compile Include="Stats\MlbStatProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

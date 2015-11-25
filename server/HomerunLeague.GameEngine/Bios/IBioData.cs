@@ -5,6 +5,6 @@ namespace HomerunLeague.GameEngine.Bios
 {
     public interface IBioData 
     {
-        void Update(IEnumerable<Player> players);
+        void UpdatePlayerBios(IEnumerable<Player> players);
     }
 }

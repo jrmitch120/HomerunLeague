@@ -54,6 +54,7 @@
     <Compile Include="PlayerServices.cs" />
     <Compile Include="DivisionServices.cs" />
     <Compile Include="Extensions\OrmExtensions.cs" />
+    <Compile Include="StatService.cs" />
     <Compile Include="TeamService.cs" />
     <Compile Include="AdminServices.cs" />
   </ItemGroup>

@@ -3,13 +3,13 @@ using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel.Types
 {
-    // Game events carry meta about and action to be executed through the league engine.
-    public class GameEvent : IAudit
+    // League events carry meta about and action to be executed through the league engine.
+    public class LeagueEvent : IAudit
     {
         [AutoIncrement]
         public int Id { get; set; }
 
-        public GameAction Action { get; set; }
+        public LeagueAction Action { get; set; }
 
         public object Options { get; set; }
 
@@ -20,8 +20,8 @@ namespace HomerunLeague.ServiceModel.Types
         public DateTime? Completed { get; set; }
     }
 
-    // Game actions drive game logic through the league engine.
-    public enum GameAction
+    // League actions drive game logic through the league engine.
+    public enum LeagueAction
     {
         BioUpdate = 1,
         StatUpdate
@@ -31,6 +31,7 @@ namespace HomerunLeague.ServiceModel.Types
     {
         public bool IncludeInactive { get; set; }
     }
-    
+
+    public class StatUpdateOptions {}
 }
 

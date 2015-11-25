@@ -18,10 +18,8 @@ namespace HomerunLeague.ServiceModel
     {
         private readonly string _currentUrl;
 
-        public Meta(string currentUrl)
-        {
-            _currentUrl = currentUrl;
-        }
+        public Meta() { _currentUrl = string.Empty; }
+        public Meta(string currentUrl) { _currentUrl = currentUrl; }
 
         public static int PageSize = 2;
 

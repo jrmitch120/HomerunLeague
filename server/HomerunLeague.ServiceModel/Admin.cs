@@ -6,27 +6,29 @@ using ServiceStack;
 namespace HomerunLeague.ServiceModel
 {
     [Route("/game/events", "GET")]
-    public class GetGameEvents : PageableRequest, IReturn<GetGameEventsResponse>
+    public class GetLeagueEvents : PageableRequest, IReturn<GetLeagueEventsResponse>
     {
         public bool IncludeCompleted { get; set; } 
     }
 
-    public class GetGameEventsResponse : IHasResponseStatus, IMeta
+    public class GetLeagueEventsResponse : IHasResponseStatus, IMeta
     {
         public Meta Meta { get; set; }
-        public List<GameEvent> GameEvents { get; set; }
+        public List<LeagueEvent> LeagueEvents { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
     }
 
     [Route("/game/events", "POST")]
-    public class CreateGameEvent : GameEvent, IReturn<CreateActionResponse>
+    [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
+    public class CreateLeagueEvent : LeagueEvent
     {
         
     }
-
-    [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
-    public class CreateActionResponse
+    
+    [Route("/game/events", "PUT")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
+    public class UpdateLeagueEvent : LeagueEvent
     {
 
     }
