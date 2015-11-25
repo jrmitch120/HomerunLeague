@@ -10,7 +10,7 @@ namespace HomerunLeague.GameEngine.Stats
     {
         public PlayerStats FetchStats(Player player, int year)
         {
-            var playerStats = new PlayerStats {GameLogs = new List<GameLog>()};
+            var playerStats = new PlayerStats();
 
             var client =
                 new RestClient(

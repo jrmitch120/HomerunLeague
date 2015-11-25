@@ -40,7 +40,7 @@ namespace HomerunLeague.ServiceInterface
 
             return new GetPlayersResponse
             {
-                Players = Db.Select(query.PageTo(page)),
+                Players = Db.LoadSelect(query.PageTo(page)),
                 Meta = new Meta(Request != null ? Request.AbsoluteUri : string.Empty) { Page = page, TotalCount = Db.Count(query) }
             };
         }

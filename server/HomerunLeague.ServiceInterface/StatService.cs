@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Linq;
 using HomerunLeague.ServiceModel;
 using ServiceStack;
 using ServiceStack.OrmLite;
@@ -35,7 +36,16 @@ namespace HomerunLeague.ServiceInterface
 
         public HttpResult Put(PutGameLogs request)
         {
+            var debug =
+                request.GameLogs.GroupBy(n => n.Id)
+                    .Select(n => new {Id = n.Key, Count = n.Count()})
+                    .OrderByDescending(n => n.Count);
+
             request.GameLogs.ForEach(stat => stat.PlayerId = request.PlayerId);
+
+            // TESTING
+            //foreach (var log in request.GameLogs)
+            //    Db.Save(log);
 
             Db.SaveAll(request.GameLogs);
             return new HttpResult { StatusCode = HttpStatusCode.NoContent };

@@ -21,14 +21,12 @@ namespace HomerunLeague.ServiceInterface
             var divisions = Db.Select(query.PageTo(page));
 
             divisions.ForEach(division =>
-                {   
-                    Db.Select<Player>(q => q.Join<Player,DivisionalPlayer>((player, divPlayer) => player.Id == divPlayer.PlayerId)
-                                            .Where<DivisionalPlayer>(divPlayer => divPlayer.DivisionId == division.Id))
-                                            .ForEach(player =>
-                                                {
-                                                    division.Players.Add(player);
-                                                });
-                });
+            {
+                division.Players.AddRange(
+                    Db.LoadSelect<Player>(
+                        q => q.Join<Player, DivisionalPlayer>((player, divPlayer) => player.Id == divPlayer.PlayerId)
+                            .Where<DivisionalPlayer>(divPlayer => divPlayer.DivisionId == division.Id)));
+            });
                     
             return new GetDivisionsResponse
             {

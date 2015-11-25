@@ -5,11 +5,11 @@ namespace HomerunLeague.ServiceModel.Types
     [CompositeIndex("Year", "PlayerId")]
     public class SeasonTotals
     {
-        [PrimaryKey]
         public string Id { get { return PlayerId + "/" + Year; } }
 
         public int Year { get; set; }
 
+        [References(typeof(Player))]
         public int PlayerId { get; set; }
 
         // Stats

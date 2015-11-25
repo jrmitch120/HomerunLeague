@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel.Types
@@ -34,7 +35,10 @@ namespace HomerunLeague.ServiceModel.Types
         public string TeamName { get; set; }
 
         public bool Active { get; set; }
-        
+
+        [Reference]
+        public List<SeasonTotals> SeasonTotals { get; set; }
+
         public DateTime Created { get; set; }
 
         public DateTime Modified { get; set; }

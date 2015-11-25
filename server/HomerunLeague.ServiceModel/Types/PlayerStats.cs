@@ -7,5 +7,10 @@ namespace HomerunLeague.ServiceModel.Types
         public SeasonTotals SeasonTotals { get; set; }
 
         public List<GameLog> GameLogs { get; set; }
+
+        public PlayerStats()
+        {
+            GameLogs = new List<GameLog>();
+        }
     }
 }

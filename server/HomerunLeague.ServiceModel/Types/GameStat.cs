@@ -1,11 +1,9 @@
 ﻿using System;
-using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel.Types
 {
     public class GameLog
     {
-        [PrimaryKey]
         public string Id { get { return PlayerId + "/" + GameId; } }
 
         public string GameId { get; set; }

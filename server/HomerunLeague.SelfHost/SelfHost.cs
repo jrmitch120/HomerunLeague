@@ -28,8 +28,9 @@ namespace HomerunLeague.SelfHost
                 container.RegisterAutoWiredAs<MlbBioProvider, IBioData>();
                 container.RegisterAutoWiredAs<MlbStatProvider, IStatData>();
 
-			    JsConfig.IncludeTypeInfo = true;
-
+                JsConfig<BioUpdateOptions>.IncludeTypeInfo = true;
+                JsConfig<StatUpdateOptions>.IncludeTypeInfo = true;
+                
                 OrmLiteConfig.InsertFilter = (dbCmd, row) =>
                 {
                     var auditRow = row as IAudit;
