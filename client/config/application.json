@@ -6,7 +6,7 @@
     },
     "development": {
         "api": {
-            "endpoint": "http://localhost:9001/api/"
+            "endpoint": "http://theretina:9001/api/"
         }
     }
 }
