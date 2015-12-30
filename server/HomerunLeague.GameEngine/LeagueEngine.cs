@@ -99,6 +99,8 @@ namespace HomerunLeague.GameEngine
         /// <param name="options">Bio update options</param>
         private void UpdateBio(BioUpdateOptions options)
         {
+            options = options ?? new BioUpdateOptions();
+
             _services.PlayerSvc.BatchPlayerAction(new GetPlayers { IncludeInactive = options.IncludeInactive }, players =>
             {
                 _bioData.UpdatePlayerBios(players);
@@ -112,25 +114,28 @@ namespace HomerunLeague.GameEngine
         /// <param name="options">Stat update options</param>
         private void UpdateStats(StatUpdateOptions options)
         {
-            int year = DateTime.Now.Month < 5 ? DateTime.Now.Year - 1 : DateTime.Now.Year;
+            options = options ?? new StatUpdateOptions();
 
             _services.PlayerSvc.BatchPlayerAction(new GetPlayers(), players =>
             {
                 foreach (var player in players)
                 {
-                    var stats = _statData.FetchStats(player, year);
+                    var stats = _statData.FetchStats(player, options.Year);
 
-                    _services.StatSvc.Put(new PutGameLogs
+                    if (stats.GameLogs.Any()) // Did we find any stats?
                     {
-                        PlayerId = player.Id,
-                        GameLogs = stats.GameLogs
-                    });
+                        _services.StatSvc.Put(new PutGameLogs
+                        {
+                            PlayerId = player.Id,
+                            GameLogs = stats.GameLogs
+                        });
 
-                    _services.StatSvc.Put(new PutSeasonTotals
-                    {
-                        PlayerId = player.Id,
-                        SeasonTotals = stats.SeasonTotals
-                    });
+                        _services.StatSvc.Put(new PutSeasonTotals
+                        {
+                            PlayerId = player.Id,
+                            SeasonTotals = stats.SeasonTotals
+                        });
+                    }
                 }
             });
         }

@@ -4,7 +4,7 @@ using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel.Types
 {
-    public class Team
+    public class Team : IAudit
     {
         public Team()
         {
@@ -23,6 +23,8 @@ namespace HomerunLeague.ServiceModel.Types
         public bool Paid { get; set; }
 
         public DateTime Created { get; set; }
+
+        public DateTime Modified { get; set; }
 
         [Reference]
         public List<Player> Players { get; set; }

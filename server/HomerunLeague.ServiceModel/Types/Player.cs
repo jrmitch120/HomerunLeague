@@ -18,7 +18,7 @@ namespace HomerunLeague.ServiceModel.Types
 
         public string LastName { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public int Weight { get; set; }
 

@@ -24,7 +24,12 @@ namespace HomerunLeague.SelfHost
 			{
                 Plugins.Add(new CorsFeature());
 
+                // SqlServer
+                // container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"Data Source=.\SQLEXPRESS;Initial Catalog=HomerunLeague;Integrated Security=True", SqlServer2012Dialect.Provider));
+                
+                // SQLite
                 container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../../Database/leaguedata.sqlite", SqliteDialect.Provider));
+
                 container.RegisterAutoWiredAs<MlbBioProvider, IBioData>();
                 container.RegisterAutoWiredAs<MlbStatProvider, IStatData>();
                 container.Register(new ApiKeys(ConfigurationManager.AppSettings["apiKeys"].Split(',')));
@@ -48,8 +53,8 @@ namespace HomerunLeague.SelfHost
 
                 using (var db = container.Resolve<IDbConnectionFactory>().Open())
                 {
-                    db.DropAndCreateTables(typeof (Division), typeof (Player), typeof (Team), typeof (Teamate),
-                        typeof (DivisionalPlayer), typeof (LeagueEvent), typeof (GameLog), typeof(SeasonTotals));
+                    db.DropTables(typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(SeasonTotals), typeof(Team), typeof(Player), typeof(Division));
+                    db.CreateTables(true,typeof(Team), typeof(Player), typeof(Division), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(SeasonTotals));
 
                     var divId1 = 
                     db.Insert(new Division{Name = "Ron Santo", PlayerRequirment = 2, Description = "First division test.", Year = DateTime.Now.Year, Order = 1, Active = true}, selectIdentity:true);                    
@@ -86,7 +91,8 @@ namespace HomerunLeague.SelfHost
                     db.Insert(new LeagueEvent
                     {
                         Created = DateTime.Now,
-                        Action = LeagueAction.StatUpdate
+                        Action = LeagueAction.StatUpdate,
+                        Options = new StatUpdateOptions { Year = 2014 }
                     });
 
                     var tid1 = db.Insert(new Team{ Name = "Test test 1", Year = DateTime.Now.Year });

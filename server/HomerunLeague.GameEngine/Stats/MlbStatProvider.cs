@@ -10,7 +10,7 @@ namespace HomerunLeague.GameEngine.Stats
     {
         public PlayerStats FetchStats(Player player, int year)
         {
-            var playerStats = new PlayerStats();
+            var playerStats = new PlayerStats { PlayerId = player.Id, Year = year };
 
             var client =
                 new RestClient(
@@ -18,7 +18,8 @@ namespace HomerunLeague.GameEngine.Stats
 
             var result = client.Get<MlbStatsResponse>(new RestRequest().AddParameter("player_id", player.MlbId).AddParameter("season", year));
 
-            if (result.StatusCode == HttpStatusCode.OK)
+            if (result.StatusCode == HttpStatusCode.OK &&
+                result.Data.sport_hitting_game_log_composed.SportHittingGameLog.queryResults.totalSize > 0) // any data?
             {
                 foreach (
                     var stat in result.Data.sport_hitting_game_log_composed.SportHittingGameLog.queryResults.row)
@@ -133,7 +134,7 @@ namespace HomerunLeague.GameEngine.Stats
         public class GameLogResults
         {
             public string created { get; set; }
-            public string totalSize { get; set; }
+            public int totalSize { get; set; }
             public List<GameLogStat> row { get; set; }
         }
 
