@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using HomerunLeague.ServiceInterface.RequestFilters;
 using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
@@ -7,6 +8,7 @@ using ServiceStack.OrmLite;
 
 namespace HomerunLeague.ServiceInterface
 {
+    [Secured]
     public class AdminServices : Service
     {
         public AdminServices()

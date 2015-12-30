@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Net;
+using HomerunLeague.ServiceInterface.RequestFilters;
+using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
-using HomerunLeague.ServiceModel;
-using HomerunLeague.ServiceModel.Types;
 /*
 
 /{year}/league
@@ -45,6 +46,7 @@ namespace HomerunLeague.ServiceInterface
             };
         }
 
+        [Secured]
         public HttpResult Put(PutPlayers request)
         {
             Db.SaveAll(request.Players);

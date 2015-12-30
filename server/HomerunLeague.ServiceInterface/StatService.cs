@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Linq;
+using HomerunLeague.ServiceInterface.RequestFilters;
 using HomerunLeague.ServiceModel;
 using ServiceStack;
 using ServiceStack.OrmLite;
@@ -34,6 +35,7 @@ namespace HomerunLeague.ServiceInterface
         //    };
         //}
 
+        [Secured]
         public HttpResult Put(PutGameLogs request)
         {
             var debug =
@@ -51,6 +53,7 @@ namespace HomerunLeague.ServiceInterface
             return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
 
+        [Secured]
         public HttpResult Put(PutSeasonTotals request)
         {
             request.SeasonTotals.PlayerId = request.PlayerId;

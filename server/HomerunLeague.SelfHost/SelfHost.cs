@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Funq;
 using HomerunLeague.GameEngine;
 using HomerunLeague.GameEngine.Bios;
@@ -21,12 +22,12 @@ namespace HomerunLeague.SelfHost
 
 			public override void Configure(Container container)
 			{
-                
                 Plugins.Add(new CorsFeature());
 
                 container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../../Database/leaguedata.sqlite", SqliteDialect.Provider));
                 container.RegisterAutoWiredAs<MlbBioProvider, IBioData>();
                 container.RegisterAutoWiredAs<MlbStatProvider, IStatData>();
+                container.Register(new ApiKeys(ConfigurationManager.AppSettings["apiKeys"].Split(',')));
 
                 JsConfig<BioUpdateOptions>.IncludeTypeInfo = true;
                 JsConfig<StatUpdateOptions>.IncludeTypeInfo = true;

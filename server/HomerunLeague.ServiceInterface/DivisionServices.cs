@@ -10,7 +10,6 @@ namespace HomerunLeague.ServiceInterface
         
         public GetDivisionsResponse Get(GetDivisions request) 
         {
-            
             int page = request.Page ?? 1;
 
             var query = Db.From<Division>().Where(q => q.Year == request.Year);
