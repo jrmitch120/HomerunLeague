@@ -1,6 +1,6 @@
 ﻿using HomerunLeague.ServiceModel.Types;
 
-namespace HomerunLeague.GameEngine.Valiadtion
+namespace HomerunLeague.ServiceInterface.Validation
 {
     public interface ITeamValidator
     {

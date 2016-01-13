@@ -51,8 +51,7 @@
     <Compile Include="Services.cs" />
     <Compile Include="Stats\IStatData.cs" />
     <Compile Include="Stats\MlbStatProvider.cs" />
-    <Compile Include="Valiadtion\ITeamValidator.cs" />
-    <Compile Include="Valiadtion\TeamValidator.cs" />
+    <Compile Include="Stats\StatPull.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

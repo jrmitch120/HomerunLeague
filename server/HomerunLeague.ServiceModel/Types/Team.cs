@@ -9,6 +9,7 @@ namespace HomerunLeague.ServiceModel.Types
         public Team()
         {
             Players = new List<Player>();
+            Totals = new TeamTotals();
         }
 
         [AutoIncrement]
@@ -27,6 +28,9 @@ namespace HomerunLeague.ServiceModel.Types
         public DateTime Modified { get; set; }
 
         [Reference]
+        public TeamTotals Totals { get; set; }
+
+        [Ignore]
         public List<Player> Players { get; set; }
     }
 }

@@ -18,11 +18,11 @@ namespace HomerunLeague.ServiceInterface
         }
 
         [Secured]
-        public HttpResult Put(PutSeasonTotals request)
+        public HttpResult Put(PutPlayerTotals request)
         {
-            request.SeasonTotals.PlayerId = request.PlayerId;
+            request.PlayerTotals.PlayerId = request.PlayerId;
 
-            Db.Save(request.SeasonTotals);
+            Db.Save(request.PlayerTotals);
             return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
     }

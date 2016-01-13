@@ -130,10 +130,10 @@ namespace HomerunLeague.GameEngine
                             GameLogs = stats.GameLogs
                         });
 
-                        _services.StatSvc.Put(new PutSeasonTotals
+                        _services.StatSvc.Put(new PutPlayerTotals
                         {
                             PlayerId = player.Id,
-                            SeasonTotals = stats.SeasonTotals
+                            PlayerTotals = stats.Totals
                         });
                     }
                 }

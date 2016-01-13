@@ -16,14 +16,14 @@ namespace HomerunLeague.ServiceModel
         public List<GameLog> GameLogs { get; set; }
     }
 
-    [Route("/players/{playerId}/SeasonTotals", "PUT")]
+    [Route("/players/{playerId}/PlayerTotals", "PUT")]
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
-    public class PutSeasonTotals
+    public class PutPlayerTotals
     {
         [ApiMember(IsRequired = true)]
         public int PlayerId { get; set; }
 
         [ApiMember(IsRequired = true)]
-        public SeasonTotals SeasonTotals { get; set; }
+        public PlayerTotals PlayerTotals { get; set; }
     }
 }

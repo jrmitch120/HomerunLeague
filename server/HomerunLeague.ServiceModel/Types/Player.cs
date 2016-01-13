@@ -18,6 +18,8 @@ namespace HomerunLeague.ServiceModel.Types
 
         public string LastName { get; set; }
 
+        public string DisplayName { get; set; }
+
         public DateTime? BirthDate { get; set; }
 
         public int Weight { get; set; }
@@ -37,7 +39,7 @@ namespace HomerunLeague.ServiceModel.Types
         public bool Active { get; set; }
 
         [Reference]
-        public List<SeasonTotals> SeasonTotals { get; set; }
+        public List<PlayerTotals> PlayerTotals { get; set; }
 
         public DateTime Created { get; set; }
 

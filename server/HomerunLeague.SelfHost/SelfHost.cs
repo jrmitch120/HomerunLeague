@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using Funq;
 using HomerunLeague.GameEngine;
@@ -53,8 +54,8 @@ namespace HomerunLeague.SelfHost
 
                 using (var db = container.Resolve<IDbConnectionFactory>().Open())
                 {
-                    db.DropTables(typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(SeasonTotals), typeof(Team), typeof(Player), typeof(Division));
-                    db.CreateTables(true,typeof(Team), typeof(Player), typeof(Division), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(SeasonTotals));
+                    db.DropTables(typeof(TeamTotals), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(Team), typeof(Player), typeof(Division));
+                    db.CreateTables(true,typeof(Team), typeof(Player), typeof(Division), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(TeamTotals));
 
                     var divId1 = 
                     db.Insert(new Division{Name = "Ron Santo", PlayerRequirment = 2, Description = "First division test.", Year = DateTime.Now.Year, Order = 1, Active = true}, selectIdentity:true);                    
@@ -70,9 +71,12 @@ namespace HomerunLeague.SelfHost
                     var pid3 = db.Insert(new Player{FirstName = "Joe", LastName = "Test", MlbId = 605218}, selectIdentity:true);
                     var pid4 = db.Insert(new Player{FirstName = "Bull", LastName = "Pucky", MlbId = 471083}, selectIdentity:true);
                     var pid5 = db.Insert(new Player{FirstName = "Fifth", LastName = "Man", MlbId = 467008}, selectIdentity:true);
-                    var pid6 = db.Insert(new Player { FirstName = "Sixth", LastName = "Man", MlbId = 120074 }, selectIdentity: true);
-                    var pid7 = db.Insert(new Player { FirstName = "Sixth", LastName = "Man", MlbId = 547180 }, selectIdentity: true);
+                    var pid6 = db.Insert(new Player {FirstName = "Sixth", LastName = "Man", MlbId = 120074}, selectIdentity: true);
+                    var pid7 = db.Insert(new Player {FirstName = "Sixth", LastName = "Man", MlbId = 547180}, selectIdentity: true);
                     
+                    container.Resolve<PlayerServices>()
+                        .Post(new ServiceModel.CreatePlayers { Players = new List<Player> { new Player { MlbId = 545361 } } });
+
                     db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid1});
                     db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid2});
                     db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid3});
@@ -95,10 +99,11 @@ namespace HomerunLeague.SelfHost
                         Options = new StatUpdateOptions { Year = 2014 }
                     });
 
-                    var tid1 = db.Insert(new Team{ Name = "Test test 1", Year = DateTime.Now.Year });
-                    tid1 = Convert.ToInt32(tid1);
-                    db.Insert(new Teamate{ PlayerId = (int)pid1, TeamId = (int)tid1 });
-                    db.Insert(new Teamate{ PlayerId = (int)pid2, TeamId = (int)tid1 });
+
+                    var team1 = new Team {Name = "Test test 1", Year = DateTime.Now.Year};
+                    db.Save(team1, true);
+                    db.Insert(new Teamate{ PlayerId = (int)pid1, TeamId = team1.Id });
+                    db.Insert(new Teamate{ PlayerId = (int)pid2, TeamId = team1.Id });
                 }
 
                 var game = new LeagueEngine(container.Resolve<IBioData>(), container.Resolve<IStatData>(),

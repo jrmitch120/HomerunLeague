@@ -25,7 +25,7 @@ namespace HomerunLeague.ServiceModel.Types
 
         public int Order { get; set; }
 
-        [Reference]
+        [Ignore]
         public List<Player> Players { get; set; }
     }
 }

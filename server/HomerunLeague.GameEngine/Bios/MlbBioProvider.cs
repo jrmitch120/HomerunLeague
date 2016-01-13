@@ -27,6 +27,7 @@ namespace HomerunLeague.GameEngine.Bios
                     player.Active = bio.active_sw == "Y";
                     player.Bats = bio.bats;
                     player.BirthDate = bio.birth_date;
+                    player.DisplayName = bio.name_first_last;
                     player.FirstName = bio.name_first;
                     player.HeightFeet = bio.height_feet;
                     player.HeightInches = bio.height_inches;

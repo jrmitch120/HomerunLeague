@@ -37,21 +37,21 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stats.cs" />
-    <Compile Include="Types\GameStat.cs" />
+    <Compile Include="Types\GameLog.cs" />
     <Compile Include="Types\IAudit.cs" />
     <Compile Include="Types\Player.cs" />
     <Compile Include="Players.cs" />
     <Compile Include="Types\Division.cs" />
     <Compile Include="Divisions.cs" />
-    <Compile Include="Types\PlayerStats.cs" />
-    <Compile Include="Types\SeasonTotals.cs" />
+    <Compile Include="Types\TeamTotals.cs" />
+    <Compile Include="Types\PlayerTotals.cs" />
     <Compile Include="Types\Team.cs" />
     <Compile Include="Types\Teamate.cs" />
     <Compile Include="Teams.cs" />
     <Compile Include="Meta.cs" />
     <Compile Include="Types\DivisionalPlayer.cs" />
     <Compile Include="Admin.cs" />
-    <Compile Include="Types\GameEvent.cs" />
+    <Compile Include="Types\LeagueEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

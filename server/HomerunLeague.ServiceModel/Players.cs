@@ -32,6 +32,14 @@ namespace HomerunLeague.ServiceModel
         public ResponseStatus ResponseStatus { get; set; }
     }
 
+    [Route("/players", "POST")]
+    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    public class CreatePlayers
+    {
+        [ApiMember(IsRequired = true)]
+        public List<Player> Players { get; set; }
+    }
+
     [Route("/players", "PUT")]
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
     public class PutPlayers 

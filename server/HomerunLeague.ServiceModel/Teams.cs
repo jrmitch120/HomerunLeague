@@ -29,19 +29,19 @@ namespace HomerunLeague.ServiceModel
         public int Year { get; set; }
     }
 
-    [Route("/{year}/teams", "POST")]
-    [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
-    public class CreateTeam : Team, IReturn<GetTeamsResponse> 
-    {
-        
-    }
-
     public class GetTeamsResponse : IHasResponseStatus, IMeta
     {
         public Meta Meta { get; set; }
         public List<Team> Teams { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
+    }
+
+    [Route("/{year}/teams", "POST")]
+    [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
+    public class CreateTeam : Team, IReturn<GetTeamsResponse>
+    {
+
     }
 }
 

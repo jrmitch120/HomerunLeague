@@ -6,20 +6,16 @@ using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
-/*
-
-/{year}/league
-/{year}/league/divisions
-/{year}/league/divisions/{id}/players
-
-/players/{id}
-
-*/
-
 namespace HomerunLeague.ServiceInterface
 {
     public class PlayerServices : Service
 	{
+        public HttpResult Post(CreatePlayers request)
+        {
+            Db.SaveAll(request.Players);
+            return new HttpResult { StatusCode = HttpStatusCode.Created };
+        }
+
         public GetPlayerResponse Get(GetPlayer request) 
 		{
             var player = Db.LoadSingleById<Player>(request.Id);

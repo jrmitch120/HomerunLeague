@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Net;
-using ServiceStack;
-using ServiceStack.OrmLite;
-
+using HomerunLeague.ServiceInterface.Validation;
 using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Types;
+using ServiceStack;
+using ServiceStack.OrmLite;
 
 namespace HomerunLeague.ServiceInterface
 {
@@ -21,7 +21,7 @@ namespace HomerunLeague.ServiceInterface
 
                     new ArgumentException("TeamId {0} does not exist in {1}. ".Fmt(request.Id, request.Year)));
 
-            team.Players = Db.Select<Player>(q => q.Join<Player,Teamate>((player, teamate) => player.Id == teamate.Id));
+            team.Players = Db.Select<Player>(q => q.Join<Player,Teamate>((player, teamate) => player.Id == teamate.PlayerId));
 
             return new GetTeamResponse { Team = team };
         }
@@ -32,8 +32,18 @@ namespace HomerunLeague.ServiceInterface
 
             return new GetTeamsResponse
             {
-                Teams = Db.Select<Team>(q => q.PageTo(page)),
-                Meta = new Meta(Request.AbsoluteUri) { Page = page, TotalCount = Db.Count<Team>() }
+                Teams =
+                    Db.Select(
+                        Db.From<Team>()
+                            .Where(t => t.Year == request.Year)
+                            .OrderByDescending(s => s.Totals.Hr)
+                            .PageTo(page)),
+                Meta =
+                    new Meta(Request.AbsoluteUri)
+                    {
+                        Page = page,
+                        TotalCount = Db.Count<Team>(t => t.Year == request.Year)
+                    }
             };
         }
 
@@ -48,9 +58,9 @@ namespace HomerunLeague.ServiceInterface
                 var teamates = new List<Teamate>();
 
                 request.Players.ForEach(p =>
-                    {
-                        teamates.Add(new Teamate{PlayerId = p.Id, TeamId = teamId});
-                    });
+                {
+                    teamates.Add(new Teamate {PlayerId = p.Id, TeamId = teamId});
+                });
 
                 Db.InsertAll(teamates);
               

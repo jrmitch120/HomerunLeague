@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using HomerunLeague.ServiceModel.Types;
 
-namespace HomerunLeague.ServiceModel.Types
+namespace HomerunLeague.GameEngine.Stats
 {
-    public class PlayerStats
+    public class StatPull
     {
         public int PlayerId { get; set; }
 
         public int Year { get; set; }
 
-        public SeasonTotals SeasonTotals { get; set; }
+        public PlayerTotals Totals { get; set; }
 
         public List<GameLog> GameLogs { get; set; }
 
-        public PlayerStats()
+        public StatPull()
         {
             GameLogs = new List<GameLog>();
         }

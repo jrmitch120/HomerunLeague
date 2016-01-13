@@ -8,9 +8,9 @@ namespace HomerunLeague.GameEngine.Stats
 {
     public class MlbStatProvider : IStatData
     {
-        public PlayerStats FetchStats(Player player, int year)
+        public StatPull FetchStats(Player player, int year)
         {
-            var playerStats = new PlayerStats { PlayerId = player.Id, Year = year };
+            var playerStats = new StatPull { PlayerId = player.Id, Year = year };
 
             var client =
                 new RestClient(
@@ -55,7 +55,7 @@ namespace HomerunLeague.GameEngine.Stats
 
                 var season = result.Data.sport_hitting_game_log_composed.sport_hitting.queryResults.row;
 
-                playerStats.SeasonTotals = new SeasonTotals
+                playerStats.Totals = new PlayerTotals
                 {
                     Year = season.season,
                     PlayerId = player.Id,

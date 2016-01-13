@@ -59,6 +59,8 @@
     <Compile Include="StatService.cs" />
     <Compile Include="TeamService.cs" />
     <Compile Include="AdminServices.cs" />
+    <Compile Include="Validation\ITeamValidator.cs" />
+    <Compile Include="Validation\TeamValidator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
