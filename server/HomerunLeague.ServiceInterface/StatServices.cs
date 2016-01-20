@@ -6,7 +6,7 @@ using ServiceStack.OrmLite;
 
 namespace HomerunLeague.ServiceInterface
 {
-    public class StatService : Service
+    public class StatServices : Service
     {
         [Secured]
         public HttpResult Put(PutGameLogs request)
@@ -14,6 +14,7 @@ namespace HomerunLeague.ServiceInterface
             request.GameLogs.ForEach(stat => stat.PlayerId = request.PlayerId);  // Associate stats with the player
 
             Db.SaveAll(request.GameLogs);
+            
             return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
 

@@ -1,4 +1,5 @@
-﻿using ServiceStack;
+﻿using HomerunLeague.ServiceInterface.Authentication;
+using ServiceStack;
 using ServiceStack.Web;
 
 namespace HomerunLeague.ServiceInterface.RequestFilters
@@ -10,10 +11,10 @@ namespace HomerunLeague.ServiceInterface.RequestFilters
             if (req.IsLocal)
                 return;
 
-            var appConfig = req.TryResolve<ApiKeys>();
+            var apiKeys = req.TryResolve<IKeys>();
             var apiKey = req.Headers["x-api-key"] ?? req.QueryString["api_key"];
 
-            if (apiKey == null || !appConfig.ReadWriteApiKeys.Contains(apiKey))
+            if (apiKey == null || !apiKeys.ReadWriteApiKeys.Contains(apiKey))
             {
                 throw HttpError.Unauthorized("Unauthorized.  Valid x-api-key header required.");
             }

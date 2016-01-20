@@ -17,17 +17,18 @@ namespace HomerunLeague.GameEngine
 
         private readonly IBioData _bioData;
         private readonly IStatData _statData;
+
         private readonly Services _services;
 
         private readonly Timer _timer;
-        private volatile bool _processing;
-
+        private volatile bool _running;
+        
         public LeagueEngine(IBioData bioData, IStatData statData, Services services)
         {
             _bioData = bioData;
             _statData = statData;
             _services = services;
-
+            
             _timer = new Timer(TimeSpan.FromSeconds(1).TotalMilliseconds);
             _timer.Elapsed += Run;
             _timer.AutoReset = true;
@@ -51,12 +52,13 @@ namespace HomerunLeague.GameEngine
 
         private void Run(object sender, ElapsedEventArgs e)
         {
+            if (_running) return;
+
             try
             {
-                if (_processing)
-                    return;
+                _running = true;
 
-                _processing = true;
+                HeartBeat();
 
                 GetLeagueEventsResponse response;
 
@@ -65,8 +67,8 @@ namespace HomerunLeague.GameEngine
                 do
                 {
                     page++;
-                    response = _services.AdminSvc.Get(new GetLeagueEvents {Page = page});
-                    response.LeagueEvents.OrderBy(le => le.Created).ToList().ForEach(ProcessRequest);
+                    response = _services.AdminSvc.Get(new GetLeagueEvents {Status = EventStatus.Incomplete, Page = page});
+                    response.LeagueEvents.ForEach(ProcessRequest);
 
                 } while (response.Meta.Page < response.Meta.TotalPages);
             }
@@ -77,7 +79,8 @@ namespace HomerunLeague.GameEngine
             }
             finally
             {
-                _processing = false;
+                _running = false;
+                _services.Dispose();
             }
         }
 
@@ -88,9 +91,39 @@ namespace HomerunLeague.GameEngine
 
             _gameActions[leagueEvent.Action].Invoke(leagueEvent.Options);
 
-            leagueEvent.Completed = DateTime.Now;
+            leagueEvent.Completed = DateTime.UtcNow;
 
             _services.AdminSvc.Put(leagueEvent.ConvertTo<UpdateLeagueEvent>());
+        }
+
+        private void HeartBeat()
+        {
+            // Automatic stat updates once every 12 hrs
+            var lastStat =
+                _services.AdminSvc.Get(new GetLeagueEvents
+                {
+                    Action = LeagueAction.StatUpdate,
+                }).LeagueEvents.FirstOrDefault();
+
+            if (lastStat == null || DateTime.UtcNow.AddHours(-12) > lastStat.Completed)
+                _services.AdminSvc.Post(new CreateLeagueEvent
+                {
+                    Action = LeagueAction.StatUpdate,
+                    Options = new StatUpdateOptions {Year = _services.AdminSvc.Get(new GetSettings()).BaseballYear}
+                });
+
+            // Automatic bio updates once a week
+            var lastBio =
+                _services.AdminSvc.Get(new GetLeagueEvents
+                {
+                    Action = LeagueAction.BioUpdate,
+                }).LeagueEvents.FirstOrDefault();
+
+            if (lastBio == null || DateTime.UtcNow.AddDays(-7) > lastBio.Completed)
+                _services.AdminSvc.Post(new CreateLeagueEvent
+                {
+                    Action = LeagueAction.BioUpdate
+                });
         }
 
         /// <summary>
@@ -123,7 +156,7 @@ namespace HomerunLeague.GameEngine
                     var stats = _statData.FetchStats(player, options.Year);
 
                     if (stats.GameLogs.Any()) // Did we find any stats?
-                    {
+                        {
                         _services.StatSvc.Put(new PutGameLogs
                         {
                             PlayerId = player.Id,
@@ -154,7 +187,7 @@ namespace HomerunLeague.GameEngine
                 request.Page = page;
                 response = svc.Get(request);
 
-                if(response.Players.Any())
+                if (response.Players.Any())
                     process.Invoke(response.Players);
 
             } while (response.Meta.Page < response.Meta.TotalPages);

@@ -21,6 +21,10 @@ namespace HomerunLeague.ServiceModel.Types
 
         public string Email { get; set; }
 
+        public bool Validated { get; set; }
+
+        public string ValidationToken { get; set; }
+
         public bool Paid { get; set; }
 
         public DateTime Created { get; set; }

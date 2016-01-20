@@ -10,12 +10,6 @@ namespace HomerunLeague.ServiceInterface
 {
     public class PlayerServices : Service
 	{
-        public HttpResult Post(CreatePlayers request)
-        {
-            Db.SaveAll(request.Players);
-            return new HttpResult { StatusCode = HttpStatusCode.Created };
-        }
-
         public GetPlayerResponse Get(GetPlayer request) 
 		{
             var player = Db.LoadSingleById<Player>(request.Id);
@@ -48,6 +42,13 @@ namespace HomerunLeague.ServiceInterface
             Db.SaveAll(request.Players);
             return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
-	}
+
+        [Secured]
+        public HttpResult Post(CreatePlayers request)
+        {
+            Db.SaveAll(request.Players);
+            return new HttpResult { StatusCode = HttpStatusCode.Created };
+        }
+    }
 }
 

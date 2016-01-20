@@ -7,7 +7,6 @@ namespace HomerunLeague.ServiceInterface
 {
     public class DivisionServices : Service
     {
-        
         public GetDivisionsResponse Get(GetDivisions request) 
         {
             int page = request.Page ?? 1;
@@ -26,11 +25,16 @@ namespace HomerunLeague.ServiceInterface
                         q => q.Join<Player, DivisionalPlayer>((player, divPlayer) => player.Id == divPlayer.PlayerId)
                             .Where<DivisionalPlayer>(divPlayer => divPlayer.DivisionId == division.Id)));
             });
-                    
+
             return new GetDivisionsResponse
             {
                 Divisions = divisions,
-                Meta = new Meta(Request.AbsoluteUri) { Page = page, TotalCount = Db.Count<Division>(query) }
+                Meta =
+                    new Meta(Request != null ? Request.AbsoluteUri : string.Empty)
+                    {
+                        Page = page,
+                        TotalCount = Db.Count(query)
+                    }
             };
         }
     }

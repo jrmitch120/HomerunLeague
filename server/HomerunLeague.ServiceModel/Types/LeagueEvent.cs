@@ -35,11 +35,6 @@ namespace HomerunLeague.ServiceModel.Types
     public class StatUpdateOptions
     {
         public int Year { get; set; }
-
-        public StatUpdateOptions()
-        {
-            Year = DateTime.Now.Month < 5 ? DateTime.Now.Year - 1 : DateTime.Now.Year;
-        }
     }
 }
 

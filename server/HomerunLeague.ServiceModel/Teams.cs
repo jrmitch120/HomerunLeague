@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using HomerunLeague.ServiceModel.Types;
+using HomerunLeague.ServiceModel.ViewModels;
 using ServiceStack;
 
 namespace HomerunLeague.ServiceModel
@@ -17,7 +18,7 @@ namespace HomerunLeague.ServiceModel
 
     public class GetTeamResponse : IHasResponseStatus 
     {
-        public Team Team { get; set; }
+        public TeamView Team { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
     }
@@ -32,16 +33,23 @@ namespace HomerunLeague.ServiceModel
     public class GetTeamsResponse : IHasResponseStatus, IMeta
     {
         public Meta Meta { get; set; }
-        public List<Team> Teams { get; set; }
+
+        public List<TeamView> Teams { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
     }
 
     [Route("/{year}/teams", "POST")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
-    public class CreateTeam : Team, IReturn<GetTeamsResponse>
+    public class CreateTeam : IReturn<GetTeamsResponse>
     {
+        public string Name { get; set; }
 
+        public int Year { get; set; }
+
+        public string Email { get; set; }
+
+        public List<int> PlayerIds { get; set; }
     }
 }
 

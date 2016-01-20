@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using Funq;
+
 using HomerunLeague.GameEngine;
 using HomerunLeague.GameEngine.Bios;
 using HomerunLeague.GameEngine.Stats;
 using HomerunLeague.ServiceInterface;
+using HomerunLeague.ServiceInterface.Authentication;
+using HomerunLeague.ServiceInterface.Validation;
+using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Types;
+
 using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Text;
+using ServiceStack.Validation;
 
 namespace HomerunLeague.SelfHost
 {
@@ -24,16 +29,23 @@ namespace HomerunLeague.SelfHost
 			public override void Configure(Container container)
 			{
                 Plugins.Add(new CorsFeature());
+                Plugins.Add(new ValidationFeature());
 
                 // SqlServer
-                // container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"Data Source=.\SQLEXPRESS;Initial Catalog=HomerunLeague;Integrated Security=True", SqlServer2012Dialect.Provider));
-                
+                //container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"Data Source=.\SQLEXPRESS;Initial Catalog=HomerunLeague;Integrated Security=True", SqlServer2012Dialect.Provider));
+
                 // SQLite
                 container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../../Database/leaguedata.sqlite", SqliteDialect.Provider));
 
-                container.RegisterAutoWiredAs<MlbBioProvider, IBioData>();
-                container.RegisterAutoWiredAs<MlbStatProvider, IStatData>();
-                container.Register(new ApiKeys(ConfigurationManager.AppSettings["apiKeys"].Split(',')));
+                container.RegisterAutoWiredAs<MlbBioProvider, IBioData>(); // Bios from MLB
+                container.RegisterAutoWiredAs<MlbStatProvider, IStatData>(); // Stats from MLB
+                container.RegisterAutoWiredAs<ApiKeys, IKeys>(); // API Keys
+                container.RegisterAutoWiredAs<FunqServiceFactory, IServiceFactory>(); // Service Factory
+			    container.RegisterAutoWired<Services>();
+                container.RegisterAutoWired<LeagueEngine>();
+                
+                // Validators
+                container.RegisterValidators(typeof(TeamValidator).Assembly);
 
                 JsConfig<BioUpdateOptions>.IncludeTypeInfo = true;
                 JsConfig<StatUpdateOptions>.IncludeTypeInfo = true;
@@ -54,60 +66,53 @@ namespace HomerunLeague.SelfHost
 
                 using (var db = container.Resolve<IDbConnectionFactory>().Open())
                 {
-                    db.DropTables(typeof(TeamTotals), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(Team), typeof(Player), typeof(Division));
-                    db.CreateTables(true,typeof(Team), typeof(Player), typeof(Division), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(TeamTotals));
+                    db.DropTables(typeof(TeamTotals), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(Team), typeof(Player), typeof(Division), typeof(Setting));
+                    db.CreateTables(true,typeof(Team), typeof(Player), typeof(Division), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(TeamTotals), typeof(Setting));
+
+                    var baseballYear = Container.Resolve<AdminServices>().Get(new GetSettings()).BaseballYear;
 
                     var divId1 = 
-                    db.Insert(new Division{Name = "Ron Santo", PlayerRequirment = 2, Description = "First division test.", Year = DateTime.Now.Year, Order = 1, Active = true}, selectIdentity:true);                    
+                    db.Insert(new Division{Name = "Ron Santo", PlayerRequirment = 3, Description = "First division test.", Year = baseballYear, Order = 1, Active = true}, selectIdentity:true);                    
 
                     var divId2 =
-                    db.Insert(new Division{Name = "Billy Williams", PlayerRequirment = 2, Description = "Second division test.", Year = DateTime.Now.Year, Order = 2, Active = true}, selectIdentity:true);
+                    db.Insert(new Division{Name = "Billy Williams", PlayerRequirment = 2, Description = "Second division test.", Year = baseballYear, Order = 2, Active = true}, selectIdentity:true);
 
-                    db.Insert(new Division{ Name = "Ron Cey", PlayerRequirment = 3, Description = "Third division test.", Year = DateTime.Now.Year , Order = 3, Active = true});
-                    db.Insert(new Division{ Name = "Inactive Division", PlayerRequirment = 3, Description = "Inactive division test.", Year = DateTime.Now.Year , Order = 4, Active = false});
+                    var divId3 = 
+                    db.Insert(new Division{ Name = "Ron Cey", PlayerRequirment = 1, Description = "Third division test.", Year = baseballYear, Order = 3, Active = true}, selectIdentity: true);
+
+                    db.Insert(new Division{ Name = "Inactive Division", PlayerRequirment = 3, Description = "Inactive division test.", Year = baseballYear, Order = 4, Active = false});
 
                     var pid1 = db.Insert(new Player{FirstName = "Jeff", LastName = "Mitchell", MlbId = 516770, Active = true}, selectIdentity:true);
-                    var pid2 = db.Insert(new Player{FirstName = "Bone", LastName = "Jones", MlbId = 458085, Active = false}, selectIdentity:true);
-                    var pid3 = db.Insert(new Player{FirstName = "Joe", LastName = "Test", MlbId = 605218}, selectIdentity:true);
-                    var pid4 = db.Insert(new Player{FirstName = "Bull", LastName = "Pucky", MlbId = 471083}, selectIdentity:true);
-                    var pid5 = db.Insert(new Player{FirstName = "Fifth", LastName = "Man", MlbId = 467008}, selectIdentity:true);
-                    var pid6 = db.Insert(new Player {FirstName = "Sixth", LastName = "Man", MlbId = 120074}, selectIdentity: true);
-                    var pid7 = db.Insert(new Player {FirstName = "Sixth", LastName = "Man", MlbId = 547180}, selectIdentity: true);
+                    var pid2 = db.Insert(new Player{FirstName = "Bone", LastName = "Jones", MlbId = 458085, Active = true}, selectIdentity:true);
+                    var pid3 = db.Insert(new Player{FirstName = "Joe", LastName = "Test", MlbId = 605218, Active = true }, selectIdentity:true);
+                    var pid4 = db.Insert(new Player{FirstName = "Bull", LastName = "Pucky", MlbId = 471083, Active = true }, selectIdentity:true);
+                    var pid5 = db.Insert(new Player{FirstName = "Fifth", LastName = "Man", MlbId = 467008, Active = true }, selectIdentity:true);
+                    var pid6 = db.Insert(new Player {FirstName = "Sixth", LastName = "Man", MlbId = 120074, Active = true }, selectIdentity: true);
+                    var pid7 = db.Insert(new Player {FirstName = "Sixth", LastName = "Man", MlbId = 547180, Active = true }, selectIdentity: true);
                     
                     container.Resolve<PlayerServices>()
-                        .Post(new ServiceModel.CreatePlayers { Players = new List<Player> { new Player { MlbId = 545361 } } });
+                        .Post(new CreatePlayers { Players = new List<Player> { new Player { MlbId = 545361, Active = true } } });
 
                     db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid1});
                     db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid2});
                     db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid3});
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid7});
                     db.Insert(new DivisionalPlayer {DivisionId = (int) divId2, PlayerId = (int) pid4});
                     db.Insert(new DivisionalPlayer {DivisionId = (int) divId2, PlayerId = (int) pid5});
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId2, PlayerId = (int) pid6});
+                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId3, PlayerId = (int) pid6});
+                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId3, PlayerId = (int) pid7});
 
-                    db.Insert(new LeagueEvent
-                    {
-                        Created = DateTime.Now,
-                        Action = LeagueAction.BioUpdate,
-                        Options = new BioUpdateOptions { IncludeInactive = true }
-                    });
-
-                    db.Insert(new LeagueEvent
-                    {
-                        Created = DateTime.Now,
-                        Action = LeagueAction.StatUpdate,
-                        Options = new StatUpdateOptions { Year = 2014 }
-                    });
-
-
-                    var team1 = new Team {Name = "Test test 1", Year = DateTime.Now.Year};
-                    db.Save(team1, true);
-                    db.Insert(new Teamate{ PlayerId = (int)pid1, TeamId = team1.Id });
-                    db.Insert(new Teamate{ PlayerId = (int)pid2, TeamId = team1.Id });
+                    //Container.Resolve<TeamServices>()
+                    //    .Post(new CreateTeam
+                    //    {
+                    //        Email = "bob@yahoo.com",
+                    //        Name = "Bob Rocks",
+                    //        Year = baseballYear,
+                    //        PlayerIds =
+                    //            new List<int> { (int)pid1, (int)pid2, (int)pid3, (int)pid4, (int)pid5, (int)pid6 }
+                    //    });
                 }
 
-                var game = new LeagueEngine(container.Resolve<IBioData>(), container.Resolve<IStatData>(),
-                    new Services(Container.Resolve<AdminServices>(), Container.Resolve<PlayerServices>(), Container.Resolve<StatService>()));
+			    var game = container.Resolve<LeagueEngine>();
 
                 game.Start();
 			}
