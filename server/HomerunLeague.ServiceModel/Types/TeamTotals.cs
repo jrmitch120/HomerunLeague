@@ -1,4 +1,6 @@
-﻿namespace HomerunLeague.ServiceModel.Types
+﻿using ServiceStack.DataAnnotations;
+
+namespace HomerunLeague.ServiceModel.Types
 {
     public class TeamTotals
     {

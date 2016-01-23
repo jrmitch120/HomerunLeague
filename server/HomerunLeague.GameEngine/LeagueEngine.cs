@@ -5,6 +5,7 @@ using System.Timers;
 using HomerunLeague.GameEngine.Bios;
 using HomerunLeague.GameEngine.Stats;
 using HomerunLeague.ServiceInterface;
+using HomerunLeague.ServiceInterface.Extensions;
 using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
@@ -35,8 +36,8 @@ namespace HomerunLeague.GameEngine
 
             _gameActions = new Dictionary<LeagueAction, Action<object>>
             {
-                {LeagueAction.BioUpdate, o => UpdateBio(o.ConvertTo<BioUpdateOptions>())},
-                {LeagueAction.StatUpdate, o => UpdateStats(o.ConvertTo<StatUpdateOptions>())}
+                {LeagueAction.BioUpdate, o => UpdatePlayerBios(o.ConvertTo<BioUpdateOptions>())},
+                {LeagueAction.StatUpdate, o => UpdatePlayerStats(o.ConvertTo<StatUpdateOptions>())}
             };
         }
 
@@ -130,7 +131,7 @@ namespace HomerunLeague.GameEngine
         /// Update players' biographical information from the IBioData provider
         /// </summary>
         /// <param name="options">Bio update options</param>
-        private void UpdateBio(BioUpdateOptions options)
+        private void UpdatePlayerBios(BioUpdateOptions options)
         {
             options = options ?? new BioUpdateOptions();
 
@@ -145,7 +146,7 @@ namespace HomerunLeague.GameEngine
         /// Update players' statistics from the IStatData provider
         /// </summary>
         /// <param name="options">Stat update options</param>
-        private void UpdateStats(StatUpdateOptions options)
+        private void UpdatePlayerStats(StatUpdateOptions options)
         {
             options = options ?? new StatUpdateOptions();
 
@@ -156,7 +157,7 @@ namespace HomerunLeague.GameEngine
                     var stats = _statData.FetchStats(player, options.Year);
 
                     if (stats.GameLogs.Any()) // Did we find any stats?
-                        {
+                    {
                         _services.StatSvc.Put(new PutGameLogs
                         {
                             PlayerId = player.Id,
@@ -171,6 +172,13 @@ namespace HomerunLeague.GameEngine
                     }
                 }
             });
+        }
+
+        private void UpdateTeamTotals()
+        {
+            var players = new Dictionary<int, Player>();
+
+            // TODO Update totals
         }
     }
 

@@ -14,10 +14,12 @@ namespace HomerunLeague.GameEngine
         private Lazy<AdminServices> _adminServices;
         private Lazy<PlayerServices> _playerServices;
         private Lazy<StatServices> _statServices;
+        private Lazy<TeamServices> _teamServices;
 
         public AdminServices AdminSvc => _adminServices.Value;
         public PlayerServices PlayerSvc => _playerServices.Value;
         public StatServices StatSvc => _statServices.Value;
+        public TeamServices TeamSvc => _teamServices.Value;
 
         public Services(IServiceFactory factory)
         {
@@ -30,7 +32,8 @@ namespace HomerunLeague.GameEngine
         {
             _adminServices = new Lazy<AdminServices>(_factory.CreateAdminServices);
             _playerServices = new Lazy<PlayerServices>(_factory.CreatePlayerServices);
-            _statServices = new Lazy<StatServices>(_factory.CreateStatService);
+            _statServices = new Lazy<StatServices>(_factory.CreateStatServices);
+            _teamServices = new Lazy<TeamServices>(_factory.CreateTeamServices);
         }
 
         public void Dispose()
@@ -42,6 +45,8 @@ namespace HomerunLeague.GameEngine
                 _playerServices.Value.Dispose();
             if (_statServices.IsValueCreated)
                 _statServices.Value.Dispose();
+            if (_teamServices.IsValueCreated)
+                _teamServices.Value.Dispose();
 
             Init();
         }

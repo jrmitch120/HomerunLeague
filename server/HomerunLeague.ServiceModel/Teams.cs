@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using HomerunLeague.ServiceModel.Types;
 using HomerunLeague.ServiceModel.ViewModels;
 using ServiceStack;
 
 namespace HomerunLeague.ServiceModel
 {
-    [Route("/{year}/teams/{id}", "GET")]
+    [Route("/teams/{id}", "GET", Summary = "Get a homerun league team")]
     public class GetTeam : IReturn<GetTeamsResponse> 
     {
-        [ApiMember(IsRequired = true)]
-        public int Year { get; set; }
-
-        [ApiMember(IsRequired = true)]
+        [ApiMember(Name = "Id", Description = "Id of the team.",
+        ParameterType = "path", DataType = "string", IsRequired = true)]
         public int Id { get; set; }
     }
 
@@ -23,11 +20,12 @@ namespace HomerunLeague.ServiceModel
         public ResponseStatus ResponseStatus { get; set; }
     }
 
-    [Route("/{year}/teams", "GET")]
+    [Route("/teams", "GET", Summary = "Get a list of homerun league teams")]
     public class GetTeams : PageableRequest, IReturn<GetTeamsResponse> 
     {
-        [ApiMember(IsRequired = true)]
-        public int Year { get; set; }
+        [ApiMember(Name = "Year", Description = "Filter teams by year.",
+        ParameterType = "query", DataType = "string", IsRequired = true)]
+        public int? Year { get; set; }
     }
 
     public class GetTeamsResponse : IHasResponseStatus, IMeta
@@ -39,17 +37,32 @@ namespace HomerunLeague.ServiceModel
         public ResponseStatus ResponseStatus { get; set; }
     }
 
-    [Route("/{year}/teams", "POST")]
+    [Route("/teams", "POST", Summary = "Create a homerun league team.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     public class CreateTeam : IReturn<GetTeamsResponse>
     {
         public string Name { get; set; }
 
-        public int Year { get; set; }
-
         public string Email { get; set; }
 
         public List<int> PlayerIds { get; set; }
+    }
+
+    [Route("/teams/{id}/totals", "PUT", Summary = "Update a homerun league team's statistical totals.")]
+    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    public class UpdateTeamTotals
+    {
+        public int Id { get; set; }
+
+        public TeamTotalsView TeamTotals { get; set; }
+    }
+
+    [Route("/teams/{id}", "DELETE", Summary = "Delete a homerun league team.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
+    public class DeleteTeam
+    {
+        [ApiMember(IsRequired = true)]
+        public int Id { get; set; }
     }
 }
 

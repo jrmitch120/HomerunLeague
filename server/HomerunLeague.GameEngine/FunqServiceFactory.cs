@@ -17,9 +17,14 @@ namespace HomerunLeague.GameEngine
             return _container.Resolve<PlayerServices>();
         }
 
-        public StatServices CreateStatService()
+        public StatServices CreateStatServices()
         {
             return _container.Resolve<StatServices>();
+        }
+
+        public TeamServices CreateTeamServices()
+        {
+            return _container.Resolve<TeamServices>();
         }
 
         public FunqServiceFactory(Container container)

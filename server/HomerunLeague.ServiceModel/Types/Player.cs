@@ -14,6 +14,8 @@ namespace HomerunLeague.ServiceModel.Types
         [Index(Unique=true)]
         public int MlbId { get; set; }
 
+        public int MlbTeamId { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -29,6 +31,16 @@ namespace HomerunLeague.ServiceModel.Types
         public int HeightInches { get; set; }
 
         public int JerseyNumber { get; set; }
+
+        [Ignore]
+        public Uri PlayerImage => new Uri($"http://mlb.mlb.com/mlb/images/players/head_shot/{MlbId}.jpg");
+        [Ignore]
+        public Uri PlayerImage2X => new Uri($"http://mlb.mlb.com/mlb/images/players/head_shot/{MlbId}@2x.jpg");
+
+        [Ignore]
+        public Uri TeamLogo => new Uri($"http://m.mlb.com/shared/images/logos/32x32_cap/{MlbTeamId}.png");
+        [Ignore]
+        public Uri TeamLogo2X=> new Uri($"http://m.mlb.com/shared/images/logos/32x32_cap/{MlbTeamId}@2x.png");
 
         public string Bats { get; set; }
 

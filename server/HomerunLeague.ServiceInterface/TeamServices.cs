@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using HomerunLeague.ServiceInterface.Extensions;
+using HomerunLeague.ServiceInterface.RequestFilters;
 using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
@@ -20,37 +21,43 @@ namespace HomerunLeague.ServiceInterface
             _adminSvc = adminSvc;
         }
 
-        public GetTeamResponse Get(GetTeam request) 
+        public GetTeamResponse Get(GetTeam request)
         {
-            var team = Db.LoadSelect<Team>(t => t.Id == request.Id && t.Year == request.Year).SingleOrDefault();
+            var team = Db.LoadSelect<Team>(t => t.Id == request.Id).SingleOrDefault();
 
             if (team == null)
-                throw new HttpError(HttpStatusCode.NotFound, 
+                throw new HttpError(HttpStatusCode.NotFound,
 
-                    new ArgumentException("TeamId {0} does not exist in {1}. ".Fmt(request.Id, request.Year)));
+                    new ArgumentException("TeamId {0} does not exist. ".Fmt(request.Id)));
 
-            team.Players = Db.Select<Player>(q => q.Join<Player,Teamate>((player, teamate) => player.Id == teamate.PlayerId));
+            team.Players =
+                Db.Select<Player>(q => q.Join<Player, Teamate>((player, teamate) => player.Id == teamate.PlayerId));
 
             return new GetTeamResponse {Team = team.ToViewModel()};
         }
 
-        public GetTeamsResponse Get(GetTeams request) 
+        public GetTeamsResponse Get(GetTeams request)
         {
             int page = request.Page ?? 1;
+
+            var query = Db.From<Team>();
+
+            if (request.Year.HasValue)
+                query.Where(q => q.Year == request.Year);
+
+            query
+                .OrderBy(q => new {f1 = Sql.Desc(q.Year), f2 = q.Name})
+                .PageTo(page);
 
             return new GetTeamsResponse
             {
                 Teams =
-                    Db.LoadSelect(
-                        Db.From<Team>()
-                            .Where(t => t.Year == request.Year)
-                            //.OrderByDescending(s => s.Totals.Hr) TODO: Crashing
-                            .PageTo(page)).ToViewModel(),
+                    Db.LoadSelect(query).ToViewModel(),
                 Meta =
                     new Meta(Request.AbsoluteUri)
                     {
                         Page = page,
-                        TotalCount = Db.Count<Team>(t => t.Year == request.Year)
+                        TotalCount = Db.Count(query)
                     }
             };
         }
@@ -61,6 +68,8 @@ namespace HomerunLeague.ServiceInterface
                 throw new UnauthorizedAccessException("New team registration is currently closed.");
 
             var team = request.ConvertTo<Team>();
+
+            team.Year = _adminSvc.Get(new GetSettings()).BaseballYear;
 
             team.ValidationToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
 
@@ -76,19 +85,46 @@ namespace HomerunLeague.ServiceInterface
                 });
 
                 Db.InsertAll(teamates);
-              
+
                 trans.Commit();
             }
 
             return
-                new HttpResult(new GetTeamResponse().PopulateWith(Get(new GetTeam {Year = request.Year, Id = team.Id})))
+                new HttpResult(new GetTeamResponse().PopulateWith(Get(new GetTeam {Id = team.Id})))
                 {
                     StatusCode = HttpStatusCode.Created,
                     Headers =
                     {
-                        {HttpHeaders.Location, new GetTeam {Year = request.Year, Id = team.Id}.ToGetUrl()}
+                        {HttpHeaders.Location, new GetTeam {Id = team.Id}.ToGetUrl()}
                     }
                 };
+        }
+
+        [Secured]
+        public HttpResult Put(UpdateTeamTotals request)
+        {
+            // TODO, Working
+            var totals = request.ConvertTo<TeamTotals>();
+
+            totals.TeamId = request.Id;
+
+            Db.Save(totals);
+
+            return new HttpResult {StatusCode = HttpStatusCode.NoContent};
+        }
+
+        [Secured]
+        public HttpResult Delete(DeleteTeam request)
+        {
+            using (IDbTransaction trans = Db.OpenTransaction())
+            {
+                Db.Delete<Teamate>(tm => tm.TeamId == request.Id);
+                Db.DeleteById<Team>(request.Id);
+
+                trans.Commit();
+            }
+
+            return new HttpResult {StatusCode = HttpStatusCode.NoContent};
         }
     }
 }

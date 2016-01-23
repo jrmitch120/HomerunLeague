@@ -6,6 +6,7 @@ namespace HomerunLeague.GameEngine
     {
         AdminServices CreateAdminServices();
         PlayerServices CreatePlayerServices();
-        StatServices CreateStatService();
+        StatServices CreateStatServices();
+        TeamServices CreateTeamServices();
     }
 }

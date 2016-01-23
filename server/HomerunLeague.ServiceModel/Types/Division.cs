@@ -19,7 +19,7 @@ namespace HomerunLeague.ServiceModel.Types
 
         public string Description { get; set; }
 
-        public int PlayerRequirment { get; set; }
+        public int PlayerRequirement { get; set; }
 
         public bool Active { get; set; }
 

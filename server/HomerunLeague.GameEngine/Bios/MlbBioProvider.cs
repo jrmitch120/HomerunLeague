@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using HomerunLeague.ServiceModel.Types;
 using RestSharp;
-using ServiceStack;
 
 namespace HomerunLeague.GameEngine.Bios
 {
@@ -42,7 +41,10 @@ namespace HomerunLeague.GameEngine.Bios
                     teamsClient.Get<MlbPlayerTeamResponse>(new RestRequest().AddParameter("player_id", player.MlbId));
 
                 if (teamsResult.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    player.MlbTeamId = teamsResult.Data.player_teams.queryResults.row[0].team_id;
                     player.TeamName = teamsResult.Data.player_teams.queryResults.row[0].team;
+                }
             }
         }
     }
@@ -156,7 +158,7 @@ namespace HomerunLeague.GameEngine.Bios
         public string player_id { get; set; }
         public string current_sw { get; set; }
         public string primary_stat_type { get; set; }
-        public string team_id { get; set; }
+        public int team_id { get; set; }
         public string start_date { get; set; }
     }
 

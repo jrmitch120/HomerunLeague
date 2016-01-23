@@ -1,11 +1,7 @@
-﻿using System;
-
-using ServiceStack;
+﻿using HomerunLeague.ServiceModel;
 using ServiceStack.OrmLite;
 
-using HomerunLeague.ServiceModel;
-
-namespace HomerunLeague.ServiceInterface
+namespace HomerunLeague.ServiceInterface.Extensions
 {
     public static class OrmExtensions
     {

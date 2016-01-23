@@ -31,13 +31,13 @@ namespace HomerunLeague.ServiceInterface.Validation
         public bool DivisionRequirmentsMet(List<int> playerIds)
         {
             // Check to see if they sent the exact number of players required across all divisions
-            if (_divisions.Sum(d => d.PlayerRequirment) != playerIds.Count)
+            if (_divisions.Sum(d => d.PlayerRequirement) != playerIds.Count)
                 return false;
 
             // Iterate the divisions and check to see if the player requirement for each is met
             foreach (var division in _divisions)
             {
-                if (division.PlayerRequirment !=
+                if (division.PlayerRequirement !=
                     division.Players.Select(p => p.Id).Intersect(playerIds).Count())
                     return false;
             }

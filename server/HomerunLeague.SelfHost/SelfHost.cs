@@ -69,50 +69,67 @@ namespace HomerunLeague.SelfHost
                     db.DropTables(typeof(TeamTotals), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(Team), typeof(Player), typeof(Division), typeof(Setting));
                     db.CreateTables(true,typeof(Team), typeof(Player), typeof(Division), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(TeamTotals), typeof(Setting));
 
-                    var baseballYear = Container.Resolve<AdminServices>().Get(new GetSettings()).BaseballYear;
-
-                    var divId1 = 
-                    db.Insert(new Division{Name = "Ron Santo", PlayerRequirment = 3, Description = "First division test.", Year = baseballYear, Order = 1, Active = true}, selectIdentity:true);                    
-
-                    var divId2 =
-                    db.Insert(new Division{Name = "Billy Williams", PlayerRequirment = 2, Description = "Second division test.", Year = baseballYear, Order = 2, Active = true}, selectIdentity:true);
-
-                    var divId3 = 
-                    db.Insert(new Division{ Name = "Ron Cey", PlayerRequirment = 1, Description = "Third division test.", Year = baseballYear, Order = 3, Active = true}, selectIdentity: true);
-
-                    db.Insert(new Division{ Name = "Inactive Division", PlayerRequirment = 3, Description = "Inactive division test.", Year = baseballYear, Order = 4, Active = false});
-
-                    var pid1 = db.Insert(new Player{FirstName = "Jeff", LastName = "Mitchell", MlbId = 516770, Active = true}, selectIdentity:true);
-                    var pid2 = db.Insert(new Player{FirstName = "Bone", LastName = "Jones", MlbId = 458085, Active = true}, selectIdentity:true);
-                    var pid3 = db.Insert(new Player{FirstName = "Joe", LastName = "Test", MlbId = 605218, Active = true }, selectIdentity:true);
-                    var pid4 = db.Insert(new Player{FirstName = "Bull", LastName = "Pucky", MlbId = 471083, Active = true }, selectIdentity:true);
-                    var pid5 = db.Insert(new Player{FirstName = "Fifth", LastName = "Man", MlbId = 467008, Active = true }, selectIdentity:true);
-                    var pid6 = db.Insert(new Player {FirstName = "Sixth", LastName = "Man", MlbId = 120074, Active = true }, selectIdentity: true);
-                    var pid7 = db.Insert(new Player {FirstName = "Sixth", LastName = "Man", MlbId = 547180, Active = true }, selectIdentity: true);
-                    
-                    container.Resolve<PlayerServices>()
-                        .Post(new CreatePlayers { Players = new List<Player> { new Player { MlbId = 545361, Active = true } } });
-
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid1});
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid2});
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId1, PlayerId = (int) pid3});
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId2, PlayerId = (int) pid4});
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId2, PlayerId = (int) pid5});
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId3, PlayerId = (int) pid6});
-                    db.Insert(new DivisionalPlayer {DivisionId = (int) divId3, PlayerId = (int) pid7});
-
-                    //Container.Resolve<TeamServices>()
-                    //    .Post(new CreateTeam
-                    //    {
-                    //        Email = "bob@yahoo.com",
-                    //        Name = "Bob Rocks",
-                    //        Year = baseballYear,
-                    //        PlayerIds =
-                    //            new List<int> { (int)pid1, (int)pid2, (int)pid3, (int)pid4, (int)pid5, (int)pid6 }
-                    //    });
+                    db.Save(new Setting {Name = "RegistrationOpen", Value = "true"});
+                    db.Save(new Setting {Name = "BaseballYear", Value = "2015"});
                 }
 
-			    var game = container.Resolve<LeagueEngine>();
+                var baseballYear = Container.Resolve<AdminServices>().Get(new GetSettings()).BaseballYear;
+
+                // Add some test players via service
+                container.Resolve<PlayerServices>()
+                    .Post(new CreatePlayers
+                    {
+                        Players =
+                            new List<Player>
+                            {
+                                new Player {MlbId = 516770, Active = true},
+                                new Player {MlbId = 458085, Active = true},
+                                new Player {MlbId = 605218, Active = true},
+                                new Player {MlbId = 471083, Active = true},
+                                new Player {MlbId = 467008, Active = true},
+                                new Player {MlbId = 120074, Active = true},
+                                new Player {MlbId = 547180, Active = true},
+                                new Player {MlbId = 545361, Active = true}
+                            }
+                    });
+
+                // Add some test divisions via service
+                Container.Resolve<DivisionServices>()
+			        .Post(new CreateDivisions
+			        {
+			            Divisions = new List<CreateDivision>
+			            {
+			                new CreateDivision
+			                {
+			                    Name = "Division 1",
+			                    Description = "Description for division 1",
+			                    PlayerRequirement = 2,
+			                    Order = 1,
+			                    Active = true,
+                                PlayerIds = new List<int> {1, 2, 3}
+			                },
+                            new CreateDivision
+                            {
+                                Name = "Division 2",
+                                Description = "Description for division 2",
+                                PlayerRequirement = 2,
+                                Order = 2,
+                                Active = true,
+                                PlayerIds = new List<int> {4, 5}
+                            },
+                            new CreateDivision
+                            {
+                                Name = "Division 3",
+                                Description = "Description for division 3",
+                                PlayerRequirement = 3,
+                                Order = 3,
+                                Active = true,
+                                PlayerIds = new List<int> {6, 7, 8}
+                            }
+                        }
+			        });
+
+                var game = container.Resolve<LeagueEngine>();
 
                 game.Start();
 			}
