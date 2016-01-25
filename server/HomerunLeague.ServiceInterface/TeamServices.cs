@@ -54,7 +54,7 @@ namespace HomerunLeague.ServiceInterface
                 Teams =
                     Db.LoadSelect(query).ToViewModel(),
                 Meta =
-                    new Meta(Request.AbsoluteUri)
+                    new Meta(Request?.AbsoluteUri)
                     {
                         Page = page,
                         TotalCount = Db.Count(query)
@@ -103,14 +103,13 @@ namespace HomerunLeague.ServiceInterface
         [Secured]
         public HttpResult Put(UpdateTeamTotals request)
         {
-            // TODO, Working
-            var totals = request.ConvertTo<TeamTotals>();
+            var totals = request.TeamTotals.ConvertTo<TeamTotals>();
 
             totals.TeamId = request.Id;
 
-            Db.Save(totals);
+            Db.Update(totals);
 
-            return new HttpResult {StatusCode = HttpStatusCode.NoContent};
+            return new HttpResult {StatusCode = HttpStatusCode.OK};
         }
 
         [Secured]

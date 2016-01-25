@@ -48,7 +48,7 @@ namespace HomerunLeague.ServiceModel
     }
     
     [Route("/admin/events/{Id}", "PUT")]
-    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
     public class UpdateLeagueEvent : LeagueEvent
     {
 

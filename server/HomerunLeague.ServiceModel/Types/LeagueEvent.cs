@@ -24,7 +24,8 @@ namespace HomerunLeague.ServiceModel.Types
     public enum LeagueAction
     {
         BioUpdate = 1,
-        StatUpdate
+        StatUpdate,
+        TeamUpdate
     }
 
     public class BioUpdateOptions
@@ -33,6 +34,11 @@ namespace HomerunLeague.ServiceModel.Types
     }
 
     public class StatUpdateOptions
+    {
+        public int Year { get; set; }
+    }
+
+    public class TeamUpdateOptions
     {
         public int Year { get; set; }
     }

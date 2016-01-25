@@ -49,7 +49,8 @@ namespace HomerunLeague.SelfHost
 
                 JsConfig<BioUpdateOptions>.IncludeTypeInfo = true;
                 JsConfig<StatUpdateOptions>.IncludeTypeInfo = true;
-                
+                JsConfig<TeamUpdateOptions>.IncludeTypeInfo = true;
+
                 OrmLiteConfig.InsertFilter = (dbCmd, row) =>
                 {
                     var auditRow = row as IAudit;
@@ -127,6 +128,15 @@ namespace HomerunLeague.SelfHost
                                 PlayerIds = new List<int> {6, 7, 8}
                             }
                         }
+			        });
+
+                // Add a team
+			    Container.Resolve<TeamServices>()
+			        .Post(new CreateTeam
+			        {
+			            Email = "Bob@yahoo.com",
+                        Name = "Bob's team team",
+                        PlayerIds =  new List<int> { 1, 2, 4, 5, 6, 7, 8 }
 			        });
 
                 var game = container.Resolve<LeagueEngine>();

@@ -5,14 +5,14 @@ using System.Timers;
 using HomerunLeague.GameEngine.Bios;
 using HomerunLeague.GameEngine.Stats;
 using HomerunLeague.ServiceInterface;
-using HomerunLeague.ServiceInterface.Extensions;
 using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Types;
+using HomerunLeague.ServiceModel.ViewModels;
 using ServiceStack;
 
-namespace HomerunLeague.GameEngine
+namespace HomerunLeague.GameEngine 
 {
-    public class LeagueEngine
+    public class LeagueEngine : IDisposable
     {
         private readonly Dictionary<LeagueAction, Action<object>> _gameActions; 
 
@@ -20,6 +20,8 @@ namespace HomerunLeague.GameEngine
         private readonly IStatData _statData;
 
         private readonly Services _services;
+
+        private GetSettingsResponse _settings;
 
         private readonly Timer _timer;
         private volatile bool _running;
@@ -37,7 +39,8 @@ namespace HomerunLeague.GameEngine
             _gameActions = new Dictionary<LeagueAction, Action<object>>
             {
                 {LeagueAction.BioUpdate, o => UpdatePlayerBios(o.ConvertTo<BioUpdateOptions>())},
-                {LeagueAction.StatUpdate, o => UpdatePlayerStats(o.ConvertTo<StatUpdateOptions>())}
+                {LeagueAction.StatUpdate, o => UpdatePlayerStats(o.ConvertTo<StatUpdateOptions>())},
+                {LeagueAction.TeamUpdate, o => UpdateTeams(o.ConvertTo<TeamUpdateOptions>())}
             };
         }
 
@@ -58,6 +61,8 @@ namespace HomerunLeague.GameEngine
             try
             {
                 _running = true;
+
+                _settings = _services.AdminSvc.Get(new GetSettings());
 
                 HeartBeat();
 
@@ -110,7 +115,7 @@ namespace HomerunLeague.GameEngine
                 _services.AdminSvc.Post(new CreateLeagueEvent
                 {
                     Action = LeagueAction.StatUpdate,
-                    Options = new StatUpdateOptions {Year = _services.AdminSvc.Get(new GetSettings()).BaseballYear}
+                    Options = new StatUpdateOptions {Year = _settings.BaseballYear}
                 });
 
             // Automatic bio updates once a week
@@ -148,7 +153,7 @@ namespace HomerunLeague.GameEngine
         /// <param name="options">Stat update options</param>
         private void UpdatePlayerStats(StatUpdateOptions options)
         {
-            options = options ?? new StatUpdateOptions();
+            options = options ?? new StatUpdateOptions {Year = _settings.BaseballYear};
 
             _services.PlayerSvc.BatchPlayerAction(new GetPlayers(), players =>
             {
@@ -172,13 +177,51 @@ namespace HomerunLeague.GameEngine
                     }
                 }
             });
+
+            // Since we've update statistics, create a new request to update teams.
+            _services.AdminSvc.Post(new CreateLeagueEvent
+            {
+                Action = LeagueAction.TeamUpdate,
+                Options = new TeamUpdateOptions {Year = options.Year}
+            });
         }
 
-        private void UpdateTeamTotals()
+        private void UpdateTeams(TeamUpdateOptions options)
         {
-            var players = new Dictionary<int, Player>();
+            options = options ?? new TeamUpdateOptions {Year = _settings.BaseballYear };
 
-            // TODO Update totals
+            // TODO: var players = new Dictionary<int, Player>();
+
+            _services.TeamSvc.BatchTeamAction(new GetTeams { Year = options.Year}, teams =>
+            {
+                foreach (var team in teams)
+                {
+                    var fullTeam = _services.TeamSvc.Get(new GetTeam {Id = team.Id}).Team;
+                    var originalHr = team.Totals.Hr;
+
+                    team.Totals.Hr = 0;
+
+                    foreach (var player in fullTeam.Players)
+                    {
+                        var playerTotal = _services.PlayerSvc.Get(new GetPlayer {Id = player.Id})
+                            .Player.PlayerTotals.FirstOrDefault(total => total.Year == options.Year);
+
+                        if (playerTotal == null)
+                            throw new ArgumentException($"Unable to find {options.Year} stats for {player.MlbId}");
+
+                        team.Totals.Hr += playerTotal.Hr;
+                    }
+
+                    team.Totals.HrMovement = team.Totals.Hr - originalHr;
+
+                    _services.TeamSvc.Put(new UpdateTeamTotals {Id = team.Id, TeamTotals = team.Totals});
+                }
+            });
+        }
+
+        public void Dispose()
+        {
+            _services?.Dispose();
         }
     }
 
@@ -197,6 +240,23 @@ namespace HomerunLeague.GameEngine
 
                 if (response.Players.Any())
                     process.Invoke(response.Players);
+
+            } while (response.Meta.Page < response.Meta.TotalPages);
+        }
+
+        public static void BatchTeamAction(this TeamServices svc, GetTeams request, Action<List<TeamListView>> process)
+        {
+            GetTeamsResponse response;
+            int page = 0;
+
+            do
+            {
+                page++;
+                request.Page = page;
+                response = svc.Get(request);
+
+                if (response.Teams.Any())
+                    process.Invoke(response.Teams);
 
             } while (response.Meta.Page < response.Meta.TotalPages);
         }

@@ -12,9 +12,9 @@ namespace HomerunLeague.ServiceInterface.Extensions
             return team.ConvertTo<TeamView>();
         }
 
-        public static List<TeamView> ToViewModel(this List<Team> teams)
+        public static List<TeamListView> ToViewModel(this List<Team> teams)
         {
-            return teams.ConvertAll(t => t.ToViewModel());
+            return teams.ConvertAll(team => team.ConvertTo<TeamListView>());
         }
     }
 }

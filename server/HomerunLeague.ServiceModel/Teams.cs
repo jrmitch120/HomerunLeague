@@ -24,7 +24,7 @@ namespace HomerunLeague.ServiceModel
     public class GetTeams : PageableRequest, IReturn<GetTeamsResponse> 
     {
         [ApiMember(Name = "Year", Description = "Filter teams by year.",
-        ParameterType = "query", DataType = "string", IsRequired = true)]
+        ParameterType = "query", DataType = "string", IsRequired = false)]
         public int? Year { get; set; }
     }
 
@@ -32,7 +32,7 @@ namespace HomerunLeague.ServiceModel
     {
         public Meta Meta { get; set; }
 
-        public List<TeamView> Teams { get; set; }
+        public List<TeamListView> Teams { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
     }

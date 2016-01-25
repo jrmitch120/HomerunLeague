@@ -54,6 +54,7 @@
     <Compile Include="Types\DivisionalPlayer.cs" />
     <Compile Include="Admin.cs" />
     <Compile Include="Types\LeagueEvent.cs" />
+    <Compile Include="ViewModels\TeamListView.cs" />
     <Compile Include="ViewModels\TeamTotalsView.cs" />
     <Compile Include="ViewModels\TeamView.cs" />
   </ItemGroup>
