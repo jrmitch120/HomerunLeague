@@ -67,7 +67,7 @@ namespace HomerunLeague.ServiceInterface
                 throw new HttpError(HttpStatusCode.NotFound,
                     new ArgumentException("LeagueEvent {0} does not exist. ".Fmt(request.Id)));
 
-            return new HttpResult { StatusCode = HttpStatusCode.OK };
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
     }
 }

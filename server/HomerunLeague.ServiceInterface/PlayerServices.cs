@@ -41,7 +41,7 @@ namespace HomerunLeague.ServiceInterface
         public HttpResult Put(PutPlayers request)
         {
             Db.SaveAll(request.Players);
-            return new HttpResult { StatusCode = HttpStatusCode.OK };
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
 
         [Secured]

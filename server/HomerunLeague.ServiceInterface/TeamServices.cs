@@ -109,7 +109,7 @@ namespace HomerunLeague.ServiceInterface
 
             Db.Update(totals);
 
-            return new HttpResult {StatusCode = HttpStatusCode.OK};
+            return new HttpResult {StatusCode = HttpStatusCode.NoContent };
         }
 
         [Secured]

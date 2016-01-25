@@ -49,7 +49,7 @@ namespace HomerunLeague.ServiceModel
     }
 
     [Route("/teams/{id}/totals", "PUT", Summary = "Update a homerun league team's statistical totals.")]
-    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     public class UpdateTeamTotals
     {
         public int Id { get; set; }

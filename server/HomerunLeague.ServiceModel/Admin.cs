@@ -5,7 +5,7 @@ using ServiceStack;
 
 namespace HomerunLeague.ServiceModel
 {
-    [Route("/admin/settings")]
+    [Route("/admin/settings", "GET")]
     public class GetSettings { }
 
     public class GetSettingsResponse
@@ -48,7 +48,7 @@ namespace HomerunLeague.ServiceModel
     }
     
     [Route("/admin/events/{Id}", "PUT")]
-    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     public class UpdateLeagueEvent : LeagueEvent
     {
 

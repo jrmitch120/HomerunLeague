@@ -33,7 +33,7 @@ namespace HomerunLeague.ServiceModel
     }
 
     [Route("/players", "POST")]
-    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     public class CreatePlayers
     {
         [ApiMember(IsRequired = true)]
@@ -41,7 +41,7 @@ namespace HomerunLeague.ServiceModel
     }
 
     [Route("/players", "PUT")]
-    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     public class PutPlayers 
     {
         [ApiMember(IsRequired = true)]

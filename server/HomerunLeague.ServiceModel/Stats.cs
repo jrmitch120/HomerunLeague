@@ -6,7 +6,7 @@ using ServiceStack;
 namespace HomerunLeague.ServiceModel
 {
     [Route("/players/{playerId}/gamelogs", "PUT")]
-    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     public class PutGameLogs
     {
         [ApiMember(IsRequired = true)]
@@ -17,7 +17,7 @@ namespace HomerunLeague.ServiceModel
     }
 
     [Route("/players/{playerId}/playertotals", "PUT")]
-    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     public class PutPlayerTotals
     {
         [ApiMember(IsRequired = true)]

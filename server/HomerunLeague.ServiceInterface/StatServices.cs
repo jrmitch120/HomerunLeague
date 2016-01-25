@@ -15,7 +15,7 @@ namespace HomerunLeague.ServiceInterface
 
             Db.SaveAll(request.GameLogs);
             
-            return new HttpResult { StatusCode = HttpStatusCode.OK };
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
 
         [Secured]
@@ -24,7 +24,7 @@ namespace HomerunLeague.ServiceInterface
             request.PlayerTotals.PlayerId = request.PlayerId;
 
             Db.Save(request.PlayerTotals);
-            return new HttpResult { StatusCode = HttpStatusCode.OK };
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
     }
 }
