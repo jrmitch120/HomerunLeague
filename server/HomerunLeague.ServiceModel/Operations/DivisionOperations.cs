@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 
-namespace HomerunLeague.ServiceModel
+namespace HomerunLeague.ServiceModel.Operations
 {
+    /***********************
+    *    GET OPERATIONS    *
+    ***********************/
     [Route("/divisions", "GET")]
-    public class GetDivisions : PageableRequest, IReturn<GetDivisionsResponse> 
+    public class GetDivisions : PageableRequest, IReturn<GetDivisionsResponse>
     {
         [ApiMember(IsRequired = false)]
         public int? Year { get; set; }
@@ -15,15 +17,9 @@ namespace HomerunLeague.ServiceModel
         public bool IncludeInactive { get; set; }
     }
 
-    public class GetDivisionsResponse : IHasResponseStatus, IMeta
-    {
-        public Meta Meta { get; set; }
-
-        public List<Division> Divisions { get; set; }
-
-        public ResponseStatus ResponseStatus { get; set; }
-    }
-
+    /***********************
+    *   POST OPERATIONS    *
+    ***********************/
     [Route("/divisions", "POST")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     public class CreateDivisions
@@ -56,6 +52,9 @@ namespace HomerunLeague.ServiceModel
         public List<int> PlayerIds { get; set; }
     }
 
+    /***********************
+    *   DELETE OPERATIONS  *
+    ***********************/
     [Route("/divisions/{id}", "Delete")]
     [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     public class DeleteDivision
@@ -63,4 +62,3 @@ namespace HomerunLeague.ServiceModel
         public int Id { get; set; }
     }
 }
-

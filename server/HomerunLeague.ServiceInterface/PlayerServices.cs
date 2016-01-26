@@ -2,7 +2,7 @@
 using System.Net;
 using HomerunLeague.ServiceInterface.Extensions;
 using HomerunLeague.ServiceInterface.RequestFilters;
-using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.OrmLite;

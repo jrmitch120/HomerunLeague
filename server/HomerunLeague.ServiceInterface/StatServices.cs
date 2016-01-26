@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using HomerunLeague.ServiceInterface.RequestFilters;
-using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Operations;
 using ServiceStack;
 using ServiceStack.OrmLite;
 

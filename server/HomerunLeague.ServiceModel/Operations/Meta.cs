@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using ServiceStack.DataAnnotations;
 
-namespace HomerunLeague.ServiceModel
+namespace HomerunLeague.ServiceModel.Operations
 {
     public abstract class PageableRequest
     {

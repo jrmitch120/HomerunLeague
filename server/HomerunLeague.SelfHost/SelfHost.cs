@@ -9,6 +9,7 @@ using HomerunLeague.ServiceInterface;
 using HomerunLeague.ServiceInterface.Authentication;
 using HomerunLeague.ServiceInterface.Validation;
 using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 
 using ServiceStack;

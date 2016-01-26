@@ -6,6 +6,7 @@ using HomerunLeague.GameEngine.Bios;
 using HomerunLeague.GameEngine.Stats;
 using HomerunLeague.ServiceInterface;
 using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 using HomerunLeague.ServiceModel.ViewModels;
 using ServiceStack;

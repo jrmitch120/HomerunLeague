@@ -1,10 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 
-namespace HomerunLeague.ServiceModel
+namespace HomerunLeague.ServiceModel.Operations
 {
+    /***********************
+    *    PUT OPERATIONS    *
+    ***********************/
     [Route("/players/{playerId}/gamelogs", "PUT")]
     [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     public class PutGameLogs

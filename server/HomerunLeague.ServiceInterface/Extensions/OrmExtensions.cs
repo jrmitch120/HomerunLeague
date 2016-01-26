@@ -1,4 +1,5 @@
 ﻿using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Operations;
 using ServiceStack.OrmLite;
 
 namespace HomerunLeague.ServiceInterface.Extensions

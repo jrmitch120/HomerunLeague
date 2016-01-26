@@ -2,6 +2,7 @@
 using System.Linq;
 using HomerunLeague.ServiceInterface.Extensions;
 using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.FluentValidation;

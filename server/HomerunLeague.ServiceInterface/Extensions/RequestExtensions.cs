@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using HomerunLeague.ServiceModel;
+using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 
 namespace HomerunLeague.ServiceInterface.Extensions
