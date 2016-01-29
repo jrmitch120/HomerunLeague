@@ -8,7 +8,6 @@ using HomerunLeague.GameEngine.Stats;
 using HomerunLeague.ServiceInterface;
 using HomerunLeague.ServiceInterface.Authentication;
 using HomerunLeague.ServiceInterface.Validation;
-using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 
@@ -31,16 +30,22 @@ namespace HomerunLeague.SelfHost
 			{
                 Plugins.Add(new CorsFeature());
                 Plugins.Add(new ValidationFeature());
+			    Plugins.Add(new PostmanFeature());
 
                 // SqlServer
-                //container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"Data Source=.\SQLEXPRESS;Initial Catalog=HomerunLeague;Integrated Security=True", SqlServer2012Dialect.Provider));
+                //container.Register<IDbConnectionFactory>(
+                //    new OrmLiteConnectionFactory(
+                //        @"Data Source=.\SQLEXPRESS;Initial Catalog=HomerunLeague;Integrated Security=True",
+                //        SqlServer2012Dialect.Provider));
 
                 // SQLite
-                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../../Database/leaguedata.sqlite", SqliteDialect.Provider));
+                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../../Database/leaguedata.sqlite",
+                    SqliteDialect.Provider));
+
+                container.Register<IKeys>(new ApiKeys(AppSettings.GetList("apiKeys"))); // API Keys
 
                 container.RegisterAutoWiredAs<MlbBioProvider, IBioData>(); // Bios from MLB
                 container.RegisterAutoWiredAs<MlbStatProvider, IStatData>(); // Stats from MLB
-                container.RegisterAutoWiredAs<ApiKeys, IKeys>(); // API Keys
                 container.RegisterAutoWiredAs<FunqServiceFactory, IServiceFactory>(); // Service Factory
 			    container.RegisterAutoWired<Services>();
                 container.RegisterAutoWired<LeagueEngine>();
@@ -75,76 +80,70 @@ namespace HomerunLeague.SelfHost
                     db.Save(new Setting {Name = "BaseballYear", Value = "2015"});
                 }
 
-                var baseballYear = Container.Resolve<AdminServices>().Get(new GetSettings()).BaseballYear;
+			    var services = container.Resolve<Services>();
 
                 // Add some test players via service
-                container.Resolve<PlayerServices>()
-                    .Post(new CreatePlayers
-                    {
-                        Players =
-                            new List<Player>
-                            {
-                                new Player {MlbId = 516770, Active = true},
-                                new Player {MlbId = 458085, Active = true},
-                                new Player {MlbId = 605218, Active = true},
-                                new Player {MlbId = 471083, Active = true},
-                                new Player {MlbId = 467008, Active = true},
-                                new Player {MlbId = 120074, Active = true},
-                                new Player {MlbId = 547180, Active = true},
-                                new Player {MlbId = 545361, Active = true}
-                            }
-                    });
+                services.PlayerSvc
+                    .Post(new []
+			        {
+			            new CreatePlayer {MlbId = 516770, Active = true},
+			            new CreatePlayer {MlbId = 458085, Active = true},
+			            new CreatePlayer {MlbId = 605218, Active = true},
+			            new CreatePlayer {MlbId = 471083, Active = true},
+			            new CreatePlayer {MlbId = 467008, Active = true},
+			            new CreatePlayer {MlbId = 120074, Active = true},
+			            new CreatePlayer {MlbId = 547180, Active = true},
+			            new CreatePlayer {MlbId = 545361, Active = true}
+			        });
 
                 // Add some test divisions via service
-                Container.Resolve<DivisionServices>()
-			        .Post(new CreateDivisions
+                services.DivisionSvc
+                    .Post(new[]
 			        {
-			            Divisions = new List<CreateDivision>
+			            new CreateDivision
 			            {
-			                new CreateDivision
-			                {
-			                    Name = "Division 1",
-			                    Description = "Description for division 1",
-			                    PlayerRequirement = 2,
-			                    Order = 1,
-			                    Active = true,
-                                PlayerIds = new List<int> {1, 2, 3}
-			                },
-                            new CreateDivision
-                            {
-                                Name = "Division 2",
-                                Description = "Description for division 2",
-                                PlayerRequirement = 2,
-                                Order = 2,
-                                Active = true,
-                                PlayerIds = new List<int> {4, 5}
-                            },
-                            new CreateDivision
-                            {
-                                Name = "Division 3",
-                                Description = "Description for division 3",
-                                PlayerRequirement = 3,
-                                Order = 3,
-                                Active = true,
-                                PlayerIds = new List<int> {6, 7, 8}
-                            }
-                        }
+			                Name = "Division 1",
+			                Description = "Description for division 1",
+			                PlayerRequirement = 2,
+			                Order = 1,
+			                Active = true,
+			                PlayerIds = new List<int> {1, 2, 3}
+			            },
+			            new CreateDivision
+			            {
+			                Name = "Division 2",
+			                Description = "Description for division 2",
+			                PlayerRequirement = 2,
+			                Order = 2,
+			                Active = true,
+			                PlayerIds = new List<int> {4, 5}
+			            },
+			            new CreateDivision
+			            {
+			                Name = "Division 3",
+			                Description = "Description for division 3",
+			                PlayerRequirement = 3,
+			                Order = 3,
+			                Active = true,
+			                PlayerIds = new List<int> {6, 7, 8}
+			            }
 			        });
 
                 // Add a team
-			    Container.Resolve<TeamServices>()
-			        .Post(new CreateTeam
+                services.TeamSvc
+                    .Post(new CreateTeam
 			        {
 			            Email = "Bob@yahoo.com",
                         Name = "Bob's team team",
                         PlayerIds =  new List<int> { 1, 2, 4, 5, 6, 7, 8 }
 			        });
 
+			    services.Dispose();
+
                 var game = container.Resolve<LeagueEngine>();
 
                 game.Start();
-			}
-
+            }
 		}
 
 		//Run it!

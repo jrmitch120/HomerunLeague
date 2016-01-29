@@ -6,6 +6,10 @@ namespace HomerunLeague.ServiceInterface.RequestFilters
 {
     public class SecuredAttribute : RequestFilterAttribute
     {
+        public SecuredAttribute() { }
+
+        public SecuredAttribute(ApplyTo applyTo) : base(applyTo) { }
+
         public override void Execute(IRequest req, IResponse res, object requestDto)
         {
             if (req.IsLocal)

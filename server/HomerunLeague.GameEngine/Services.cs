@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using HomerunLeague.ServiceInterface;
 
 namespace HomerunLeague.GameEngine
@@ -12,11 +13,13 @@ namespace HomerunLeague.GameEngine
 
         // Using lazy here because all services may not be required at any given time
         private Lazy<AdminServices> _adminServices;
+        private Lazy<DivisionServices> _divisionServices;
         private Lazy<PlayerServices> _playerServices;
         private Lazy<StatServices> _statServices;
         private Lazy<TeamServices> _teamServices;
 
         public AdminServices AdminSvc => _adminServices.Value;
+        public DivisionServices DivisionSvc => _divisionServices.Value;
         public PlayerServices PlayerSvc => _playerServices.Value;
         public StatServices StatSvc => _statServices.Value;
         public TeamServices TeamSvc => _teamServices.Value;
@@ -31,16 +34,20 @@ namespace HomerunLeague.GameEngine
         private void Init()
         {
             _adminServices = new Lazy<AdminServices>(_factory.CreateAdminServices);
+            _divisionServices = new Lazy<DivisionServices>(_factory.CreateDivisionServices);
             _playerServices = new Lazy<PlayerServices>(_factory.CreatePlayerServices);
             _statServices = new Lazy<StatServices>(_factory.CreateStatServices);
             _teamServices = new Lazy<TeamServices>(_factory.CreateTeamServices);
         }
 
+        // TODO: Tighten up some.  Too tired now.
         public void Dispose()
         {
             // We want to impliment dispose to clean up the services that operate using database connections
             if (_adminServices.IsValueCreated)
                 _adminServices.Value.Dispose();
+            if (_divisionServices.IsValueCreated)
+                _divisionServices.Value.Dispose();
             if (_playerServices.IsValueCreated)
                 _playerServices.Value.Dispose();
             if (_statServices.IsValueCreated)

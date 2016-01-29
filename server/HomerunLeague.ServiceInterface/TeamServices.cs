@@ -12,6 +12,7 @@ using ServiceStack.OrmLite;
 
 namespace HomerunLeague.ServiceInterface
 {
+    [Secured(ApplyTo.Put | ApplyTo.Delete)]
     public class TeamServices : Service
     {
         private readonly AdminServices _adminSvc;
@@ -21,6 +22,7 @@ namespace HomerunLeague.ServiceInterface
             _adminSvc = adminSvc;
         }
 
+        // Get Team by Id
         public GetTeamResponse Get(GetTeam request)
         {
             var team = Db.LoadSelect<Team>(t => t.Id == request.Id).SingleOrDefault();
@@ -36,6 +38,7 @@ namespace HomerunLeague.ServiceInterface
             return new GetTeamResponse {Team = team.ToViewModel()};
         }
 
+        // Get Teams from collection
         public GetTeamsResponse Get(GetTeams request)
         {
             int page = request.Page ?? 1;
@@ -45,9 +48,9 @@ namespace HomerunLeague.ServiceInterface
             if (request.Year.HasValue)
                 query.Where(q => q.Year == request.Year);
 
-            query
-                .OrderBy(q => new {f1 = Sql.Desc(q.Year), f2 = q.Name})
-                .PageTo(page);
+            query.OrderByDescending(q => q.Year)
+                 .ThenBy(q => q.Name)
+                 .PageTo(page);
 
             return new GetTeamsResponse
             {
@@ -62,6 +65,7 @@ namespace HomerunLeague.ServiceInterface
             };
         }
 
+        // Create Team
         public HttpResult Post(CreateTeam request)
         {
             if (!_adminSvc.Get(new GetSettings()).RegistrationOpen)
@@ -90,7 +94,7 @@ namespace HomerunLeague.ServiceInterface
             }
 
             return
-                new HttpResult(new GetTeamResponse().PopulateWith(Get(new GetTeam {Id = team.Id})))
+                new HttpResult(Get(new GetTeam {Id = team.Id}))
                 {
                     StatusCode = HttpStatusCode.Created,
                     Headers =
@@ -100,7 +104,7 @@ namespace HomerunLeague.ServiceInterface
                 };
         }
 
-        [Secured]
+        // Update Team
         public HttpResult Put(UpdateTeamTotals request)
         {
             var totals = request.TeamTotals.ConvertTo<TeamTotals>();
@@ -112,7 +116,7 @@ namespace HomerunLeague.ServiceInterface
             return new HttpResult {StatusCode = HttpStatusCode.NoContent };
         }
 
-        [Secured]
+        // Delete Team
         public HttpResult Delete(DeleteTeam request)
         {
             using (IDbTransaction trans = Db.OpenTransaction())

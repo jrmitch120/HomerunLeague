@@ -1,14 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using ServiceStack.Configuration;
 
 namespace HomerunLeague.ServiceInterface.Authentication
 {
     public class ApiKeys : IKeys
     {
-        public ApiKeys(IAppSettings settings)
+        public ApiKeys(IEnumerable<string> keys)
         {
-            ReadWriteApiKeys = new AppSettings().GetList("apiKeys").ToList().AsReadOnly();
+            ReadWriteApiKeys = keys.ToList().AsReadOnly();
         }
 
         public ReadOnlyCollection<string> ReadWriteApiKeys { get; }

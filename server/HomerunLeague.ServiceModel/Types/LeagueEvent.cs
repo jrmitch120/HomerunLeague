@@ -23,7 +23,7 @@ namespace HomerunLeague.ServiceModel.Types
     // League actions drive game logic through the league engine.
     public enum LeagueAction
     {
-        BioUpdate = 1,
+        BioUpdate,
         StatUpdate,
         TeamUpdate
     }

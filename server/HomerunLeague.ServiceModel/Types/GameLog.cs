@@ -4,8 +4,7 @@ namespace HomerunLeague.ServiceModel.Types
 {
     public class GameLog
     {
-        public string Id { get { return PlayerId + "" +
-                                        ":" + GameId; } }
+        public string Id => PlayerId + "/" + GameId;
 
         public string GameId { get; set; }
 

@@ -1,6 +1,7 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.ServiceInterface", "HomerunLeague.ServiceInterface\HomerunLeague.ServiceInterface.csproj", "{3D8A1683-9571-4EAE-B02C-56E29259C518}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomerunLeague.SelfHost", "HomerunLeague.SelfHost\HomerunLeague.SelfHost.csproj", "{72715423-8786-4697-930C-565FC598A716}"
@@ -19,17 +20,20 @@ Global
 		{3D8A1683-9571-4EAE-B02C-56E29259C518}.Debug|x86.Build.0 = Debug|Any CPU
 		{3D8A1683-9571-4EAE-B02C-56E29259C518}.Release|x86.ActiveCfg = Release|Any CPU
 		{3D8A1683-9571-4EAE-B02C-56E29259C518}.Release|x86.Build.0 = Release|Any CPU
-		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Debug|x86.Build.0 = Debug|Any CPU
-		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Release|x86.ActiveCfg = Release|Any CPU
-		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Release|x86.Build.0 = Release|Any CPU
 		{72715423-8786-4697-930C-565FC598A716}.Debug|x86.ActiveCfg = Debug|x86
 		{72715423-8786-4697-930C-565FC598A716}.Debug|x86.Build.0 = Debug|x86
 		{72715423-8786-4697-930C-565FC598A716}.Release|x86.ActiveCfg = Release|x86
 		{72715423-8786-4697-930C-565FC598A716}.Release|x86.Build.0 = Release|x86
+		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Debug|x86.Build.0 = Debug|Any CPU
+		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Release|x86.ActiveCfg = Release|Any CPU
+		{6980A1AB-82BF-49DD-9857-A22A85B28153}.Release|x86.Build.0 = Release|Any CPU
 		{C59690F9-3A59-4A72-84D1-60CC8C96F6C5}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{C59690F9-3A59-4A72-84D1-60CC8C96F6C5}.Debug|x86.Build.0 = Debug|Any CPU
 		{C59690F9-3A59-4A72-84D1-60CC8C96F6C5}.Release|x86.ActiveCfg = Release|Any CPU
 		{C59690F9-3A59-4A72-84D1-60CC8C96F6C5}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

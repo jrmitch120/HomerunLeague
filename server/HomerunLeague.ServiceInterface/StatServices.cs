@@ -1,30 +1,58 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using HomerunLeague.ServiceInterface.RequestFilters;
 using HomerunLeague.ServiceModel.Operations;
+using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
 namespace HomerunLeague.ServiceInterface
 {
+    [Secured]
     public class StatServices : Service
     {
-        [Secured]
-        public HttpResult Put(PutGameLogs request)
+        // Update GameLog
+        public HttpResult Put(PutGameLog request)
         {
-            request.GameLogs.ForEach(stat => stat.PlayerId = request.PlayerId);  // Associate stats with the player
+            var gameLog = request.ConvertTo<GameLog>();
 
-            Db.SaveAll(request.GameLogs);
-            
+            Db.Save(gameLog);
+
             return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
 
-        [Secured]
+        // Batch Update GameLog
+        public List<HttpResult> Put(PutGameLog[] requests)
+        {
+            using (var trans = Db.OpenTransaction())
+            {
+                var responses = requests.Map(Put);
+
+                trans.Commit();
+                return responses;
+            }
+        }
+
+        // Update PlayerTotals
         public HttpResult Put(PutPlayerTotals request)
         {
-            request.PlayerTotals.PlayerId = request.PlayerId;
+            var totals = request.ConvertTo<PlayerTotals>();
 
-            Db.Save(request.PlayerTotals);
+            Db.Save(totals);
+
             return new HttpResult { StatusCode = HttpStatusCode.NoContent };
+        }
+
+        // Batch Update PlayerTotals
+        public List<HttpResult> Put(PutPlayerTotals[] requests)
+        {
+            using (var trans = Db.OpenTransaction())
+            {
+                var responses = requests.Map(Put);
+
+                trans.Commit();
+                return responses;
+            }
         }
     }
 }

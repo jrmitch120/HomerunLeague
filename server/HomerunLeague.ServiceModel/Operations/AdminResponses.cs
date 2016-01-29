@@ -16,6 +16,13 @@ namespace HomerunLeague.ServiceModel.Operations
         public ResponseStatus ResponseStatus { get; set; }
     }
 
+    public class GetLeagueEventResponse : IHasResponseStatus
+    {
+        public LeagueEvent LeagueEvent { get; set; }
+
+        public ResponseStatus ResponseStatus { get; set; }
+    }
+
     public class GetLeagueEventsResponse : IHasResponseStatus, IMeta
     {
         public Meta Meta { get; set; }

@@ -7,6 +7,14 @@ namespace HomerunLeague.ServiceModel.Operations
     /***********************
     *    GET OPERATIONS    *
     ***********************/
+
+    [Route("/divisions/{id}", "GET")]
+    public class GetDivision : PageableRequest, IReturn<GetDivisionsResponse>
+    {
+        [ApiMember(IsRequired = false)]
+        public int Id { get; set; }
+    }
+
     [Route("/divisions", "GET")]
     public class GetDivisions : PageableRequest, IReturn<GetDivisionsResponse>
     {
@@ -22,16 +30,6 @@ namespace HomerunLeague.ServiceModel.Operations
     ***********************/
     [Route("/divisions", "POST")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
-    public class CreateDivisions
-    {
-        public CreateDivisions()
-        {
-            Divisions = new List<CreateDivision>();
-        }
-
-        public List<CreateDivision> Divisions { get; set; }
-    }
-
     public class CreateDivision
     {
         public CreateDivision()

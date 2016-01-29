@@ -5,7 +5,6 @@ using System.Timers;
 using HomerunLeague.GameEngine.Bios;
 using HomerunLeague.GameEngine.Stats;
 using HomerunLeague.ServiceInterface;
-using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 using HomerunLeague.ServiceModel.ViewModels;
@@ -144,7 +143,11 @@ namespace HomerunLeague.GameEngine
             _services.PlayerSvc.BatchPlayerAction(new GetPlayers { IncludeInactive = options.IncludeInactive }, players =>
             {
                 _bioData.UpdatePlayerBios(players);
-                _services.PlayerSvc.Put(new PutPlayers { Players = players });
+
+                var updateRequests = new List<PutPlayer>();
+                players.ForEach(p => updateRequests.Add(p.ConvertTo<PutPlayer>()));
+
+                _services.PlayerSvc.Put(updateRequests.ToArray());
             });
         }
 
@@ -164,17 +167,8 @@ namespace HomerunLeague.GameEngine
 
                     if (stats.GameLogs.Any()) // Did we find any stats?
                     {
-                        _services.StatSvc.Put(new PutGameLogs
-                        {
-                            PlayerId = player.Id,
-                            GameLogs = stats.GameLogs
-                        });
-
-                        _services.StatSvc.Put(new PutPlayerTotals
-                        {
-                            PlayerId = player.Id,
-                            PlayerTotals = stats.Totals
-                        });
+                        _services.StatSvc.Put(stats.GameLogs.Map(gl => gl.ConvertTo<PutGameLog>()).ToArray());
+                        _services.StatSvc.Put(stats.Totals.ConvertTo<PutPlayerTotals>());
                     }
                 }
             });

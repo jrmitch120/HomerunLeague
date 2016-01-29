@@ -13,6 +13,7 @@ namespace HomerunLeague.ServiceInterface
     [Secured]
     public class AdminServices : Service
     {
+        // Get the game settings
         public GetSettingsResponse Get(GetSettings request)
         {
             var settings = Db.Select<Setting>().ToDictionary(s => new KeyValuePair<string, string>(s.Name, s.Value));
@@ -30,6 +31,18 @@ namespace HomerunLeague.ServiceInterface
             };
         }
 
+        // Get LeagueEvent by ID
+        public GetLeagueEventResponse Get(GetLeagueEvent request)
+        {
+            var leagueEvent = Db.LoadSingleById<LeagueEvent>(request.Id);
+
+            if (leagueEvent == null)
+                throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Leage Event {0} does not exist. ".Fmt(request.Id)));
+
+            return new GetLeagueEventResponse { LeagueEvent = leagueEvent };
+        }
+
+        // Get LeageEvents from collection
         public GetLeagueEventsResponse Get(GetLeagueEvents request)
         {
             int page = request.Page ?? 1;
@@ -49,19 +62,21 @@ namespace HomerunLeague.ServiceInterface
             return new GetLeagueEventsResponse
             {
                 LeagueEvents = Db.Select(query.PageTo(page)),
-                Meta = new Meta(Request != null ? Request.AbsoluteUri : string.Empty) { Page = page, TotalCount = Db.Count(query) }
+                Meta = new Meta(Request?.AbsoluteUri) { Page = page, TotalCount = Db.Count(query) }
             };
         }
 
+        // Create LeagueEvent
         public HttpResult Post(CreateLeagueEvent request)
         {
             Db.Save(request.ConvertTo<LeagueEvent>());
             return new HttpResult { StatusCode = HttpStatusCode.Created };
         }
 
+        // Update LeagueEvent
         public HttpResult Put(UpdateLeagueEvent request)
         {
-            int result = Db.Update(request.ConvertTo<LeagueEvent>());
+            int result = Db.Update(Get(new GetLeagueEvent { Id = request.Id }).LeagueEvent.PopulateWith(request));
 
             if (result == 0)
                 throw new HttpError(HttpStatusCode.NotFound,

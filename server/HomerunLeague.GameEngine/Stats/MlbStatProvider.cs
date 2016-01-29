@@ -10,7 +10,7 @@ namespace HomerunLeague.GameEngine.Stats
     {
         public StatPull FetchStats(Player player, int year)
         {
-            var playerStats = new StatPull { PlayerId = player.Id, Year = year };
+            var playerStats = new StatPull();
 
             var client =
                 new RestClient(
@@ -28,7 +28,7 @@ namespace HomerunLeague.GameEngine.Stats
                         PlayerId = player.Id,
                         GameId = stat.game_id,
                         Ab = stat.ab,
-                        Avg = stat.avg.Equals(string.Empty) ? Decimal.Zero : Convert.ToDecimal(stat.avg),
+                        Avg = stat.avg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(stat.avg),
                         Bb = stat.bb,
                         Cs = stat.cs,
                         D = stat.d,
@@ -45,7 +45,7 @@ namespace HomerunLeague.GameEngine.Stats
                         Result = stat.team_result,
                         Sb = stat.sb,
                         Sf = stat.sf,
-                        Slg = stat.slg.Equals(string.Empty) ? Decimal.Zero : Convert.ToDecimal(stat.slg),
+                        Slg = stat.slg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(stat.slg),
                         So = stat.so,
                         T = stat.t,
                         Tb = stat.tb,
@@ -60,7 +60,7 @@ namespace HomerunLeague.GameEngine.Stats
                     Year = season.season,
                     PlayerId = player.Id,
                     Ab = season.ab,
-                    Avg = season.avg.Equals(string.Empty) ? Decimal.Zero : Convert.ToDecimal(season.avg),
+                    Avg = season.avg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(season.avg),
                     Bb = season.bb,
                     Cs = season.cs,
                     D = season.d,
@@ -72,7 +72,7 @@ namespace HomerunLeague.GameEngine.Stats
                     Rbi = season.rbi,
                     Sb = season.sb,
                     Sf = season.sf,
-                    Slg = season.slg.Equals(string.Empty) ? Decimal.Zero : Convert.ToDecimal(season.slg),
+                    Slg = season.slg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(season.slg),
                     So = season.so,
                     T = season.t,
                     Tb = season.tb,

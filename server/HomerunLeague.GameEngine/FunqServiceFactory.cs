@@ -12,6 +12,11 @@ namespace HomerunLeague.GameEngine
             return _container.Resolve<AdminServices>();
         }
 
+        public DivisionServices CreateDivisionServices()
+        {
+            return _container.Resolve<DivisionServices>();
+        }
+
         public PlayerServices CreatePlayerServices()
         {
             return _container.Resolve<PlayerServices>();
