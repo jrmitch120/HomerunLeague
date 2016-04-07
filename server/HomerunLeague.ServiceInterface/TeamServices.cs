@@ -16,10 +16,12 @@ namespace HomerunLeague.ServiceInterface
     public class TeamServices : Service
     {
         private readonly AdminServices _adminSvc;
+        private readonly LeaderServices _leaderSvc;
 
-        public TeamServices(AdminServices adminSvc)
+        public TeamServices(AdminServices adminSvc, LeaderServices leaderSvc)
         {
             _adminSvc = adminSvc;
+            _leaderSvc = leaderSvc;
         }
 
         // Get Team by Id
@@ -29,13 +31,21 @@ namespace HomerunLeague.ServiceInterface
 
             if (team == null)
                 throw new HttpError(HttpStatusCode.NotFound,
-
                     new ArgumentException("TeamId {0} does not exist. ".Fmt(request.Id)));
 
-            team.Players =
-                Db.Select<Player>(q => q.Join<Player, Teamate>((player, teamate) => player.Id == teamate.PlayerId));
+            var teamView = team.ToViewModel();
 
-            return new GetTeamResponse {Team = team.ToViewModel()};
+            teamView.TeamLeaders = _leaderSvc.Get(new GetLeadersRequest
+            {
+                Year = _adminSvc.Get(new GetSettings()).BaseballYear,
+                TeamId = request.Id
+            }).Leaders;
+            
+            // Let's use something a little more useful
+            //Db.Select<Player>(q => q.Join<Player, Teamate>((player, teamate) => player.Id == teamate.PlayerId && 
+            //                                                                    teamate.TeamId == team.Id));
+
+            return new GetTeamResponse {Team = teamView};
         }
 
         // Get Teams from collection
@@ -43,10 +53,7 @@ namespace HomerunLeague.ServiceInterface
         {
             int page = request.Page ?? 1;
 
-            var query = Db.From<Team>();
-
-            if (request.Year.HasValue)
-                query.Where(q => q.Year == request.Year);
+            var query = Db.From<Team>().Where(q => q.Year == request.Year);
 
             query.OrderByDescending(q => q.Year)
                  .ThenBy(q => q.Name)
@@ -55,7 +62,7 @@ namespace HomerunLeague.ServiceInterface
             return new GetTeamsResponse
             {
                 Teams =
-                    Db.LoadSelect(query).ToViewModel(),
+                    Db.LoadSelect(query).OrderByDescending(t => t.Totals.Hr).ToList().ToViewModel(),
                 Meta =
                     new Meta(Request?.AbsoluteUri)
                     {

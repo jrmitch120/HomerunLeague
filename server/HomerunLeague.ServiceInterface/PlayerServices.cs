@@ -21,6 +21,9 @@ namespace HomerunLeague.ServiceInterface
             if (player == null)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("PlayerId {0} does not exist. ".Fmt(request.Id)));
 
+            // Sort the referenced stats by year.
+            player.PlayerTotals.Sort((x, y) => y.Year.CompareTo(x.Year)); 
+
             return new GetPlayerResponse { Player = player };
 		}
 
@@ -36,7 +39,7 @@ namespace HomerunLeague.ServiceInterface
 
             return new GetPlayersResponse
             {
-                Players = Db.LoadSelect(query.PageTo(page)),
+                Players = Db.Select(query.PageTo(page)),
                 Meta = new Meta(Request?.AbsoluteUri) { Page = page, TotalCount = Db.Count(query) }
             };
         }

@@ -39,6 +39,8 @@
     <Compile Include="Operations\AdminResponses.cs" />
     <Compile Include="Operations\DivisionOperations.cs" />
     <Compile Include="Operations\DivisionResponses.cs" />
+    <Compile Include="Operations\LeaderResponses.cs" />
+    <Compile Include="Operations\LeaderOperations.cs" />
     <Compile Include="Operations\PlayerOperations.cs" />
     <Compile Include="Operations\PlayerResponses.cs" />
     <Compile Include="Operations\StatOperations.cs" />

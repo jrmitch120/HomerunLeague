@@ -16,12 +16,12 @@ namespace HomerunLeague.ServiceModel.Operations
         public int Id { get; set; }
     }
 
-    [Route("/teams", "GET", Summary = "Get a list of homerun league teams")]
+    [Route("/seasons/{year}/teams", "GET", Summary = "Get a list of homerun league teams for a season")]
     public class GetTeams : PageableRequest, IReturn<GetTeamsResponse>
     {
         [ApiMember(Name = "Year", Description = "Filter teams by year.",
-        ParameterType = "query", DataType = "string", IsRequired = false)]
-        public int? Year { get; set; }
+        ParameterType = "query", DataType = "string", IsRequired = true)]
+        public int Year { get; set; }
     }
 
     /***********************

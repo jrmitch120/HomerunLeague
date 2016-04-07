@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 
 namespace HomerunLeague.ServiceModel.ViewModels
@@ -20,6 +21,6 @@ namespace HomerunLeague.ServiceModel.ViewModels
 
         public TeamTotalsView Totals { get; set; }
 
-        public List<Player> Players { get; set; }
+        public List<Leader> TeamLeaders { get; set; }
     }
 }
