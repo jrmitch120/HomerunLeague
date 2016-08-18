@@ -15,11 +15,11 @@ namespace HomerunLeague.ServiceModel.Operations
         public int Id { get; set; }
     }
 
-    [Route("/divisions", "GET")]
+    [Route("/seasons/{year}/divisions", "GET")]
     public class GetDivisions : PageableRequest, IReturn<GetDivisionsResponse>
     {
-        [ApiMember(IsRequired = false)]
-        public int? Year { get; set; }
+        [ApiMember(IsRequired = true)]
+        public int Year { get; set; }
 
         [ApiMember(IsRequired = false)]
         public bool IncludeInactive { get; set; }

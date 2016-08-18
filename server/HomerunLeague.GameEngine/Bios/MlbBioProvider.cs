@@ -28,12 +28,12 @@ namespace HomerunLeague.GameEngine.Bios
                     player.BirthDate = bio.birth_date;
                     player.DisplayName = bio.name_first_last;
                     player.FirstName = bio.name_first;
-                    player.HeightFeet = bio.height_feet;
-                    player.HeightInches = bio.height_inches;
-                    player.JerseyNumber = bio.jersey_number;
+                    player.HeightFeet = bio.height_feet ?? 0;
+                    player.HeightInches = bio.height_inches ?? 0;
+                    player.JerseyNumber = bio.jersey_number ?? 0;
                     player.LastName = bio.name_last;
                     player.PrimaryPosition = bio.primary_position_txt;
-                    player.Weight = bio.weight;
+                    player.Weight = bio.weight ?? 0;
                 }
 
                 // Current team is not on the player bio.  We have to lookup a player's team history to figure that out.
@@ -56,24 +56,24 @@ namespace HomerunLeague.GameEngine.Bios
         public string name_first_last { get; set; }
         public string name_prefix { get; set; }
         public string birth_country { get; set; }
-        public int weight { get; set; }
+        public int? weight { get; set; }
         public string birth_state { get; set; }
         public string draft_round { get; set; }
         public string player { get; set; }
         public string draft_year { get; set; }
         public string last_played { get; set; }
         public string college { get; set; }
-        public int height_inches { get; set; }
+        public int? height_inches { get; set; }
         public string name_middle { get; set; }
         public string name_last_first_html { get; set; }
         public string death_country { get; set; }
-        public int jersey_number { get; set; }
+        public int? jersey_number { get; set; }
         public string name_pronunciation { get; set; }
         public string death_state { get; set; }
         public string bats { get; set; }
         public string name_first { get; set; }
         public string age { get; set; }
-        public int height_feet { get; set; }
+        public int? height_feet { get; set; }
         public string gender { get; set; }
         public string birth_city { get; set; }
         public string pro_debut_date { get; set; }

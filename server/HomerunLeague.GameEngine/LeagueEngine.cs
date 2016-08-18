@@ -38,9 +38,9 @@ namespace HomerunLeague.GameEngine
 
             _gameActions = new Dictionary<LeagueAction, Action<object>>
             {
-                {LeagueAction.BioUpdate, o => UpdatePlayerBios(o.ConvertTo<BioUpdateOptions>())},
-                {LeagueAction.StatUpdate, o => UpdatePlayerStats(o.ConvertTo<StatUpdateOptions>())},
-                {LeagueAction.TeamUpdate, o => UpdateTeams(o.ConvertTo<TeamUpdateOptions>())}
+                {LeagueAction.BioUpdate, o => UpdatePlayerBios(o?.ConvertTo<BioUpdateOptions>())},
+                {LeagueAction.StatUpdate, o => UpdatePlayerStats(o?.ConvertTo<StatUpdateOptions>())},
+                {LeagueAction.TeamUpdate, o => UpdateTeams(o?.ConvertTo<TeamUpdateOptions>())}
             };
         }
 
@@ -196,13 +196,11 @@ namespace HomerunLeague.GameEngine
 
                     team.Totals.Hr = 0;
 
-                    foreach (var player in fullTeam.Players)
+                    foreach (var player in fullTeam.TeamLeaders)
                     {
-                        var playerTotal = _services.PlayerSvc.Get(new GetPlayer {Id = player.Id})
-                            .Player.PlayerTotals.FirstOrDefault(total => total.Year == options.Year);
-
-                        if (playerTotal == null)
-                            throw new ArgumentException($"Unable to find {options.Year} stats for {player.MlbId}");
+                        // Get play totals for the year.  If he doesn't have any yet, just get an empty stat object.
+                        var playerTotal = _services.PlayerSvc.Get(new GetPlayer {Id = player.PlayerId})
+                            .Player.PlayerTotals.FirstOrDefault(total => total.Year == options.Year) ?? new PlayerTotals();
 
                         team.Totals.Hr += playerTotal.Hr;
                     }

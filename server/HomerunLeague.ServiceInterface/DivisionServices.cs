@@ -43,10 +43,7 @@ namespace HomerunLeague.ServiceInterface
         {
             int page = request.Page ?? 1;
 
-            var query = Db.From<Division>();
-            
-            if(request.Year.HasValue)
-                query.And(q => q.Year == request.Year);
+            var query = Db.From<Division>().And(q => q.Year == request.Year);
 
             if (!request.IncludeInactive)
                 query.And(q => q.Active);
@@ -60,7 +57,7 @@ namespace HomerunLeague.ServiceInterface
             divisions.ForEach(division =>
             {
                 division.Players.AddRange(
-                    Db.LoadSelect<Player>(
+                    Db.Select<Player>(
                         q => q.Join<Player, DivisionalPlayer>((player, divPlayer) => player.Id == divPlayer.PlayerId)
                               .Where<DivisionalPlayer>(divPlayer => divPlayer.DivisionId == division.Id)));
             });
