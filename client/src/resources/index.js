@@ -1,3 +1,3 @@
-export function configure(aurelia) {
-	aurelia.globalResources('./nav-bar');
+export function configure(config) {
+  config.globalResources(['./elements/nav-bar', './elements/loading'],);
 }

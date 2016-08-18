@@ -1,0 +1,12 @@
+<template>
+  <div repeat.for="team of teams" class="row" style="margin-top:20px;"> 
+    <div class="col-md-1 col-md-offset-3">
+      <div style="font-size: 36px; border-bottom: 5px solid darkred; margin-top: 15px; display: inline-block;">
+        ${team.Totals.Hr}
+      </div>
+    </div>
+    <div class="col-md-7">
+      <h1>${team.Name}</h1>
+    </div>
+  </div>
+</template>

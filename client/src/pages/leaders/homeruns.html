@@ -1,0 +1,47 @@
+<template>
+  <require from="../../resources/value-converters/date-format"></require>
+  <div repeat.for="player of leaders" class="row">
+    <div style="margin-top:20px;">
+      <div class="col-md-1 col-md-offset-3">
+        <div style="font-size: 36px; border-bottom: 5px solid darkred; margin-top: 15px; display: inline-block;">
+          ${player.Hr}
+        </div>
+      </div>
+      <div class="col-md-1">
+        <img src="${player.PlayerImage}" style="box-shadow: 3px 3px 1px #888888;" class="img-responsive" />
+      </div>
+      <div class="col-md-4">
+        <h1><a click.delegate="toggleHistory(player)" lass="text-primary">${player.DisplayName}</a></h1>
+        <div id="history-${player.PlayerId}" style="display:none;">
+          <hr/>
+          <div class="pull-left">
+            <div repeat.for="descr of player.history.recentHr">
+              <div>
+                ${descr}
+              </div>
+              <div>
+                08-14 - 2 vs. 
+                <img src="http://m.mlb.com/shared/images/logos/32x32_cap/112@2x.png" width="25px"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="pull-right">
+            <div class="text-right">
+              Last <u>7</u> Days: ${player.history.hr7}
+            </div>
+            <div class="text-right">
+              Last <u>14</u> Days: ${player.history.hr14}
+            </div>
+            <div class="text-right">
+              Last <u>30</u> Days: ${player.history.hr30}
+            </div>
+          </div>
+
+          <div class="clearfix"></div>
+          <hr/>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

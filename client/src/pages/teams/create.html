@@ -1,0 +1,46 @@
+<template>
+  <require from="../../resources/elements/baseball-card"></require>
+  <div class="row">
+    <div class="col-md-10">
+      <p class="lead">
+        So you think you've got what it takes to dominate the Homerun League? It's time to prove it. You will need to construct a
+        valid team first. In order to do that, pick the required number of players from each division. After you have done
+        that, pick a team name (be creative!), fill out your email address, and confirm your lineup. Finally, all that there's
+        left to do is enjoy the baseball season and root for your team in the standings!
+      </p>
+      <div repeat.for="division of divisions">
+        <h1>${division.Name}</h1>
+        <h2>Pick ${division.PlayerRequirement} players</h2>
+        <div repeat.for="player of division.Players">
+          <div class="pull-left">
+            <baseball-card player.bind="player"></baseball-card>
+            <button disabled.bind="$parent.division.selectedCount >= $parent.division.PlayerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
+              class="btn btn-default btn-lg glyphicon" click.delegate="$parent.$parent.togglePlayer($parent.division, player)"></button>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div id="myAffix">
+        <div repeat.for="division of divisions">
+          <div>${division.Name}: ${division.selectedCount == null ? '0' : division.selectedCount}/${division.PlayerRequirement}</div>
+        </div>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label class="sr-only" for="teamName">Team Name</label>
+            <input type="text" class="form-control col-md-2" id="teamName" placeholder="Team Name">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="email">Password</label>
+            <input type="email" class="form-control col-md-2" id="email" placeholder="Email Address">
+          </div>
+          <button disabled.bind="!validLineup" type="submit" class="btn btn-primary">Create Team</button>
+        </form>
+        <div>
+          Team creation placeholder. ${validLineup}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
