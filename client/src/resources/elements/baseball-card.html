@@ -1,5 +1,5 @@
 <template>
-  <div id.bind="id" click.delegate="flipCard()" class="cardContainer">
+  <div id.bind="id" class="cardContainer">
     <div class="front">
         <div class="cardFrame"></div>
         <img class="logo" src="${player.TeamLogo2X}" />
@@ -10,6 +10,6 @@
           </span>
         </div>
     </div>
-    <div class="back">&nbsp;Flip!</div>
+    <div class="back">Back of ${player.DisplayName}'s baseball card!</div>
   </div>
 </template>

@@ -179,6 +179,7 @@ div.cardContainer
 	position: relative;
 	width:248px;
 	height:341px;
+  cursor: pointer;
 }
 
 div.cardFrame

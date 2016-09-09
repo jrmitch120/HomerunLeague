@@ -89,8 +89,7 @@
         "name": "vendor-bundle.js",
         "prepend": [
           "node_modules/bluebird/js/browser/bluebird.core.js",
-          "scripts/require.js",
-          "node_modules/jquery/dist/jquery.min.js"
+          "scripts/require.js"
         ],
         "dependencies": [
           "moment",
@@ -137,11 +136,14 @@
             "main": "aurelia-testing",
             "env": "dev"
           },
+          "jquery",
           {
             "name": "bootstrap",
             "path": "../node_modules/bootstrap/dist",
             "main": "js/bootstrap.min",
-            "deps": [ ],
+            "deps": [
+              "jquery"
+            ],
             "exports": "$",
             "resources": [
               "css/bootstrap.css"
@@ -150,7 +152,10 @@
           {
             "name": "flip",
             "path": "../thirdparty/jquery.flip/dist",
-            "main": "jquery.flip"
+            "main": "jquery.flip",
+            "deps": [
+              "jquery"
+            ]
           },
           {
             "name": "nprogress",
