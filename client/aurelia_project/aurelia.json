@@ -149,7 +149,7 @@
           },
           {
             "name": "flip",
-            "path": "../thirdparty/jquery.flip/dist",
+            "path": "../thirdparty/jquery.flip",
             "main": "jquery.flip"
           },
           {
