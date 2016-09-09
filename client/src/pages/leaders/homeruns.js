@@ -25,9 +25,14 @@ export class HomeRuns {
     return loadLeaders().then(() => this.initHistory());
   }
 
+  attached() {
+    // Enable the tooltips
+    $('[data-toggle="tooltip"]').tooltip()
+  }
+
   initHistory() {
     for (let leader of this.leaders) {
-      leader.history = { "hr7": 0, "hr14": 0, "hr30": 0, "recentHr": [], "loaded": false };
+      leader.history = { "recentHr": [], "loaded": false };
     }
   }
 
@@ -43,15 +48,8 @@ export class HomeRuns {
       if(player.history.recentHr.length < 5 && gamelog.Hr > 0)
       {
         let location = gamelog.HomeAway === 'A' ? 'at' : 'vs'
-        player.history.recentHr.push(`${gameDate.format('MM/DD')} - ${gamelog.Hr} ${location} ${gamelog.Opponent}`)
+        player.history.recentHr.push({"date": gameDate.format('MM/DD'), "hr": gamelog.Hr, "location": location, "opp": gamelog.Opponent});
       }
-
-      if(now.diff(gameDate, 'days') <= 7)
-        player.history.hr7 += gamelog.Hr;
-      if(now.diff(gameDate, 'days') <= 14)
-        player.history.hr14 += gamelog.Hr;
-      if(now.diff(gameDate, 'days') <= 30)
-        player.history.hr30 += gamelog.Hr;
     }
 
     player.history.loaded = true;

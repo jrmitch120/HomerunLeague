@@ -13,7 +13,7 @@
         <h2>Pick ${division.PlayerRequirement} players</h2>
         <div repeat.for="player of division.Players">
           <div class="pull-left">
-            <baseball-card player.bind="player"></baseball-card>
+            <baseball-card id.bind="'player-card-' + player.Id" player.bind="player"></baseball-card>
             <button disabled.bind="$parent.division.selectedCount >= $parent.division.PlayerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
               class="btn btn-default btn-lg glyphicon" click.delegate="$parent.$parent.togglePlayer($parent.division, player)"></button>
           </div>
