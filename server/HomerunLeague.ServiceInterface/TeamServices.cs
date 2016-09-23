@@ -33,6 +33,11 @@ namespace HomerunLeague.ServiceInterface
                 throw new HttpError(HttpStatusCode.NotFound,
                     new ArgumentException("TeamId {0} does not exist. ".Fmt(request.Id)));
 
+            if (request.Year.HasValue && team.Year != request.Year)
+                throw new HttpError(HttpStatusCode.NotFound,
+                    new ArgumentException("TeamId {0} does not exist in year {1}. ".Fmt(request.Id, request.Year)));
+
+
             var teamView = team.ToViewModel();
 
             teamView.TeamLeaders = _leaderSvc.Get(new GetLeadersRequest
@@ -80,9 +85,18 @@ namespace HomerunLeague.ServiceInterface
 
             var team = request.ConvertTo<Team>();
 
-            team.Year = _adminSvc.Get(new GetSettings()).BaseballYear;
-
             team.ValidationToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+
+            // Testing
+            return
+               new HttpResult(Get(new GetTeam { Id = 1 }))
+               {
+                   StatusCode = HttpStatusCode.Created,
+                   Headers =
+                   {
+                        {HttpHeaders.Location, new GetTeam {Id = team.Id}.ToGetUrl()}
+                   }
+               };
 
             using (IDbTransaction trans = Db.OpenTransaction())
             {
@@ -140,6 +154,8 @@ namespace HomerunLeague.ServiceInterface
         public override void Dispose()
         {
             _adminSvc.Dispose();
+            _leaderSvc.Dispose();
+
             base.Dispose();
         }
     }

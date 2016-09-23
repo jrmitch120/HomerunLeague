@@ -39,6 +39,10 @@
     <Compile Include="Operations\AdminResponses.cs" />
     <Compile Include="Operations\DivisionOperations.cs" />
     <Compile Include="Operations\DivisionResponses.cs" />
+    <Compile Include="ViewModels\RecentHr.cs" />
+    <Compile Include="ViewModels\Leader.cs" />
+    <Compile Include="Operations\RecentOperations.cs" />
+    <Compile Include="Operations\RecentResponses.cs" />
     <Compile Include="Operations\LeaderResponses.cs" />
     <Compile Include="Operations\LeaderOperations.cs" />
     <Compile Include="Operations\PlayerOperations.cs" />
@@ -61,6 +65,7 @@
     <Compile Include="Operations\Meta.cs" />
     <Compile Include="Types\DivisionalPlayer.cs" />
     <Compile Include="Types\LeagueEvent.cs" />
+    <Compile Include="Utils\MlbImages.cs" />
     <Compile Include="ViewModels\TeamListView.cs" />
     <Compile Include="ViewModels\TeamTotalsView.cs" />
     <Compile Include="ViewModels\TeamView.cs" />

@@ -8,18 +8,23 @@ namespace HomerunLeague.ServiceModel.Operations
     *    GET OPERATIONS    *
     ***********************/
 
+    [Route("/seasons/{year}/divisions/{id}", "GET")]
     [Route("/divisions/{id}", "GET")]
     public class GetDivision : PageableRequest, IReturn<GetDivisionsResponse>
     {
         [ApiMember(IsRequired = false)]
+        public int? Year { get; set; }
+
+        [ApiMember(IsRequired = true)]
         public int Id { get; set; }
     }
 
     [Route("/seasons/{year}/divisions", "GET")]
+    [Route("/divisions", "GET")]
     public class GetDivisions : PageableRequest, IReturn<GetDivisionsResponse>
     {
-        [ApiMember(IsRequired = true)]
-        public int Year { get; set; }
+        [ApiMember(IsRequired = false)]
+        public int? Year { get; set; }
 
         [ApiMember(IsRequired = false)]
         public bool IncludeInactive { get; set; }
@@ -28,7 +33,7 @@ namespace HomerunLeague.ServiceModel.Operations
     /***********************
     *   POST OPERATIONS    *
     ***********************/
-    [Route("/divisions", "POST")]
+    [Route("/seasons/{year}/divisions", "POST")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     public class CreateDivision
     {

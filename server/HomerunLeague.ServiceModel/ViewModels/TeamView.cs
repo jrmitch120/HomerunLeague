@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using HomerunLeague.ServiceModel.Operations;
-using HomerunLeague.ServiceModel.Types;
 
 namespace HomerunLeague.ServiceModel.ViewModels
 {

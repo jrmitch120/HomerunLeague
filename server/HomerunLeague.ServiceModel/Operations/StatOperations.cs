@@ -1,11 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
-using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 
 namespace HomerunLeague.ServiceModel.Operations
 {
+    /***********************
+    *    GET OPERATIONS    *
+    ***********************/
+    [Route("/seasons/{year}/gamelogs", "GET", Summary = "Get a list of game logs for a year")]
+    public class GetGameLogs : PageableRequest, IReturn<GetGameLogsResponse>
+    {
+        [ApiMember(Name = "Year", Description = "Year of logs to get.", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int Year { get; set; }
+
+        [ApiMember(Name = "Start", Description = "Get a list of gamelogs starting from this date.", ParameterType = "query", DataType = "DateTime", IsRequired = false)]
+        public DateTime? Start { get; set; }
+    }
+
+    /***********************
+    *    GET OPERATIONS    *
+    ***********************/
+    [Route("/players/{playerId}/gamelogs", "GET", Summary = "Get a list of game logs for a player")]
+    public class GetGameLogsForPlayer : PageableRequest, IReturn<GetGameLogsResponse>
+    {
+        [ApiMember(Name = "PlayerId", Description = "Id of player", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int PlayerId { get; set; }
+
+        [ApiMember(Name = "Year", Description = "Year of logs to get.", ParameterType = "path", DataType = "int", IsRequired = false)]
+        public int? Year { get; set; }
+    }
+
     /***********************
     *    PUT OPERATIONS    *
     ***********************/
@@ -57,6 +81,9 @@ namespace HomerunLeague.ServiceModel.Operations
         public int H { get; set; }
         public int Hbp { get; set; }
         public int Hr { get; set; }
+        public int Hr7 { get; set; }
+        public int Hr14 { get; set; }
+        public int Hr30 { get; set; }
         public int R { get; set; }
         public int Rbi { get; set; }
         public decimal Slg { get; set; }

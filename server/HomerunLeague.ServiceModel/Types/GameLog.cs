@@ -39,7 +39,7 @@ namespace HomerunLeague.ServiceModel.Types
 
         public int Sb { get; set; } // sac bunt
 
-        public int Sf { get; set; } // sav fly
+        public int Sf { get; set; } // sac fly
 
         public int So { get; set; }
 

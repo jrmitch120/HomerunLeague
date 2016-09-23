@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HomerunLeague.ServiceModel.Utils;
 using ServiceStack.DataAnnotations;
 
 namespace HomerunLeague.ServiceModel.Types
@@ -33,14 +34,16 @@ namespace HomerunLeague.ServiceModel.Types
         public int JerseyNumber { get; set; }
 
         [Ignore]
-        public Uri PlayerImage => new Uri($"http://mlb.mlb.com/mlb/images/players/head_shot/{MlbId}.jpg");
-        [Ignore]
-        public Uri PlayerImage2X => new Uri($"http://mlb.mlb.com/mlb/images/players/head_shot/{MlbId}@2x.jpg");
+        public Uri PlayerImage => MlbImages.Player(MlbId);
 
         [Ignore]
-        public Uri TeamLogo => new Uri($"http://m.mlb.com/shared/images/logos/32x32_cap/{MlbTeamId}.png");
+        public Uri PlayerImage2X => MlbImages.Player(MlbId, MlbImages.ImageSize.Large);
+
         [Ignore]
-        public Uri TeamLogo2X=> new Uri($"http://m.mlb.com/shared/images/logos/32x32_cap/{MlbTeamId}@2x.png");
+        public Uri TeamLogo => MlbImages.TeamLogo(MlbTeamId);
+
+        [Ignore]
+        public Uri TeamLogo2X=> MlbImages.TeamLogo(MlbTeamId, MlbImages.ImageSize.Large);
 
         public string Bats { get; set; }
 

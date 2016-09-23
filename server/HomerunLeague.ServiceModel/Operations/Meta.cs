@@ -21,7 +21,7 @@ namespace HomerunLeague.ServiceModel.Operations
         public Meta() { _currentUrl = string.Empty; }
         public Meta(string currentUrl) { _currentUrl = currentUrl ?? string.Empty; }
 
-        public static int PageSize = 50;
+        public static int PageSize = 200;
 
         [Description("Current page")]
         public int Page { get; set; }
