@@ -1,0 +1,17 @@
+<template>
+  <div repeat.for="team of teams" class="row">
+    <div class="list-row">
+      <div class="col-md-1 col-md-offset-3">
+        <div style="font-size: 36px; border-bottom: 5px solid darkred; margin-top: 15px; display: inline-block;">
+          ${team.Totals.Hr}
+        </div>
+        <div>
+          <sup if.bind="team.Totals.HrMovement > 0" class="text-success pull-right" style="font-size: 15px; margin-top: -40px; margin-right: -8px;">+${team.Totals.HrMovement}</sup>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <h1>${team.Name}</h1>
+      </div>
+    </div>
+  </div>
+</template>

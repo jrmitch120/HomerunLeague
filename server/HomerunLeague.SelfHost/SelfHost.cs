@@ -36,6 +36,7 @@ namespace HomerunLeague.SelfHost
                 //        @"Data Source=.\SQLEXPRESS;Initial Catalog=HomerunLeague;Integrated Security=True",
                 //        SqlServer2012Dialect.Provider));
 
+
                 // SQLite
 			    container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"leaguedata.sqlite",
 			        SqliteDialect.Provider));

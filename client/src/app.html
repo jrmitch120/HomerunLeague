@@ -1,5 +1,9 @@
 <template>
   <require from="bootstrap/css/bootstrap.css"></require>
-  <nav-bar router.bind="router"></nav-bar>
-  <router-view></router-view>
+  <require from="./styles.css"></require>
+  <nav-bar router.bind="router" api.bind="api"></nav-bar>
+  <loading loading.bind="router.isNavigating || api.isRequesting"></loading>
+  <div class="container">
+    <router-view></router-view>
+  </div>
 </template>
