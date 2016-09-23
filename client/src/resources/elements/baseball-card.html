@@ -1,15 +1,19 @@
 <template>
-  <div id.bind="id" class="cardContainer">
+  <div id.bind="id" class="card-container">
     <div class="front">
-        <div class="cardFrame"></div>
-        <img class="logo" src="${player.TeamLogo2X}" />
-        <img class="profile" src="${player.PlayerImage}" />
-        <div class="nameplate">
+        <div class="card-frame"></div>
+        <img class="card-logo" src="${player.TeamLogo2X}" />
+        <img class="card-picture" src="${player.PlayerImage}" />
+        <div class="card-nameplate">
           <span class="playername">
             ${player.DisplayName}
           </span>
         </div>
     </div>
-    <div class="back">Back of ${player.DisplayName}'s baseball card!</div>
+    <div class="back">
+      <p>Back of ${player.DisplayName}'s baseball card!</p>
+      <img src="${player.TeamLogo2X}"  />
+      
+    </div>
   </div>
 </template>

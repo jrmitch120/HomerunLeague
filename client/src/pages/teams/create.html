@@ -14,8 +14,8 @@
         <div repeat.for="player of division.Players">
           <div class="pull-left">
             <baseball-card id.bind="'player-card-' + player.Id" player.bind="player"></baseball-card>
-            <button disabled.bind="$parent.division.selectedCount >= $parent.division.PlayerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
-              class="btn btn-default btn-lg glyphicon" click.delegate="$parent.$parent.togglePlayer($parent.division, player)"></button>
+            <button disabled.bind="division.selectedCount >= division.PlayerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
+              class="btn btn-default btn-lg glyphicon" click.delegate="togglePlayer(division, player)"></button>
           </div>
         </div>
         <div class="clearfix"></div>
@@ -29,16 +29,19 @@
         <form class="form-horizontal">
           <div class="form-group">
             <label class="sr-only" for="teamName">Team Name</label>
-            <input type="text" class="form-control col-md-2" id="teamName" placeholder="Team Name">
+            <input type="text" class="form-control col-md-2" id="teamName" placeholder="Team Name" value.bind="name">
           </div>
           <div class="form-group">
             <label class="sr-only" for="email">Password</label>
-            <input type="email" class="form-control col-md-2" id="email" placeholder="Email Address">
+            <input type="email" class="form-control col-md-2" id="email" placeholder="Email Address" value.bind="email">
           </div>
-          <button disabled.bind="!validLineup" type="submit" class="btn btn-primary">Create Team</button>
+          <button disabled.bind="!validLineup" click.trigger="createTeam()"  type="submit" class="btn btn-primary">Create Team</button>
         </form>
         <div>
           Team creation placeholder. ${validLineup}
+        </div>
+        <div>
+          ${status}
         </div>
       </div>
     </div>

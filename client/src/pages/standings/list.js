@@ -14,7 +14,6 @@ export class List {
       return this.api.getTeams(page).then(results => {
         
         this.teams = this.teams.concat(results.Teams);
-        console.info(this.teams);
 
         if (results.Meta.Page < results.Meta.TotalPages)
           return loadData(results.Meta.Page + 1);

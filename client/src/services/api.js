@@ -1,5 +1,5 @@
 import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 import 'whatwg-fetch'; // polyfil for fetch
 import environment from '../environment'
 
@@ -28,7 +28,7 @@ export class Api {
 					},
 					response(response) {
 						this.isRequesting = false;
-						return response;
+						return response.json();
 					}
 				})
 		});
@@ -36,31 +36,46 @@ export class Api {
 		this.http = http;
 	}
 
+	// Create a new Team
+	createTeam(team) {
+		return this.http.fetch(`seasons/${this.year}/teams`, {
+			method: 'post',
+			body: json(team)
+		});
+	}
+
+	// Get Administrative Event History
+	getEvents(action, page = 1) {
+		return this.http.fetch(`admin/events?page=${page}&action=${action}`)
+	}
+
 	// Get Divisions
 	getDivisions() {
-		return this.http.fetch(`seasons/${this.year}/divisions`)
-			.then(response => response.json())
-			.then(data => { return data; });
+		return this.http.fetch(`seasons/${this.year}/divisions`);
+	}
+
+	// Get GameLogs For Player
+	getGameLogsForPlayer(playerId, year = this.year, page = 1) {
+		return this.http.fetch(`players/${playerId}/gamelogs?year=${year}&page=${page}`);
 	}
 
 	// Get Leaders
 	getLeaders(page = 1) {
-		return this.http.fetch(`seasons/${this.year}/leaders?page=${page}`)
-			.then(response => response.json())
-			.then(data => { return data; });
+		return this.http.fetch(`seasons/${this.year}/leaders?page=${page}`);
 	}
 
-	// Get GameLogs For Player
-	getGameLogsForPlayer(playerId, year=this.year, page = 1) {
-		return this.http.fetch(`players/${playerId}/gamelogs?year=${year}&page=${page}`)
-			.then(response => response.json())
-			.then(data => { return data; });
+	// Get Recent HR
+	getRecentHr(page = 1) {
+		return this.http.fetch(`seasons/${this.year}/recent?page=${page}`);
+	}
+
+	// Get Settings
+	getSettings() {
+		return this.http.fetch(`admin/settings`);
 	}
 
 	// Get Teams
 	getTeams(page = 1) {
-		return this.http.fetch(`seasons/${this.year}/teams?page=${page}`)
-			.then(response => response.json())
-			.then(data => { return data; });
+		return this.http.fetch(`seasons/${this.year}/teams?page=${page}`);
 	}
 }

@@ -7,12 +7,6 @@ export class BaseballCard {
     @bindable player = {};
 
     attached() {
-        //console.info(this.id);
         $(`#${this.id}`).flip({trigger: 'click'}); 
-    }
-
-    flipCard() {
-
-        console.info(this.id);
     }
 }

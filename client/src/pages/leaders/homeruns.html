@@ -1,16 +1,15 @@
 <template>
-  <require from="../../resources/value-converters/date-format"></require>
   <div repeat.for="player of leaders" class="row">
-    <div style="margin-top:20px;">
+    <div class="list-row">
       <div class="col-md-1 col-md-offset-3">
-        <div style="font-size: 36px; border-bottom: 5px solid darkred; margin-top: 15px; display: inline-block;">
+        <div class="hr-count pull-right">
           ${player.Hr}
         </div>
       </div>
       <div class="col-md-1">
-        <img src="${player.PlayerImage}" style="box-shadow: 3px 3px 1px #888888;" class="img-responsive" />
+        <img src="${player.PlayerImage}" class="img-player img-responsive" />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <button click.delegate="toggleHistory(player)" class="btn btn-link" style="outline: none;"><h1>${player.DisplayName}</h1></button>
 
         <a if.bind="player.Hr7 >= 3" class='my-tool-tip' data-toggle="tooltip" data-placement="top" title="3+ HRs in past 7 days.">
@@ -20,7 +19,7 @@
         <a if.bind="player.Hr14 == 0" class='my-tool-tip' data-toggle="tooltip" data-placement="top" title="No HRs in past 14 days.">
           <span  class="glyphicon glyphicon-asterisk" style="color:#AAD4E5"></span>
         </a>
-        <div id="history-${player.PlayerId}" style="display:none;">
+        <div id="history-${player.PlayerId}" style="display:none;" class="col-md-8">
           <hr/>
           <div class="pull-left">
             <div repeat.for="item of player.history.recentHr">

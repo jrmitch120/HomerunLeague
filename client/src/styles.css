@@ -51,10 +51,6 @@ section {
   margin: 12px 24px 0 6px;
 }
 
-.pictureDetail {
-  max-width: 425px;
-}
-
 /* animate page transitions */
 section.au-enter-active {
   -webkit-animation: fadeInRight 1s;
@@ -173,8 +169,7 @@ div.au-stagger {
 }
 
 /* CARDS */
-div.cardContainer 
-{
+div.card-container {
   margin: 3rem;
 	position: relative;
 	width:248px;
@@ -182,8 +177,7 @@ div.cardContainer
   cursor: pointer;
 }
 
-div.cardFrame
-{
+div.card-frame {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -193,8 +187,7 @@ div.cardFrame
 	z-index: 1000;
 }
 
-img.logo
-{
+img.card-logo {
 	top: 20px;
 	left: 20px;
   position: absolute;
@@ -203,8 +196,7 @@ img.logo
 	z-index: 1000;
 }
 
-img.profile
-{
+img.card-picture {
 	top: 15px;
 	left: 21px;
 	position: absolute;
@@ -212,8 +204,7 @@ img.profile
 	height:320px;	
 }
 
-div.nameplate 
-{
+div.card-nameplate {
   display: flex;
   justify-content:center;
   align-items:center;
@@ -225,11 +216,25 @@ div.nameplate
 	height:34px;
 }
 
-div.nameplate span.playername
-{
+div.card-nameplate span.playername {
   text-transform: uppercase;
   color: white;
   font-weight: bold;
   font-size: 0.9em;
   padding: 0 3 0 3;
+}
+
+img.img-player {
+  box-shadow: 3px 3px 1px #888888;
+}
+
+.list-row {
+  margin-top:20px;
+}
+
+.hr-count {
+  font-size: 36px; 
+  border-bottom: 5px solid darkred; 
+  margin-top: 15px; 
+  display: inline-block;
 }

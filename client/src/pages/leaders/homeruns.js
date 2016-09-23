@@ -43,7 +43,7 @@ export class HomeRuns {
     var now = moment()
     
     for (let gamelog of gamelogs) {
-      let gameDate = new moment(gamelog.GameDate);
+      let gameDate = moment(gamelog.GameDate);
 
       if(player.history.recentHr.length < 5 && gamelog.Hr > 0)
       {
