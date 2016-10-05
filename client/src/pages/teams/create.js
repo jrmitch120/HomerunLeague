@@ -5,12 +5,15 @@ import bootstrap from 'bootstrap';
 
 @inject(Api)
 export class Create {
+
+  _api;
+  name = 'Test Name';
+  email = 'test@yahoo.com'
+  status = '';
+  divisions = [];
+
   constructor(api) {
-    this.api = api;
-    this.name = 'Test Name';
-    this.email = 'test@yahoo.com'
-    this.status = '';
-    this.divisions = [];
+    this._api = api;
   }
 
   attached() {
@@ -25,7 +28,7 @@ export class Create {
   }
 
   activate(params) {
-    return this.api.getDivisions().then(result => { this.divisions = result.Divisions; });
+    return this._api.getDivisions().then(result => { this.divisions = result.Divisions; });
   }
 
   get validLineup() {
@@ -48,11 +51,26 @@ export class Create {
         if (player.selected)
           playerIds.push(player.Id);
     }
-    
-    this.api.createTeam({ name: this.name, email: this.email, playerIds: playerIds }).then(result => {
+
+    this._api.createTeam({ name: this.name, email: this.email, playerIds: playerIds }).then(result => {
       console.info(result);
       this.status = 'Done!';
     });
+  }
+
+  loadPlayerStats(player) {
+    if (player.PlayerTotals === undefined) {
+      return this._api.getPlayer(player.Id).then(result => {
+        player.PlayerTotals = result.Player.PlayerTotals;
+      });
+    }
+    else
+      return true;
+  }
+
+  scrollToAnchor(anchorName) {
+    var aTag = $("a[name='" + anchorName + "']");
+    $('html,body').animate({ scrollTop: aTag.offset().top - 55 }, 'slow');
   }
 
   togglePlayer(division, player) {
@@ -67,9 +85,5 @@ export class Create {
       player.selected = true; // Works!
       division.selectedCount++;
     }
-
-    console.info(`Player Selected: ${player.LastName} : ${player.selected}`);
-    console.info(`Div Selections: ${division.selectedCount}`);
-    console.info(`Valid Team: ${this.validLineup}`);
   }
 }   

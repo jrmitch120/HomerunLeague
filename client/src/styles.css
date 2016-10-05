@@ -1,4 +1,37 @@
-body { padding-top: 70px; }
+/* Fonts */
+@font-face {
+  font-family: "mlb_primary";
+  font-style: normal;
+  font-weight: bold;
+  src: url("../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-2.eot");
+  src: url("../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-2.eot?#iefix") format('embedded-opentype'),
+  url("../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-3.woff") format('woff'),
+  url("../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-1.ttf") format('truetype'),
+  url("../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-4.svg#web") format('svg');
+}
+
+body { 
+  font-family: mlb_primary;
+  padding-top: 60px;
+  background: #fdfdff url("../assets/images/mlb_bg_gradient.png") fixed repeat-x; 
+}
+
+.navbar-main {
+  box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+  background-color: #F8F8F8 !important; 
+}
+
+.pad-top{ 
+  padding-top: 25px;
+}
+
+.stat {
+  font-family: helvetica,arial,sans-serif;
+}
+
+.container {
+  background-color: white;
+}
 
 .splash {
   text-align: center;
@@ -168,6 +201,22 @@ div.au-stagger {
   }
 }
 
+/* SPINNER */
+.glyphicon.spinning {
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
 /* CARDS */
 div.card-container {
   margin: 3rem;
@@ -175,6 +224,10 @@ div.card-container {
 	width:248px;
 	height:341px;
   cursor: pointer;
+}
+
+.selected{
+   box-shadow:5px 12px 22px 1px #002e6d !important;
 }
 
 div.card-frame {
@@ -185,6 +238,78 @@ div.card-frame {
 	height:341px;	
 	background: url("../assets/images/cardframe.png");
 	z-index: 1000;
+  
+  box-shadow:0px 8px 22px 1px #333;
+}
+
+div.card-back {
+	left: 0;
+	top: 0;
+	width:248px;
+	height:341px;
+  background: url("http://i.imgur.com/awmsxbC.png");	
+  box-shadow:0px 8px 22px 1px #333;
+}
+
+div.card-back > div.card-back-nameplate {
+  position: absolute;
+  left: 62px;
+  top: 7px;
+  font-size: 17px;
+  color: #808D48;
+}
+
+div.card-back > div.card-back-id {
+  position: absolute;
+  left: 25px;
+  top: 8px;
+  width: 30px;
+  font-size: 16px;
+  color: #1f3542;
+  text-align: center;
+}
+div.card-back a {
+  color: #1f3542;
+}
+
+div.card-back-body
+{
+  position: absolute;
+  left: 25px;
+  top: 35px;
+  width: 205px;
+  font-size: 12px;
+  color: #1f3542;
+}
+
+div.card-back-body > table
+{
+  border-collapse:separate; 
+  border-spacing:0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: .8em;
+  font-weight: bold;
+  text-align: right;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+caption {
+  color: #1f3542;
+  font-size: 1.1em;
+  padding: 0;
+  text-align: center;
+}
+
+div.card-back-body > table th
+{ 
+  border-bottom: 1px solid;
+  text-align: right;
+}
+
+div.card-back-body > table td
+{
+  
 }
 
 img.card-logo {
@@ -232,9 +357,53 @@ img.img-player {
   margin-top:20px;
 }
 
+.list-lead {
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+p.list-lead-note {
+  margin: -12px 0 0 0;
+}
+
 .hr-count {
+  font-family: helvetica,arial,sans-serif;
   font-size: 36px; 
-  border-bottom: 5px solid darkred; 
+  border-bottom: 5px solid #c00; 
   margin-top: 15px; 
   display: inline-block;
+}
+
+.rank {
+  margin-left: 20px;
+  text-align: center;
+  min-width: 50px;
+  font-size: 36px; 
+  color: azure;
+  background-color: #002e6d; 
+  margin-top: 20px; 
+  display: inline-block;
+}
+
+/* HEADINGS */
+/* h1 {
+  color: #002e6d;
+  border-bottom: double #555;
+} */
+
+h2.division {
+  color: #002e6d;
+  border-bottom: double #555; 
+}
+
+h2.division > span.requirement {
+  margin-top: 16px;
+  font-size: .5em;
+}
+
+h2.division > span.valid{
+  padding-right: 5px;
 }

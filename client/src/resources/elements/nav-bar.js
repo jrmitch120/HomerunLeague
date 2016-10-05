@@ -1,41 +1,41 @@
-import {bindable} from 'aurelia-framework'
+import {bindable, inject} from 'aurelia-framework'
 import moment from 'moment';
 
+@inject()
 export class NavBar {
 	@bindable router = null;
-	@bindable api = null;
+	@bindable lastTeamUpdate = null;
 
 	constructor() {
+		this.ticker = null;
 		this.updateStatus = '';
-  }
+	}
 
 	attached() {
-		this.getUpdateStatus();
-		setInterval(() => this.getUpdateStatus(), 60000);
+		this.setUpdateStatus();
+		this.ticker = setInterval(() => this.setUpdateStatus(), 60000);
 	}
 
-	getUpdateStatus() {
-		this.api.getEvents('TeamUpdate').then(results => {
-			if (results != null) {
-				this.setUpdateStatus(results.LeagueEvents[0].Completed);
-			}
-		});
+	detached() {
+		if(this.ticker !== null)
+			clearInterval(this.ticker);
 	}
+	
+	setUpdateStatus() {
+		if (this.lastTeamUpdate === null)
+			this.updateStatus = '';
 
-	setUpdateStatus(completed) {
-		if(completed === undefined) {
-			this.updateStatus = 'Stat update running now'
-			return;
-		}
-		
-		completed = moment(completed).toDate()
+		if (this.lastTeamUpdate === undefined)
+			this.updateStatus =  'Stat update running now'
 
-		this.updateStatus = 'Stats updated ' +
-			moment(moment.utc([completed.getFullYear(),
-				completed.getMonth(),
-				completed.getDate(),
-				completed.getHours(),
-				completed.getMinutes(),
-				completed.getSeconds()]).toDate()).fromNow();//.format('M/D, h:mm a');
+		let update = moment(this.lastTeamUpdate).toDate()
+
+		this.updateStatus =  'Stats updated ' +
+			moment(moment.utc([update.getFullYear(),
+				update.getMonth(),
+				update.getDate(),
+				update.getHours(),
+				update.getMinutes(),
+				update.getSeconds()]).toDate()).fromNow();
 	}
-}
+}	
