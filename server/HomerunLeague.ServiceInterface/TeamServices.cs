@@ -58,16 +58,20 @@ namespace HomerunLeague.ServiceInterface
         {
             int page = request.Page ?? 1;
 
-            var query = Db.From<Team>().Where(q => q.Year == request.Year);
-
-            query.OrderByDescending(q => q.Year)
-                 .ThenBy(q => q.Name)
-                 .PageTo(page);
+            var query = // Need to join this way to get ordering correct using a nested complex object (TeamTotals)
+                Db.From<Team>()
+                    .Join<Team, TeamTotals>()
+                    .Where(t => t.Year == request.Year)
+                    .OrderByDescending<TeamTotals>(tt => tt.Hr)
+                    .ThenBy<TeamTotals>(tt => tt.Ab)
+                    .ThenBy<Team>(t => t.Name)
+                    .PageTo(page);
 
             return new GetTeamsResponse
             {
                 Teams =
-                    Db.LoadSelect(query).OrderByDescending(t => t.Totals.Hr).ToList().ToViewModel(),
+                    Db.LoadSelect(query)        
+                        .ToViewModel(),
                 Meta =
                     new Meta(Request?.AbsoluteUri)
                     {

@@ -203,6 +203,7 @@ namespace HomerunLeague.GameEngine
                             .Player.PlayerTotals.FirstOrDefault(total => total.Year == options.Year) ?? new PlayerTotals();
 
                         team.Totals.Hr += playerTotal.Hr;
+                        team.Totals.Ab += playerTotal.Ab;
                     }
 
                     team.Totals.HrMovement = team.Totals.Hr - originalHr;

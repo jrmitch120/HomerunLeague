@@ -34,16 +34,19 @@ namespace HomerunLeague.ServiceModel.Types
         public int JerseyNumber { get; set; }
 
         [Ignore]
-        public Uri PlayerImage => MlbImages.Player(MlbId);
+        public Uri MlbProfile => MlbHelper.PlayerProfile(MlbId);
 
         [Ignore]
-        public Uri PlayerImage2X => MlbImages.Player(MlbId, MlbImages.ImageSize.Large);
+        public Uri PlayerImage => MlbHelper.PlayerImage(MlbId);
 
         [Ignore]
-        public Uri TeamLogo => MlbImages.TeamLogo(MlbTeamId);
+        public Uri PlayerImage2X => MlbHelper.PlayerImage(MlbId, MlbHelper.ImageSize.Large);
 
         [Ignore]
-        public Uri TeamLogo2X=> MlbImages.TeamLogo(MlbTeamId, MlbImages.ImageSize.Large);
+        public Uri TeamLogo => MlbHelper.TeamLogo(MlbTeamId);
+
+        [Ignore]
+        public Uri TeamLogo2X=> MlbHelper.TeamLogo(MlbTeamId, MlbHelper.ImageSize.Large);
 
         public string Bats { get; set; }
 

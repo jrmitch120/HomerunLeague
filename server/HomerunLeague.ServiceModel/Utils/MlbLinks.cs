@@ -3,7 +3,7 @@
 namespace HomerunLeague.ServiceModel.Utils
 {
     
-    internal static class MlbImages
+    internal static class MlbHelper
     {
         public enum ImageSize
         {
@@ -11,7 +11,12 @@ namespace HomerunLeague.ServiceModel.Utils
             Large
         }
 
-        public static Uri Player(int mlbId, ImageSize size = ImageSize.Standard)
+        public static Uri PlayerProfile(int mlbId)
+        {
+            return new Uri($"http://m.mlb.com/player/{mlbId}");
+        }
+
+        public static Uri PlayerImage(int mlbId, ImageSize size = ImageSize.Standard)
         {
             var imageSize = size == ImageSize.Large ? "@2x" : "";
 

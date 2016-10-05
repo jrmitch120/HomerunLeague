@@ -17,9 +17,9 @@ namespace HomerunLeague.ServiceModel.ViewModels
 
         public string DisplayName { get; set; }
 
-        public Uri PlayerImage => MlbImages.Player(MlbId);
+        public Uri PlayerImage => MlbHelper.PlayerImage(MlbId);
 
-        public Uri PlayerImage2X => MlbImages.Player(MlbId, MlbImages.ImageSize.Large);
+        public Uri PlayerImage2X => MlbHelper.PlayerImage(MlbId, MlbHelper.ImageSize.Large);
 
         public string TeamName { get; set; }
 

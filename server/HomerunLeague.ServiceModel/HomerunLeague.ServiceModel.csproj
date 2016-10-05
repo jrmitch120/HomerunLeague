@@ -65,7 +65,7 @@
     <Compile Include="Operations\Meta.cs" />
     <Compile Include="Types\DivisionalPlayer.cs" />
     <Compile Include="Types\LeagueEvent.cs" />
-    <Compile Include="Utils\MlbImages.cs" />
+    <Compile Include="Utils\MlbLinks.cs" />
     <Compile Include="ViewModels\TeamListView.cs" />
     <Compile Include="ViewModels\TeamTotalsView.cs" />
     <Compile Include="ViewModels\TeamView.cs" />
