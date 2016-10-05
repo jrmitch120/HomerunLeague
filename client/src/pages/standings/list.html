@@ -2,15 +2,22 @@
   <div repeat.for="team of teams" class="row">
     <div class="list-row">
       <div class="col-md-1 col-md-offset-3">
-        <div style="font-size: 36px; border-bottom: 5px solid darkred; margin-top: 15px; display: inline-block;">
-          ${team.Totals.Hr}
-        </div>
-        <div>
-          <sup if.bind="team.Totals.HrMovement > 0" class="text-success pull-right" style="font-size: 15px; margin-top: -40px; margin-right: -8px;">+${team.Totals.HrMovement}</sup>
+        <div class="rank">
+          ${$index + 1}
         </div>
       </div>
+      <div class="col-md-1">
+        <div class="hr-count">
+          ${team.Totals.Hr}<br />
+        </div>
+        <sup if.bind="team.Totals.HrMovement > 0" class="text-success" style="position: absolute; font-size: 1.1em; top: 25px; left: 75px;">+${team.Totals.HrMovement}</sup>
+      </div>
       <div class="col-md-7">
-        <h1>${team.Name}</h1>
+        <div class="list-lead">${team.Name}</div>
+        <p if.bind="teams[$index + 1].Totals.Hr == team.Totals.Hr || teams[$index - 1].Totals.Hr == team.Totals.Hr" class="list-lead-note">
+          <span class="glyphicon glyphicon-option-horizontal"></span>&nbsp;
+          <span class="text-info">Total AB: ${team.Totals.Ab.toLocaleString()}</span>
+        </p>
       </div>
     </div>
   </div>

@@ -3,15 +3,18 @@ import {Api} from '../../services/api';
 
 @inject(Api)
 export class List {
+
+  _api;
+  teams = [];
+
   constructor(api) {
-    this.api = api;
-    this.teams = [];
+    this._api = api;
   }
 
   activate(params) {
     // Load all pages for now...
     let loadData = (page) => {
-      return this.api.getTeams(page).then(results => {
+      return this._api.getTeams(page).then(results => {
         
         this.teams = this.teams.concat(results.Teams);
 

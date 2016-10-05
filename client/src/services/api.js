@@ -9,8 +9,8 @@ export class Api {
 
 	constructor(environment, http) {
 
-		// Year we're interested in
-		this.year = environment.year;
+		// Year we're interested in.  Default to current year.
+		this.year = new Date().getFullYear()
 
 		// Configure fetch client
 		http.configure(config => {
@@ -67,6 +67,11 @@ export class Api {
 	// Get Recent HR
 	getRecentHr(page = 1) {
 		return this.http.fetch(`seasons/${this.year}/recent?page=${page}`);
+	}
+
+	// Get Player
+	getPlayer(playerId) {
+		return this.http.fetch(`players/${playerId}`);
 	}
 
 	// Get Settings
