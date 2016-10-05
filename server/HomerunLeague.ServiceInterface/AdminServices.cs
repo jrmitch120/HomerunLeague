@@ -10,7 +10,7 @@ using ServiceStack.OrmLite;
 
 namespace HomerunLeague.ServiceInterface
 {
-    [Secured]
+    [Secured(ApplyTo.Post | ApplyTo.Put | ApplyTo.Delete)]
     public class AdminServices : Service
     {
         // Get the game settings
@@ -65,6 +65,7 @@ namespace HomerunLeague.ServiceInterface
                 Meta = new Meta(Request?.AbsoluteUri) { Page = page, TotalCount = Db.Count(query) }
             };
         }
+
 
         // Create LeagueEvent
         public HttpResult Post(CreateLeagueEvent request)

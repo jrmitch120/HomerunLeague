@@ -9,4 +9,14 @@ namespace HomerunLeague.ServiceModel.Operations
 
         public int? TeamId { get; set; }
     }
+
+    [Route("/seasons/{year}/leaders/{month}/{day}", "GET")]
+    public class GetLeadersByDateRequest : PageableRequest, IReturn<GetLeadersResponse>
+    {
+        public int Year { get; set; }
+
+        public int Month { get; set; }
+
+        public int? Day { get; set; }
+    }
 }

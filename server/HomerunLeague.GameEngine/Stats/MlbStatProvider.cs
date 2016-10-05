@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 using HomerunLeague.ServiceModel.Types;
 using RestSharp;
 
@@ -55,6 +56,11 @@ namespace HomerunLeague.GameEngine.Stats
 
                 var season = result.Data.sport_hitting_game_log_composed.sport_hitting.queryResults.row;
 
+                // Last # gamelogs for Hr7, 14, 30 calculations below
+                var last30 = playerStats.GameLogs.Where(g => g.GameDate >= DateTime.Now.AddDays(-30)).ToList();
+                var last14 = last30.Where(g => g.GameDate >= DateTime.Now.AddDays(-14)).ToList();
+                var last7 = last14.Where(g => g.GameDate >= DateTime.Now.AddDays(-7)).ToList();
+
                 playerStats.Totals = new PlayerTotals
                 {
                     Year = season.season,
@@ -67,6 +73,9 @@ namespace HomerunLeague.GameEngine.Stats
                     H = season.h,
                     Hbp = season.hbp,
                     Hr = season.hr,
+                    Hr30 = last30.Sum(g => g.Hr),
+                    Hr14 = last14.Sum(g => g.Hr),
+                    Hr7 = last7.Sum(g => g.Hr),
                     Ibb = season.ibb,
                     R = season.r,
                     Rbi = season.rbi,

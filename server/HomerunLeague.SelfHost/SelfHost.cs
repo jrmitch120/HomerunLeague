@@ -38,8 +38,8 @@ namespace HomerunLeague.SelfHost
 
 
                 // SQLite
-                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"../../Database/leaguedata.sqlite",
-                    SqliteDialect.Provider));
+			    container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"leaguedata.sqlite",
+			        SqliteDialect.Provider));
 
                 container.Register<IKeys>(new ApiKeys(AppSettings.GetList("apiKeys"))); // API Keys
 

@@ -23,16 +23,19 @@ namespace HomerunLeague.ServiceInterface.Validation
             {
                 RuleFor(t => t.Name).Length(3, 100);
                 RuleFor(t => t.Email).EmailAddress();
+                RuleFor(t => t.Year)
+                    .Equal(settings.BaseballYear)
+                    .WithMessage($"You can only create a team for {settings.BaseballYear}");
                 RuleFor(t => t.PlayerIds)
                     .Must(DivisionRequirmentsMet)
                     .WithMessage("Your team does not fulfill the Division requirements");
             });
         }
 
-        public bool DivisionRequirmentsMet(List<int> playerIds)
+        private bool DivisionRequirmentsMet(List<int> playerIds)
         {
             // Check to see if they sent the exact number of players required across all divisions
-            if (_divisions.Sum(d => d.PlayerRequirement) != playerIds.Count)
+            if (playerIds == null || _divisions.Sum(d => d.PlayerRequirement) != playerIds.Count)
                 return false;
 
             // Iterate the divisions and check to see if the player requirement for each is met

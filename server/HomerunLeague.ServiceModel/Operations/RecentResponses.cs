@@ -7,11 +7,11 @@ namespace HomerunLeague.ServiceModel.Operations
     /***********************
     *    GET RESPONSES     *
     ***********************/
-    public class GetLeadersResponse : IHasResponseStatus, IMeta
+    public class GetRecentHrResponse : IHasResponseStatus, IMeta
     {
         public Meta Meta { get; set; }
 
-        public List<Leader> Leaders { get; set; }
+        public List<RecentHr> RecentHrs { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
     }

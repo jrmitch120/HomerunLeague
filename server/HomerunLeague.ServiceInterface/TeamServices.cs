@@ -33,6 +33,11 @@ namespace HomerunLeague.ServiceInterface
                 throw new HttpError(HttpStatusCode.NotFound,
                     new ArgumentException("TeamId {0} does not exist. ".Fmt(request.Id)));
 
+            if (request.Year.HasValue && team.Year != request.Year)
+                throw new HttpError(HttpStatusCode.NotFound,
+                    new ArgumentException("TeamId {0} does not exist in year {1}. ".Fmt(request.Id, request.Year)));
+
+
             var teamView = team.ToViewModel();
 
             teamView.TeamLeaders = _leaderSvc.Get(new GetLeadersRequest
@@ -53,16 +58,20 @@ namespace HomerunLeague.ServiceInterface
         {
             int page = request.Page ?? 1;
 
-            var query = Db.From<Team>().Where(q => q.Year == request.Year);
-
-            query.OrderByDescending(q => q.Year)
-                 .ThenBy(q => q.Name)
-                 .PageTo(page);
+            var query = // Need to join this way to get ordering correct using a nested complex object (TeamTotals)
+                Db.From<Team>()
+                    .Join<Team, TeamTotals>()
+                    .Where(t => t.Year == request.Year)
+                    .OrderByDescending<TeamTotals>(tt => tt.Hr)
+                    .ThenBy<TeamTotals>(tt => tt.Ab)
+                    .ThenBy<Team>(t => t.Name)
+                    .PageTo(page);
 
             return new GetTeamsResponse
             {
                 Teams =
-                    Db.LoadSelect(query).OrderByDescending(t => t.Totals.Hr).ToList().ToViewModel(),
+                    Db.LoadSelect(query)        
+                        .ToViewModel(),
                 Meta =
                     new Meta(Request?.AbsoluteUri)
                     {
@@ -80,9 +89,18 @@ namespace HomerunLeague.ServiceInterface
 
             var team = request.ConvertTo<Team>();
 
-            team.Year = _adminSvc.Get(new GetSettings()).BaseballYear;
-
             team.ValidationToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+
+            // Testing
+            return
+               new HttpResult(Get(new GetTeam { Id = 1 }))
+               {
+                   StatusCode = HttpStatusCode.Created,
+                   Headers =
+                   {
+                        {HttpHeaders.Location, new GetTeam {Id = team.Id}.ToGetUrl()}
+                   }
+               };
 
             using (IDbTransaction trans = Db.OpenTransaction())
             {
@@ -140,6 +158,8 @@ namespace HomerunLeague.ServiceInterface
         public override void Dispose()
         {
             _adminSvc.Dispose();
+            _leaderSvc.Dispose();
+
             base.Dispose();
         }
     }

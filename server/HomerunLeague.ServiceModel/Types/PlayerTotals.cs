@@ -30,6 +30,12 @@ namespace HomerunLeague.ServiceModel.Types
 
         public int Hr { get; set; }
 
+        public int Hr7 { get; set; }
+
+        public int Hr14 { get; set; }
+
+        public int Hr30 { get; set; }
+
         public int R { get; set; } // runs
 
         public int Rbi { get; set; }

@@ -1,5 +1,4 @@
-﻿using HomerunLeague.ServiceModel;
-using HomerunLeague.ServiceModel.Operations;
+﻿using HomerunLeague.ServiceModel.Operations;
 using ServiceStack.OrmLite;
 
 namespace HomerunLeague.ServiceInterface.Extensions
@@ -17,13 +16,13 @@ namespace HomerunLeague.ServiceInterface.Extensions
         public static bool Search(this string target, string search)
         {
             if (search.StartsWith("*") && search.EndsWith("*"))
-                return (target.Contains(search.Trim(new[] {'*'})));
+                return target.Contains(search.Trim('*'));
             if(search.EndsWith("*"))
-                return (target.StartsWith(search.TrimEnd(new[] { '*' })));
+                return target.StartsWith(search.TrimEnd('*'));
             if (search.StartsWith("*"))
-                return (target.EndsWith(search.TrimStart(new[] { '*' })));
+                return target.EndsWith(search.TrimStart('*'));
 
-            return (target.Equals(search));
+            return target.Equals(search);
         }
     }
 }
