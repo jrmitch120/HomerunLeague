@@ -12,6 +12,8 @@ namespace HomerunLeague.ServiceModel.Types
         public int PlayerId { get; set; }
 
         // Stats
+        public int G { get; set; }
+
         public int Ab { get; set; }
 
         public decimal Avg { get; set; }

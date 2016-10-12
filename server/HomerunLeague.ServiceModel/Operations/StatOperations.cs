@@ -41,6 +41,7 @@ namespace HomerunLeague.ServiceModel.Operations
         public string GameId { get; set; }
         public int PlayerId { get; set; }
         public DateTime GameDate { get; set; }
+        public int G { get; set; }
         public int Ab { get; set; }
         public decimal Avg { get; set; }
         public int Bb { get; set; }
@@ -72,6 +73,7 @@ namespace HomerunLeague.ServiceModel.Operations
     {
         public int Year { get; set; }
         public int PlayerId { get; set; }
+        public int G { get; set; }
         public int Ab { get; set; }
         public decimal Avg { get; set; }
         public int Bb { get; set; }

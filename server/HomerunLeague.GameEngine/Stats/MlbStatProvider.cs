@@ -65,6 +65,7 @@ namespace HomerunLeague.GameEngine.Stats
                 {
                     Year = season.season,
                     PlayerId = player.Id,
+                    G = season.g,
                     Ab = season.ab,
                     Avg = season.avg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(season.avg),
                     Bb = season.bb,
@@ -167,7 +168,7 @@ namespace HomerunLeague.GameEngine.Stats
             public string slg { get; set; }
             public string ops { get; set; }
             public int hbp { get; set; }
-            public string g { get; set; }
+            public int g { get; set; }
             public int d { get; set; }
             public int so { get; set; }
             public string sport { get; set; }

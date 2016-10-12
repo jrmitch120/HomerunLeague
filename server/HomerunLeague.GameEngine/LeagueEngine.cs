@@ -80,7 +80,6 @@ namespace HomerunLeague.GameEngine
             }
             catch (Exception ex)
             {
-
                 // TODO, excetion
             }
             finally
