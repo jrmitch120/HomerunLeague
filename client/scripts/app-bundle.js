@@ -43,7 +43,7 @@ define('app',['exports', 'aurelia-framework', 'aurelia-event-aggregator', './ser
 
     App.prototype.configureRouter = function configureRouter(config, router) {
       config.title = 'Homerun League';
-      config.map([{ route: ['', 'welcome'], name: 'welcome', moduleId: 'pages/welcome/index', nav: true, title: 'Welcome' }, { route: 'teams/create', name: 'join', moduleId: 'pages/teams/create', nav: true, title: 'Join League' }, { route: 'leaders', name: 'leaders', moduleId: 'pages/leaders/homeruns', nav: true, title: 'Leaders' }, { route: 'standings', name: 'standings', moduleId: 'pages/standings/list', nav: true, title: 'Standings' }, { route: 'activity', name: 'activity', moduleId: 'pages/activity/activity', nav: true, title: 'Activity' }, { route: 'players/:id', name: 'player', moduleId: 'pages/players/details', nav: false, title: 'Join League' }]);
+      config.map([{ route: ['', 'welcome'], name: 'welcome', moduleId: 'pages/welcome/index', nav: true, title: 'Welcome' }, { route: 'teams/create', name: 'join', moduleId: 'pages/teams/create', nav: true, title: 'Join League' }, { route: 'leaders', name: 'leaders', moduleId: 'pages/leaders/homeruns', nav: true, title: 'Leaders' }, { route: 'standings', name: 'standings', moduleId: 'pages/standings/list', nav: true, title: 'Standings' }, { route: 'activity', name: 'activity', moduleId: 'pages/activity/activity', nav: true, title: 'Activity' }, { route: 'players/:id', name: 'player', moduleId: 'pages/players/details', nav: false, title: 'Player Infomration' }]);
 
       this.router = router;
     };
@@ -74,7 +74,7 @@ define('environment',['exports'], function (exports) {
   exports.default = {
     debug: true,
     testing: true,
-    api: 'http://192.168.11.141:9001/api/'
+    api: 'http://localhost:9001/api/'
   };
 });
 define('main',['exports', './environment'], function (exports, _environment) {
@@ -100,7 +100,7 @@ define('main',['exports', './environment'], function (exports, _environment) {
   });
 
   function configure(aurelia) {
-    aurelia.use.standardConfiguration().feature('resources');
+    aurelia.use.standardConfiguration().feature('resources').plugin('aurelia-chart');
 
     if (_environment2.default.debug) {
       aurelia.use.developmentLogging();
@@ -419,6 +419,90 @@ define('pages/leaders/homeruns',['exports', 'aurelia-framework', 'aurelia-event-
     return HomeRuns;
   }()) || _class);
 });
+define('pages/players/details',['exports', 'aurelia-framework', '../../services/api'], function (exports, _aureliaFramework, _api) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.Details = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  var Details = exports.Details = (_dec = (0, _aureliaFramework.inject)(_api.Api), _dec(_class = function () {
+    function Details(api) {
+      _classCallCheck(this, Details);
+
+      this._api = api;
+
+      this.resetPieData();
+      this.resetLineData();
+    }
+
+    Details.prototype.activate = function activate(params, routeConfig) {
+      var _this = this;
+
+      this.routeConfig = routeConfig;
+      this.routeConfig.navModel.setTitle('Testing changing title');
+
+      console.info('Player Details Id ' + params.id);
+
+      return this._api.getPlayer(params.id).then(function (response) {
+        _this.player = response.Player;
+      });
+    };
+
+    Details.prototype.resetPieData = function resetPieData() {
+      this.dynamicDoughnutData = {
+        labels: ["Red", "Green", "Yellow"],
+        datasets: [{
+          data: [300, 50, 100],
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+          hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+        }]
+      };
+    };
+
+    Details.prototype.resetLineData = function resetLineData() {
+      this.simpleLineData = {
+        labels: ["April", "May", "June", "July", "August", "September", "October"],
+        datasets: [{
+          label: "Healthy People",
+          backgroundColor: "rgba(220,220,220,0.2)",
+          borderColor: "rgba(220,220,220,1)",
+          pointColor: "rgba(220,220,220,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(220,220,220,1)",
+          data: [65, 59, 80, 81, 56, 55, 40]
+        }, {
+          label: "Ill People",
+          backgroundColor: "rgba(151,187,205,0.2)",
+          borderColor: "rgba(151,187,205,1)",
+          pointColor: "rgba(151,187,205,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(151,187,205,1)",
+          data: [28, 48, 40, 19, 86, 27, 90]
+        }]
+      };
+    };
+
+    Details.prototype.addEntry = function addEntry() {
+      this.dynamicDoughnutData.labels.push("New Colour");
+      this.dynamicDoughnutData.datasets[0].data.push(50);
+      this.dynamicDoughnutData.datasets[0].backgroundColor.push("#B4FD5C");
+    };
+
+    return Details;
+  }()) || _class);
+});
 define('pages/standings/list',['exports', 'aurelia-framework', '../../services/api'], function (exports, _aureliaFramework, _api) {
   'use strict';
 
@@ -461,6 +545,23 @@ define('pages/standings/list',['exports', 'aurelia-framework', '../../services/a
 
     return List;
   }()) || _class);
+});
+define('pages/welcome/index',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var Welcome = exports.Welcome = function Welcome() {
+    _classCallCheck(this, Welcome);
+  };
 });
 define('pages/teams/create',['exports', 'aurelia-framework', '../../services/api', 'bootstrap'], function (exports, _aureliaFramework, _api, _bootstrap) {
   'use strict';
@@ -628,23 +729,6 @@ define('pages/teams/create',['exports', 'aurelia-framework', '../../services/api
 
     return Create;
   }()) || _class);
-});
-define('pages/welcome/index',["exports"], function (exports) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var Welcome = exports.Welcome = function Welcome() {
-    _classCallCheck(this, Welcome);
-  };
 });
 define('resources/elements/baseball-card',['exports', 'aurelia-framework', 'bootstrap', 'flip'], function (exports, _aureliaFramework, _bootstrap) {
     'use strict';
@@ -1039,11 +1123,12 @@ define('resources/value-converters/win-loss',['exports'], function (exports) {
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"bootstrap/css/bootstrap.css\"></require>\n  <require from=\"./styles.css\"></require>\n  <nav-bar router.bind=\"router\" last-team-update.bind=\"lastTeamUpdate\"></nav-bar>\n  <loading loading.bind=\"router.isNavigating || api.isRequesting\"></loading>\n  <div class=\"container\">\n    <router-view></router-view>\n  </div>\n</template>"; });
 define('text!styles.css', ['module'], function(module) { module.exports = "/* Fonts */\n@font-face {\n  font-family: \"mlb_primary\";\n  font-style: normal;\n  font-weight: bold;\n  src: url(\"../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-2.eot\");\n  src: url(\"../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-2.eot?#iefix\") format('embedded-opentype'),\n  url(\"../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-3.woff\") format('woff'),\n  url(\"../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-1.ttf\") format('truetype'),\n  url(\"../assets/fonts/6ec61f10-00ea-4ffd-a36b-26e2577a83f1-4.svg#web\") format('svg');\n}\n\nbody { \n  font-family: mlb_primary;\n  padding-top: 60px;\n  background: #fdfdff url(\"../assets/images/mlb_bg_gradient.png\") fixed repeat-x; \n}\n\n.navbar-main {\n  box-shadow: 0 0 5px rgba(0, 0, 0, .5);\n  background-color: #F8F8F8 !important; \n}\n\n.pad-top{ \n  padding-top: 25px;\n}\n\n.stat {\n  font-family: helvetica,arial,sans-serif;\n}\n\n.container {\n  background-color: white;\n}\n\n.splash {\n  text-align: center;\n  margin: 10% 0 0 0;\n  box-sizing: border-box;\n}\n\n.splash .message {\n  font-size: 72px;\n  line-height: 72px;\n  text-shadow: rgba(0, 0, 0, 0.5) 0 0 15px;\n  text-transform: uppercase;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n\n.splash .fa-spinner {\n  text-align: center;\n  display: inline-block;\n  font-size: 72px;\n  margin-top: 50px;\n}\n\n.page-host {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 50px;\n  bottom: 0;\n  overflow-x: hidden;\n  overflow-y: auto;\n}\n\n@media print {\n  .page-host {\n    position: absolute;\n    left: 10px;\n    right: 0;\n    top: 50px;\n    bottom: 0;\n    overflow-y: inherit;\n    overflow-x: inherit;\n  }\n}\n\nsection {\n  margin: 0 20px;\n}\n\n.navbar-nav li.loader {\n  margin: 12px 24px 0 6px;\n}\n\n/* animate page transitions */\nsection.au-enter-active {\n  -webkit-animation: fadeInRight 1s;\n  animation: fadeInRight 1s;\n}\n\ndiv.au-stagger {\n  /* 50ms will be applied between each successive enter operation */\n  -webkit-animation-delay: 50ms;\n  animation-delay: 50ms;\n}\n\n.card-container.au-enter {\n  opacity: 0;\n}\n\n.card-container.au-enter-active {\n  -webkit-animation: fadeIn 2s;\n  animation: fadeIn 2s;\n}\n\n.card {\n  overflow: hidden;\n  position: relative;\n  border: 1px solid #CCC;\n  border-radius: 8px;\n  text-align: center;\n  padding: 0;\n  background-color: #337ab7;\n  color: rgb(136, 172, 217);\n  margin-bottom: 32px;\n  box-shadow: 0 0 5px rgba(0, 0, 0, .5);\n}\n\n.card .content {\n  margin-top: 10px;\n}\n\n.card .content .name {\n  color: white;\n  text-shadow: 0 0 6px rgba(0, 0, 0, .5);\n  font-size: 18px;\n}\n\n.card .header-bg {\n  /* This stretches the canvas across the entire hero unit */\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 70px;\n  border-bottom: 1px #FFF solid;\n  border-radius: 6px 6px 0 0;\n}\n\n.card .avatar {\n  position: relative;\n  margin-top: 15px;\n  z-index: 100;\n}\n\n.card .avatar img {\n  width: 100px;\n  height: 100px;\n  -webkit-border-radius: 50%;\n  -moz-border-radius: 50%;\n  border-radius: 50%;\n  border: 2px #FFF solid;\n}\n\n/* animation definitions */\n@-webkit-keyframes fadeInRight {\n  0% {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0)\n  }\n  100% {\n    opacity: 1;\n    -webkit-transform: none;\n    transform: none\n  }\n}\n\n@keyframes fadeInRight {\n  0% {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 0, 0);\n    -ms-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0)\n  }\n  100% {\n    opacity: 1;\n    -webkit-transform: none;\n    -ms-transform: none;\n    transform: none\n  }\n}\n\n@-webkit-keyframes fadeIn {\n  0% {\n    opacity: 0;\n  }\n  100% {\n    opacity: 1;\n  }\n}\n\n@keyframes fadeIn {\n  0% {\n    opacity: 0;\n  }\n  100% {\n    opacity: 1;\n  }\n}\n\n/* SPINNER */\n.glyphicon.spinning {\n    animation: spin 1s infinite linear;\n    -webkit-animation: spin2 1s infinite linear;\n}\n\n@keyframes spin {\n    from { transform: scale(1) rotate(0deg); }\n    to { transform: scale(1) rotate(360deg); }\n}\n\n@-webkit-keyframes spin2 {\n    from { -webkit-transform: rotate(0deg); }\n    to { -webkit-transform: rotate(360deg); }\n}\n\n/* CARDS */\ndiv.card-container {\n  margin: 3rem;\n\tposition: relative;\n\twidth:248px;\n\theight:341px;\n  cursor: pointer;\n}\n\n.selected{\n   box-shadow:5px 12px 22px 1px #002e6d !important;\n}\n\ndiv.card-frame {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\twidth:248px;\n\theight:341px;\t\n\tbackground: url(\"../assets/images/cardframe.png\");\n\tz-index: 1000;\n  \n  box-shadow:0px 8px 22px 1px #333;\n}\n\ndiv.card-back {\n\tleft: 0;\n\ttop: 0;\n\twidth:248px;\n\theight:341px;\n  background: url(\"http://i.imgur.com/awmsxbC.png\");\t\n  box-shadow:0px 8px 22px 1px #333;\n}\n\ndiv.card-back > div.card-back-nameplate {\n  position: absolute;\n  left: 62px;\n  top: 7px;\n  font-size: 17px;\n  color: #808D48;\n}\n\ndiv.card-back > div.card-back-id {\n  position: absolute;\n  left: 25px;\n  top: 8px;\n  width: 30px;\n  font-size: 16px;\n  color: #1f3542;\n  text-align: center;\n}\ndiv.card-back a {\n  color: #1f3542;\n}\n\ndiv.card-back-body\n{\n  position: absolute;\n  left: 25px;\n  top: 35px;\n  width: 205px;\n  font-size: 12px;\n  color: #1f3542;\n}\n\ndiv.card-back-body > table\n{\n  border-collapse:separate; \n  border-spacing:0;\n  font-family: Arial, Helvetica, sans-serif;\n  font-size: .8em;\n  font-weight: bold;\n  text-align: right;\n  text-transform: uppercase;\n  width: 100%;\n}\n\ncaption {\n  color: #1f3542;\n  font-size: 1.1em;\n  padding: 0;\n  text-align: center;\n}\n\ndiv.card-back-body > table th\n{ \n  border-bottom: 1px solid;\n  text-align: right;\n}\n\ndiv.card-back-body > table td\n{\n  \n}\n\nimg.card-logo {\n\ttop: 20px;\n\tleft: 20px;\n  position: absolute;\n\twidth:50px;\n\theight:50px;\t\n\tz-index: 1000;\n}\n\nimg.card-picture {\n\ttop: 15px;\n\tleft: 21px;\n\tposition: absolute;\n\twidth:213px;\n\theight:320px;\t\n}\n\ndiv.card-nameplate {\n  display: flex;\n  justify-content:center;\n  align-items:center;\n\ttop: 295px;\n\tleft: 73px;\n\tposition: absolute;\n\tbackground-color:blue;\n\twidth:157px;\n\theight:34px;\n}\n\ndiv.card-nameplate span.playername {\n  text-transform: uppercase;\n  color: white;\n  font-weight: bold;\n  font-size: 0.9em;\n  padding: 0 3 0 3;\n}\n\nimg.img-player {\n  box-shadow: 3px 3px 1px #888888;\n}\n\n.list-row {\n  margin-top:20px;\n}\n\n.list-lead {\n  font-size: 36px;\n  font-weight: 500;\n  line-height: 1.2;\n  margin-top: 20px;\n  margin-bottom: 10px;\n}\n\np.list-lead-note {\n  margin: -12px 0 0 0;\n}\n\n.hr-count {\n  font-family: helvetica,arial,sans-serif;\n  font-size: 36px; \n  border-bottom: 5px solid #c00; \n  margin-top: 15px; \n  display: inline-block;\n}\n\n.rank {\n  margin-left: 20px;\n  text-align: center;\n  min-width: 50px;\n  font-size: 36px; \n  color: azure;\n  background-color: #002e6d; \n  margin-top: 20px; \n  display: inline-block;\n}\n\n/* HEADINGS */\n/* h1 {\n  color: #002e6d;\n  border-bottom: double #555;\n} */\n\nh2.division {\n  color: #002e6d;\n  border-bottom: double #555; \n}\n\nh2.division > span.requirement {\n  margin-top: 16px;\n  font-size: .5em;\n}\n\nh2.division > span.valid{\n  padding-right: 5px;\n}"; });
-define('text!pages/activity/activity.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"../../resources/value-converters/date-format\"></require>\n  <require from=\"../../resources/value-converters/home-away\"></require>\n  <require from=\"../../resources/value-converters/win-loss\"></require>\n  <div if.bind=\"recent.length === 0\">\n    <h1>There have not been any home runs hit in the past week.</h1>\n  </div>\n  \n  <div repeat.for=\"stat of recent\">\n    <div class=\"list-row\">\n      <div if.bind=\"recent[$index-1].GameDate != stat.GameDate\" class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <h2>\n            ${stat.GameDate | dateFormat:'dddd, MMMM Do'}\n          </h2>\n          <hr/>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-1 col-md-offset-3\">\n          <div class=\"hr-count pull-right\">\n            ${stat.Hr}\n          </div>\n        </div>\n        <div class=\"col-md-1\"> \n          <img src=\"${stat.PlayerImage}\" class=\"img-player img-responsive\" />\n        </div>\n        <div class=\"col-md-6\">\n          <div class=\"list-lead\">${stat.DisplayName}</div>\n          <p>In a ${stat.TeamScore} - ${stat.OppnentScore} ${stat.Result | winLoss} ${stat.HomeAway | homeAway} the ${stat.Opponent}</p>\n        </div>\n      </div>\n    </div>\n</template>"; });
 define('text!pages/leaders/homeruns.html', ['module'], function(module) { module.exports = "<template>\n  <div repeat.for=\"player of leaders\" class=\"row\">\n    <div class=\"list-row\">\n      <div class=\"col-md-1 col-md-offset-3\">\n        <div class=\"hr-count pull-right\">\n          ${player.Hr}\n        </div>\n      </div>\n      <div class=\"col-md-1\">\n        <img src=\"${player.PlayerImage}\" class=\"img-player img-responsive\" />\n      </div>\n      <div class=\"col-md-6\">\n        <button click.delegate=\"toggleHistory(player)\" class=\"btn btn-link\" style=\"outline: none;\">\n          <div class=\"list-lead\">${player.DisplayName}</div> \n        </button>\n        <a if.bind=\"player.Hr7 >= 3\" class='my-tool-tip' data-toggle=\"tooltip\" data-placement=\"top\" title=\"3+ HRs in past 7 days.\">\n          <span class=\"glyphicon glyphicon-fire\" style=\"color:#E25822\"></span>\n        </a>\n        <a if.bind=\"player.Hr14 == 0\" class='my-tool-tip' data-toggle=\"tooltip\" data-placement=\"top\" title=\"No HRs in past 14 days.\">\n          <span class=\"glyphicon glyphicon-asterisk\" style=\"color:#AAD4E5\"></span>\n        </a>\n        <span id=\"spinner-${player.PlayerId}\" style=\"display:none;\" class=\"glyphicon glyphicon-cog spinning\"></span>\n        <div id=\"history-${player.PlayerId}\" style=\"display:none;\" class=\"col-md-9\">\n          <hr/>\n          <div class=\"pull-left\">\n            <div repeat.for=\"item of player.history.recentHr\">\n              <div class=\"stat\">\n                <u>${item.date}</u> - <b>${item.hr}</b> ${item.location} ${item.opp}\n              </div>\n            </div>\n          </div>\n          <div class=\"pull-right stat\">\n            <div class=\"text-right\">\n              Last\n              <u>7</u> Days: <b>${player.Hr7}</b>\n            </div>\n            <div class=\"text-right\">\n              Last\n              <u>14</u> Days: <b>${player.Hr14}</b>\n            </div>\n            <div class=\"text-right\">\n              Last\n              <u>30</u> Days: <b>${player.Hr30}</b>\n            </div>\n            <div class=\"text-right\">\n              <br/>\n              <a route-href=\"route: player; params.bind: {id:player.PlayerId}\">Player Page</a>\n            </div>\n\n          </div>\n          <div class=\"clearfix\"></div>\n          <hr/>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>"; });
+define('text!pages/activity/activity.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"../../resources/value-converters/date-format\"></require>\n  <require from=\"../../resources/value-converters/home-away\"></require>\n  <require from=\"../../resources/value-converters/win-loss\"></require>\n  <div if.bind=\"recent.length === 0\">\n    <h1>There have not been any home runs hit in the past week.</h1>\n  </div>\n  \n  <div repeat.for=\"stat of recent\">\n    <div class=\"list-row\">\n      <div if.bind=\"recent[$index-1].GameDate != stat.GameDate\" class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <h2>\n            ${stat.GameDate | dateFormat:'dddd, MMMM Do'}\n          </h2>\n          <hr/>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-1 col-md-offset-3\">\n          <div class=\"hr-count pull-right\">\n            ${stat.Hr}\n          </div>\n        </div>\n        <div class=\"col-md-1\"> \n          <img src=\"${stat.PlayerImage}\" class=\"img-player img-responsive\" />\n        </div>\n        <div class=\"col-md-6\">\n          <div class=\"list-lead\">${stat.DisplayName}</div>\n          <p>In a ${stat.TeamScore} - ${stat.OppnentScore} ${stat.Result | winLoss} ${stat.HomeAway | homeAway} the ${stat.Opponent}</p>\n        </div>\n      </div>\n    </div>\n</template>"; });
+define('text!pages/players/details.html', ['module'], function(module) { module.exports = "<template>\n  <h1>${player.DisplayName}</h1>\n\t<div class=\"row\">\n\t\t<div class=\"col-md-3\">\n\t\t\t<img src=\"${player.PlayerImage}\" class=\"img-player img-responsive\" />\n\t\t</div>\n    <div class=\"col-md-1\">\n      <table class=\"table table-striped\">\n        <thead>\n        <tr>\n          <th>AB</th>\n          <th>AB</th>\n          <th>AB</th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr>\n          <td>12</td>\n          <td>12</td>\n          <td>12</td>\n        </tr>\n        </tbody>\n      </table>\n    </div>\n\t</div>\n\t<fieldset>\n\t\t<legend>Line Graph via Attribute</legend>\n\t\t<canvas id=\"line-chart\" chart=\"type: line; should-update: false; data.bind: simpleLineData\"></canvas>\n\t\t<p>Changing the data wont change this graph as it is not update-able</p>\n\t</fieldset>\n\n\t<fieldset>\n\t\t<legend>Doughnut Chart via Element</legend>\n\t\t<chart id=\"dynamic-doughnut-chart\" type=\"doughnut\" style=\"width: 50%; height: 50%; display: block;\" should-update=\"true\"\n\t\t\tthrottle=\"2000\" data.bind=\"dynamicDoughnutData\"></chart>\n\t\t<chart id=\"dynamic-pie-chart\" type=\"pie\" style=\"width: 50%; height: 50%; display: block;\" should-update=\"true\" throttle=\"2000\"\n\t\t\tdata.bind=\"dynamicDoughnutData\" native-options.bind=\"{ animation: { animateRotate: false } }\"></chart>\n\t\t<div>\n\t\t\t<label>Values</label>\n\t\t\t<div repeat.for=\"i of dynamicDoughnutData.datasets[0].data.length\">\n\t\t\t\t<input value.bind=\"dynamicDoughnutData.datasets[0].data[i]\" placeholder=\"Value ${$index + 1}\" />\n\t\t\t</div>\n\t\t</div>\n\n\t\t<p>Both charts are using the same dataset behind the scenes, so changing one will change both.</p>\n\t\t<p>Changing the above value should trigger a chart refresh after 2 seconds</p>\n\t\t<p>Although dynamically added entries will not be tracked currently</p>\n\t\t<button click.delegate=\"addEntry()\">Add Entry</button>\n\t\t<button click.delegate=\"resetPieData()\">Reset</button>\n\t</fieldset>\n</template>"; });
 define('text!pages/standings/list.html', ['module'], function(module) { module.exports = "<template>\n  <div repeat.for=\"team of teams\" class=\"row\">\n    <div class=\"list-row\">\n      <div class=\"col-md-1 col-md-offset-3\">\n        <div class=\"rank\">\n          ${$index + 1}\n        </div>\n      </div>\n      <div class=\"col-md-1\">\n        <div class=\"hr-count\">\n          ${team.Totals.Hr}<br />\n        </div>\n        <sup if.bind=\"team.Totals.HrMovement > 0\" class=\"text-success\" style=\"position: absolute; font-size: 1.1em; top: 25px; left: 75px;\">+${team.Totals.HrMovement}</sup>\n      </div>\n      <div class=\"col-md-7\">\n        <div class=\"list-lead\">${team.Name}</div>\n        <p if.bind=\"teams[$index + 1].Totals.Hr == team.Totals.Hr || teams[$index - 1].Totals.Hr == team.Totals.Hr\" class=\"list-lead-note\">\n          <span class=\"glyphicon glyphicon-option-horizontal\"></span>&nbsp;\n          <span class=\"text-info\">Total AB: ${team.Totals.Ab.toLocaleString()}</span>\n        </p>\n      </div>\n    </div>\n  </div>\n</template>"; });
 define('text!pages/teams/create.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"../../resources/elements/baseball-card\"></require>\n  <div class=\"row\">\n    <div class=\"content col-md-12 pad-top\">\n      \n        <p class=\"lead\">\n          So you think you've got what it takes to dominate the Homerun League? It's time to prove it. You will need to build a\n          team first. In order to do that, pick the required number of players from each division. Next, \n          pick a team name (be creative!), fill out your email address, and confirm your lineup. Finally, all that\n          there's left to do is enjoy the baseball season and root for your team in the standings!\n        </p>\n      \n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-md-10\">\n      <div repeat.for=\"division of divisions\">\n        <a name=\"div-${division.Id}\"></a>\n        <h2 class=\"division\">${division.Name} Division\n          <span class=\"requirement pull-right\" class.bind=\"division.selectedCount == division.PlayerRequirement ? 'text-success' : 'text-danger'\">\n            Pick ${division.PlayerRequirement} players\n           </span>\n          <span class=\"requirement valid text-success pull-right glyphicon glyphicon-ok\" if.bind=\"division.selectedCount == division.PlayerRequirement\"></span>\n        </h2>\n\n        <div repeat.for=\"player of division.Players\">\n          <div class=\"pull-left\">\n            <baseball-card id.one-way=\"'player-card-' + player.Id\" player.bind=\"player\" click.delegate=\"loadPlayerStats(player)\"></baseball-card>\n            <button disabled.bind=\"division.selectedCount >= division.PlayerRequirement && !player.selected\" class.bind=\"player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'\"\n              class=\"btn btn-default btn-lg glyphicon\" click.delegate=\"togglePlayer(division, player)\"></button>\n          </div>\n        </div>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <div class=\"col-md-2\">\n      <div id=\"myAffix\">\n\n        <div repeat.for=\"division of divisions\">\n          <div class.bind=\"division.selectedCount == division.PlayerRequirement ? 'text-success' : ''\">\n            <a href=\"#\" click.delegate=\"scrollToAnchor('div-' + division.Id)\">${division.Name}</a>: ${division.selectedCount\n            == null ? '0' : division.selectedCount}/${division.PlayerRequirement}\n            <span class=\"text-success glyphicon glyphicon-ok\" if.bind=\"division.selectedCount == division.PlayerRequirement\"></span>\n          </div>\n        </div>\n        <hr/>\n        <form>\n          <div class=\"form-group\">\n            <label class=\"sr-only\" for=\"teamName\">Team Name</label>\n            <input type=\"text\" class=\"form-control\" id=\"teamName\" placeholder=\"Team Name\" value.bind=\"name\">\n          </div>\n          <div class=\"form-group\">\n            <label class=\"sr-only\" for=\"email\">Password</label>\n            <input type=\"email\" class=\"form-control\" id=\"email\" placeholder=\"Email Address\" value.bind=\"email\">\n          </div>\n          <div class=\"form-group\">\n            <button disabled.bind=\"!validLineup\" click.trigger=\"createTeam()\" type=\"submit\" class=\"btn btn-primary\">Create Team</button>\n          </div>\n        </form>\n        <hr/>\n        <div>\n          Team creation placeholder. ${validLineup}\n        </div>\n        <div>\n          ${status}\n        </div>\n      </div>\n    </div>\n  </div>\n</template>"; });
 define('text!pages/welcome/index.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"teamname test\">Paul Konerko 1234567890</div>\n  <div class=\"teamname test2\">Jake Arrieta 1234567890</div>\n  <div class=\"teamname test3\">Ken Griffey Jr. 1234567890</div>\n</template>\n"; });
-define('text!resources/elements/baseball-card.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"../../resources/value-converters/baseball-card-id\"></require>\n  <require from=\"../../resources/value-converters/roundAvg\"></require>\n  <div id.bind=\"id\" class=\"card-container\">\n    <div class=\"front\">\n      <div class=\"card-frame\"></div>\n      <img class=\"card-logo\" src=\"${player.TeamLogo2X}\" />\n      <img class=\"card-picture\" src=\"${player.PlayerImage}\" />\n      <div class=\"card-nameplate\">\n        <span class=\"playername\">\n            ${player.DisplayName}\n          </span>\n      </div>\n    </div>\n    <div class=\"back\">\n      <div class=\"card-back\">\n        <div class=\"card-back-id\">${player.MlbId | baseballCardId}</div>\n        <div class=\"card-back-nameplate\">\n          ${player.DisplayName}&nbsp;&#9679;&nbsp;${player.PrimaryPosition}\n        </div>\n        <div class=\"card-back-body\">\n          <table>\n            <caption>Major League Batting Record</caption>\n            <thead>\n              <tr>\n                <th>Year</th>\n                <th>G</th>\n                <th>AB</th>\n                <th>H</th>\n                <th>HR</th>\n                <th>BB</th>\n                <th>SLG</th>\n                <th>SO</th>\n                <th>AVG</th>\n              </tr>\n            </thead>\n            <tr repeat.for=\"stat of player.PlayerTotals\">\n              <td>${stat.Year}</td>\n              <td>0</td>\n              <td>${stat.Ab}</td>\n              <td>${stat.H}</td>\n              <td>${stat.Hr}</td>\n              <td>${stat.Bb}</td>\n              <td>${stat.Slg | roundAvg:3}</td>\n              <td>${stat.So}</td>\n              <td>${stat.Avg | roundAvg:3}</td>\n            </tr>\n          </table>\n          <br/>\n          <div class=\"pull-right\">\n            <a href=\"${player.MlbProfile}\" target=\"_blank\" />Full MLB Profile</a>\n          </div>\n        </div>\n      </div>\n</template>"; });
+define('text!resources/elements/baseball-card.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"../../resources/value-converters/baseball-card-id\"></require>\n  <require from=\"../../resources/value-converters/roundAvg\"></require>\n  <div id.bind=\"id\" class=\"card-container\">\n    <div class=\"front\">\n      <div class=\"card-frame\"></div>\n      <img class=\"card-logo\" src=\"${player.TeamLogo2X}\" />\n      <img class=\"card-picture\" src=\"${player.PlayerImage}\" />\n      <div class=\"card-nameplate\">\n        <span class=\"playername\">\n            ${player.DisplayName}\n          </span>\n      </div>\n    </div>\n    <div class=\"back\">\n      <div class=\"card-back\">\n        <div class=\"card-back-id\">${player.MlbId | baseballCardId}</div>\n        <div class=\"card-back-nameplate\">\n          ${player.DisplayName}&nbsp;&#9679;&nbsp;${player.PrimaryPosition}\n        </div>\n        <div class=\"card-back-body\">\n          <table>\n            <caption>Major League Batting Record</caption>\n            <thead>\n              <tr>\n                <th>Year</th>\n                <th>G</th>\n                <th>AB</th>\n                <th>H</th>\n                <th>HR</th>\n                <th>BB</th>\n                <th>SLG</th>\n                <th>SO</th>\n                <th>AVG</th>\n              </tr>\n            </thead>\n            <tr repeat.for=\"stat of player.PlayerTotals\">\n              <td>${stat.Year}</td>\n              <td>${stat.G}</td>\n              <td>${stat.Ab}</td>\n              <td>${stat.H}</td>\n              <td>${stat.Hr}</td>\n              <td>${stat.Bb}</td>\n              <td>${stat.Slg | roundAvg:3}</td>\n              <td>${stat.So}</td>\n              <td>${stat.Avg | roundAvg:3}</td>\n            </tr>\n          </table>\n          <br/>\n          <div class=\"pull-right\">\n            <a href=\"${player.MlbProfile}\" target=\"_blank\" />Full MLB Profile</a>\n          </div>\n        </div>\n      </div>\n</template>"; });
 define('text!resources/elements/nav-bar.html', ['module'], function(module) { module.exports = "<template>\n\t<header class=\"navbar-fixed-top\">\n\t\t<div class=\"navbar-main container\">\n\t\t\t<nav class=\"navbar-default\">\n\t\t\t\t<div class=\"navbar-header\">\n\t\t\t\t\t<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#navbar-collapse\" aria-expanded=\"false\">\n\t\t\t\t\t<span class=\"sr-only\">Toggle navigation</span>\n\t\t\t\t\t<span class=\"icon-bar\"></span>\n\t\t\t\t\t<span class=\"icon-bar\"></span>\n\t\t\t\t\t<span class=\"icon-bar\"></span>\n\t\t\t\t</button>\n\t\t\t\t\t<a href=\"#\" class=\"navbar-brand\">\n\t\t\t\t\t\t<img src=\"assets/images/hrd.png\" />\n\t\t\t\t\t</a>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"collapse navbar-collapse\" id=\"navbar-collapse\">\n\t\t\t\t\t<ul class=\"nav navbar-nav\">\n\t\t\t\t\t\t<li repeat.for=\"row of router.navigation\" class=\"${row.isActive ? 'active' : ''}\">\n\t\t\t\t\t\t\t<a href.bind=\"row.href\" data-toggle=\"collapse\" data-target=\".navbar-collapse.in\">${row.title}</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<p class=\"navbar-text pull-right\"><span class=\"text-info\">${updateStatus}</span></p>\n\t\t\t\t</div>\n\t\t\t</nav>\n\t\t</div>\n\t</header>\n\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

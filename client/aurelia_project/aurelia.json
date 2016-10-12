@@ -122,6 +122,21 @@
             "path": "../scripts/text"
           },
           {
+            "name": "chart.js",
+            "path": "../node_modules/chart.js/dist",
+            "main": "chart"
+          },
+          {
+            "name": "aurelia-chart",
+            "path": "../node_modules/aurelia-chart/dist/amd",
+            "main": "index",
+            "resources": [
+              "elements/chart-element.js",
+              "elements/chart-element.html",
+              "attributes/chart-attribute.js"
+            ]
+          },
+          {
             "name": "aurelia-templating-resources",
             "path": "../node_modules/aurelia-templating-resources/dist/amd",
             "main": "aurelia-templating-resources"
@@ -141,7 +156,7 @@
             "name": "bootstrap",
             "path": "../node_modules/bootstrap/dist",
             "main": "js/bootstrap.min",
-            "deps": [ ],
+            "deps": [],
             "exports": "$",
             "resources": [
               "css/bootstrap.css"

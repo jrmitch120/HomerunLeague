@@ -37,7 +37,7 @@ export class App {
       { route: 'leaders', name: 'leaders', moduleId: 'pages/leaders/homeruns', nav: true, title: 'Leaders' },
       { route: 'standings', name: 'standings', moduleId: 'pages/standings/list', nav: true, title: 'Standings' },
       { route: 'activity', name: 'activity', moduleId: 'pages/activity/activity', nav: true, title: 'Activity' },
-      { route: 'players/:id', name: 'player', moduleId: 'pages/players/details', nav: false, title: 'Join League' },
+      { route: 'players/:id', name: 'player', moduleId: 'pages/players/details', nav: false, title: 'Player Infomration' },
     ]);
 
     this.router = router;
