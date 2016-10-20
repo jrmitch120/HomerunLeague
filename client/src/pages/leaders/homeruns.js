@@ -27,7 +27,7 @@ export class HomeRuns {
     $('[data-toggle="tooltip"]').tooltip();
     
     // Subscript to team update notifications
-    this._subscriber = this._ea.subscribe('TeamUpdate', () => { return this.getData() });
+    this._subscriber = this._ea.subscribe('TeamUpdate', () => { return this._getData() });
   }
 
   detached() {
@@ -41,10 +41,10 @@ export class HomeRuns {
     let getLeaders = (page) => {
       return this._api.getLeaders(page).then(results => {
 
-        this.leaders = this.leaders.concat(results.Leaders);
+        this.leaders = this.leaders.concat(results.leaders);
 
-        if (results.Meta.Page < results.Meta.TotalPages)
-          return getLeaders(results.Meta.Page + 1);
+        if (results.meta.page < results.meta.totalPages)
+          return getLeaders(results.meta.page + 1);
       });
     };
 
@@ -64,11 +64,11 @@ export class HomeRuns {
     var now = moment()
 
     for (let gamelog of gamelogs) {
-      let gameDate = moment(gamelog.GameDate);
+      let gameDate = moment(gamelog.gameDate);
 
-      if (player.history.recentHr.length < 5 && gamelog.Hr > 0) {
-        let location = gamelog.HomeAway === 'A' ? 'at' : 'vs'
-        player.history.recentHr.push({ "date": gameDate.format('MM/DD'), "hr": gamelog.Hr, "location": location, "opp": gamelog.Opponent });
+      if (player.history.recentHr.length < 5 && gamelog.hr > 0) {
+        let location = gamelog.homeAway === 'A' ? 'at' : 'vs'
+        player.history.recentHr.push({ "date": gameDate.format('MM/DD'), "hr": gamelog.hr, "location": location, "opp": gamelog.opponent });
       }
     }
 
@@ -76,14 +76,14 @@ export class HomeRuns {
   }
 
   toggleHistory(player) {
-    var spinner = $(`#spinner-${player.PlayerId}`);
-    var history = $(`#history-${player.PlayerId}`);
+    var spinner = $(`#spinner-${player.playerId}`);
+    var history = $(`#history-${player.playerId}`);
 
     if(!history.is(':visible'))
       spinner.show();
 
-    this._api.getGameLogsForPlayer(player.PlayerId).then(results => {
-      this._loadHistory(player, results.GameLogs);
+    this._api.getGameLogsForPlayer(player.playerId).then(results => {
+      this._loadHistory(player, results.gameLogs);
       spinner.hide();
       history.slideToggle('fast', function () { });
     });

@@ -16,10 +16,10 @@ export class List {
     let loadData = (page) => {
       return this._api.getTeams(page).then(results => {
         
-        this.teams = this.teams.concat(results.Teams);
+        this.teams = this.teams.concat(results.teams);
 
-        if (results.Meta.Page < results.Meta.TotalPages)
-          return loadData(results.Meta.Page + 1);
+        if (results.meta.page < results.meta.totalPages)
+          return loadData(results.meta.page + 1);
       });
     };
 

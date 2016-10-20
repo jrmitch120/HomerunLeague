@@ -8,15 +8,15 @@
       </div>
       <div class="col-md-1">
         <div class="hr-count">
-          ${team.Totals.Hr}<br />
+          ${team.totals.hr}<br />
         </div>
-        <sup if.bind="team.Totals.HrMovement > 0" class="text-success" style="position: absolute; font-size: 1.1em; top: 25px; left: 75px;">+${team.Totals.HrMovement}</sup>
+        <sup if.bind="team.totals.hrMovement > 0" class="text-success" style="position: absolute; font-size: 1.1em; top: 25px; left: 75px;">+${team.totals.hrMovement}</sup>
       </div>
       <div class="col-md-7">
-        <div class="list-lead">${team.Name}</div>
-        <p if.bind="teams[$index + 1].Totals.Hr == team.Totals.Hr || teams[$index - 1].Totals.Hr == team.Totals.Hr" class="list-lead-note">
+        <div class="list-lead">${team.name}</div>
+        <p if.bind="teams[$index + 1].totals.hr == team.totals.hr || teams[$index - 1].totals.hr == team.totals.hr" class="list-lead-note">
           <span class="glyphicon glyphicon-option-horizontal"></span>&nbsp;
-          <span class="text-info">Total AB: ${team.Totals.Ab.toLocaleString()}</span>
+          <span class="text-info">Total AB: ${team.totals.ab.toLocaleString()}</span>
         </p>
       </div>
     </div>

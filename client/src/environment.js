@@ -1,5 +1,5 @@
 export default {
   debug: true,
   testing: true,
-  api: 'http://localhost:9001/api/',
+  api: 'http://192.168.11.180:9001/api/',
 };

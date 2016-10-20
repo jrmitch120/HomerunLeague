@@ -1,9 +1,12 @@
 <template>
-  <require from="bootstrap/css/bootstrap.css"></require>
-  <require from="./styles.css"></require>
-  <nav-bar router.bind="router" last-team-update.bind="lastTeamUpdate"></nav-bar>
-  <loading loading.bind="router.isNavigating || api.isRequesting"></loading>
-  <div class="container">
-    <router-view></router-view>
-  </div>
+	<require from="bootstrap/css/bootstrap.css"></require>
+	<require from="./styles.css"></require>
+	<nav-bar router.bind="router" last-team-update.bind="lastTeamUpdate"></nav-bar>
+	<loading loading.bind="router.isNavigating || api.isRequesting"></loading>
+	<div class="container">
+		<div class="content">
+			<router-view>
+			</router-view>
+		</div>
+	</div>
 </template>

@@ -4,19 +4,19 @@
   <div id.bind="id" class="card-container">
     <div class="front">
       <div class="card-frame"></div>
-      <img class="card-logo" src="${player.TeamLogo2X}" />
-      <img class="card-picture" src="${player.PlayerImage}" />
+      <img class="card-logo" src="${player.teamLogo2X}" />
+      <img class="card-picture" src="${player.playerImage}" />
       <div class="card-nameplate">
         <span class="playername">
-            ${player.DisplayName}
+            ${player.displayName}
           </span>
       </div>
     </div>
     <div class="back">
       <div class="card-back">
-        <div class="card-back-id">${player.MlbId | baseballCardId}</div>
+        <div class="card-back-id">${player.mlbId | baseballCardId}</div>
         <div class="card-back-nameplate">
-          ${player.DisplayName}&nbsp;&#9679;&nbsp;${player.PrimaryPosition}
+          ${player.displayName}&nbsp;&#9679;&nbsp;${player.primaryPosition}
         </div>
         <div class="card-back-body">
           <table>
@@ -34,21 +34,22 @@
                 <th>AVG</th>
               </tr>
             </thead>
-            <tr repeat.for="stat of player.PlayerTotals">
-              <td>${stat.Year}</td>
-              <td>${stat.G}</td>
-              <td>${stat.Ab}</td>
-              <td>${stat.H}</td>
-              <td>${stat.Hr}</td>
-              <td>${stat.Bb}</td>
-              <td>${stat.Slg | roundAvg:3}</td>
-              <td>${stat.So}</td>
-              <td>${stat.Avg | roundAvg:3}</td>
+            <tr repeat.for="stat of player.playerTotals">
+              <td>${stat.year}</td>
+              <td>${stat.g}</td>
+              <td>${stat.ab}</td>
+              <td>${stat.h}</td>
+              <td>${stat.hr}</td>
+              <td>${stat.bb}</td>
+              <td>${stat.slg | roundAvg:3}</td>
+              <td>${stat.so}</td>
+              <td>${stat.avg | roundAvg:3}</td>
             </tr>
           </table>
           <br/>
           <div class="pull-right">
-            <a href="${player.MlbProfile}" target="_blank" />Full MLB Profile</a>
+            <a href="${player.mlbProfile}" target="_blank" />MLB Profile</a> | 
+            <a route-href="route: player; params.bind: {id:player.id}" target="_blank">Profile</a>
           </div>
         </div>
       </div>
