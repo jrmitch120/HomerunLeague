@@ -1,51 +1,127 @@
 <template>
-  <h1>${player.DisplayName}</h1>
-	<div class="row">
-		<div class="col-md-3">
-			<img src="${player.PlayerImage}" class="img-player img-responsive" />
+	<require from="../../resources/value-converters/roundAvg"></require>
+	<require from="../../resources/value-converters/age"></require>
+	<require from="../../resources/value-converters/date-format"></require>
+	<div if.bind="!player">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Player Not Found</h1>
+			</div>
 		</div>
-    <div class="col-md-1">
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th>AB</th>
-          <th>AB</th>
-          <th>AB</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>12</td>
-          <td>12</td>
-          <td>12</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
 	</div>
-	<fieldset>
-		<legend>Line Graph via Attribute</legend>
-		<canvas id="line-chart" chart="type: line; should-update: false; data.bind: simpleLineData"></canvas>
-		<p>Changing the data wont change this graph as it is not update-able</p>
-	</fieldset>
+	<div if.bind="player">
+		<div class="row">
+			<div class="col-md-2">
+				<img src="${player.playerImage}" class="img-player img-responsive" />
+			</div>
+			<div class="col-md-4">
+				<div class="profile-bio-container">
+					<div>
+						<h1>${player.displayName} | #${player.jerseyNumber}</h1>
+						<h2>${player.teamName}</h2>
+						<p>
+							<strong>Height</strong>: ${player.heightFeet}' ${player.heightFeet}"&nbsp;
+							<strong>Weight</strong>: ${player.weight}&nbsp;
+							<strong>Age</strong>: ${player.birthDate | age}&nbsp;
+						</p>
+						<p>
+							<strong>Born</strong>: ${player.birthDate | dateFormat:'M/D/YYYY'}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-5">
 
-	<fieldset>
-		<legend>Doughnut Chart via Element</legend>
-		<chart id="dynamic-doughnut-chart" type="doughnut" style="width: 50%; height: 50%; display: block;" should-update="true"
-			throttle="2000" data.bind="dynamicDoughnutData"></chart>
-		<chart id="dynamic-pie-chart" type="pie" style="width: 50%; height: 50%; display: block;" should-update="true" throttle="2000"
-			data.bind="dynamicDoughnutData" native-options.bind="{ animation: { animateRotate: false } }"></chart>
-		<div>
-			<label>Values</label>
-			<div repeat.for="i of dynamicDoughnutData.datasets[0].data.length">
-				<input value.bind="dynamicDoughnutData.datasets[0].data[i]" placeholder="Value ${$index + 1}" />
+				<div if.bind="player.playerTotals.length > 0">
+					<div class="profile-stat-line">
+						<div class="profile-stat profile-stat-label">G</div>
+						<div class="profile-stat profile-stat-stat">${player.playerTotals[0].g}</div>
+						<div class="profile-stat-spacer"></div>
+						<div class="profile-stat profile-stat-label">AB</div>
+						<div class="profile-stat profile-stat-stat">${player.playerTotals[0].ab}</div>
+					</div>
+					<div class="profile-stat-line">
+						<div class="profile-stat profile-stat-label">H</div>
+						<div class="profile-stat profile-stat-stat">${player.playerTotals[0].h}</div>
+						<div class="profile-stat-spacer"></div>
+						<div class="profile-stat profile-stat-label">HR</div>
+						<div class="profile-stat profile-stat-stat">${player.playerTotals[0].hr}</div>
+					</div>
+					<div class="profile-stat-line">
+						<div class="profile-stat profile-stat-label">AVG</div>
+						<div class="profile-stat profile-stat-stat">${player.playerTotals[0].avg | roundAvg:3}</div>
+						<div class="profile-stat-spacer"></div>
+						<div class="profile-stat profile-stat-label">SLG</div>
+						<div class="profile-stat profile-stat-stat">${player.playerTotals[0].slg | roundAvg:3}</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<hr/>
+				<h2>Yearly Statistics</h2>
+				<div class="table-responsive">
+					<table class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th>YEAR</th>
+								<th>G</th>
+								<th>AB</th>
+								<th>R</th>
+								<th>H</th>
+								<th>TB</th>
+								<th>HR</th>
+								<th>RBI</th>
+								<th>BB</th>
+								<th>IBB</th>
+								<th>SO</th>
+								<th>SB</th>
+								<th>CS</th>
+								<th>AVG</th>
+								<th>SLG</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr repeat.for="stat of player.playerTotals" click.delegate="bindCharts(stat)" class="pointy" class.bind="stat.isSelected ? 'warning' : ''">
+								<td>${stat.year}</td>
+								<td>${stat.g}</td>
+								<td>${stat.ab}</td>
+								<td>${stat.r}</td>
+								<td>${stat.h}</td>
+								<td>${stat.tb}</td>
+								<td>${stat.hr}</td>
+								<td>${stat.rbi}</td>
+								<td>${stat.bb}</td>
+								<td>${stat.ibb}</td>
+								<td>${stat.so}</td>
+								<td>${stat.sb}</td>
+								<td>${stat.cs}</td>
+								<td>${stat.avg | roundAvg:3}</td>
+								<td>${stat.slg | roundAvg:3}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 
-		<p>Both charts are using the same dataset behind the scenes, so changing one will change both.</p>
-		<p>Changing the above value should trigger a chart refresh after 2 seconds</p>
-		<p>Although dynamically added entries will not be tracked currently</p>
-		<button click.delegate="addEntry()">Add Entry</button>
-		<button click.delegate="resetPieData()">Reset</button>
-	</fieldset>
+		<div class="row" if.bind="player.playerTotals.length > 0">
+			<div class="col-md-6">
+				<fieldset>
+					<legend>${statsYear} Home Runs</legend>
+					<chart id="dynamic-radar-chart-1" type="radar" style="width: 100%; height: auto; display: block;" should-update="true" throttle="100"
+						data.bind="radarHrData" native-options.bind="{ legend: { display: false } }"></chart>
+				</fieldset>
+			</div>
+			<div class="col-md-6">
+				<fieldset>
+					<legend>${statsYear} At Bats</legend>
+					<chart id="dynamic-radar-chart-2" type="radar" style="width: 100%; height: auto; display: block;" should-update="true" throttle="100"
+						data.bind="radarAbData" native-options.bind="{ legend: { display: false } }"></chart>
+				</fieldset>
+			</div>
+		</div>
+	</div>
 </template>

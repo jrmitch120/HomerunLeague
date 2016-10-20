@@ -28,12 +28,12 @@ export class Create {
   }
 
   activate(params) {
-    return this._api.getDivisions().then(result => { this.divisions = result.Divisions; });
+    return this._api.getDivisions().then(result => { this.divisions = result.divisions; });
   }
 
   get validLineup() {
     for (var division of this.divisions) {
-      if (division.selectedCount != division.PlayerRequirement)
+      if (division.selectedCount != division.playerRequirement)
         return false;
     }
 
@@ -47,9 +47,9 @@ export class Create {
     let playerIds = [];
 
     for (var division of this.divisions) {
-      for (var player of division.Players)
+      for (var player of division.players)
         if (player.selected)
-          playerIds.push(player.Id);
+          playerIds.push(player.id);
     }
 
     this._api.createTeam({ name: this.name, email: this.email, playerIds: playerIds }).then(result => {
@@ -59,9 +59,9 @@ export class Create {
   }
 
   loadPlayerStats(player) {
-    if (player.PlayerTotals === undefined) {
-      return this._api.getPlayer(player.Id).then(result => {
-        player.PlayerTotals = result.Player.PlayerTotals;
+    if (player.playerTotals === undefined) {
+      return this._api.getPlayer(player.id).then(result => {
+        player.playerTotals = result.player.playerTotals;
       });
     }
     else

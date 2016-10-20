@@ -14,10 +14,10 @@ export class Activity {
     let loadRecent = (page) => {
       return this.api.getRecentHr(page).then(results => {
 
-        this.recent = this.recent.concat(results.RecentHrs);
+        this.recent = this.recent.concat(results.recentHrs);
         
-        if (results.Meta.Page < results.Meta.TotalPages)
-          return loadRecent(results.Meta.Page + 1);
+        if (results.meta.page < results.meta.totalPages)
+          return loadRecent(results.meta.page + 1);
       });
     }
 

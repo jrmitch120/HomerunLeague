@@ -15,18 +15,18 @@
   <div class="row">
     <div class="col-md-10">
       <div repeat.for="division of divisions">
-        <a name="div-${division.Id}"></a>
-        <h2 class="division">${division.Name} Division
-          <span class="requirement pull-right" class.bind="division.selectedCount == division.PlayerRequirement ? 'text-success' : 'text-danger'">
-            Pick ${division.PlayerRequirement} players
+        <a name="div-${division.id}"></a>
+        <h2 class="division">${division.name} Division
+          <span class="requirement pull-right" class.bind="division.selectedCount == division.playerRequirement ? 'text-success' : 'text-danger'">
+            Pick ${division.playerRequirement} players
            </span>
-          <span class="requirement valid text-success pull-right glyphicon glyphicon-ok" if.bind="division.selectedCount == division.PlayerRequirement"></span>
+          <span class="requirement valid text-success pull-right glyphicon glyphicon-ok" if.bind="division.selectedCount == division.playerRequirement"></span>
         </h2>
 
-        <div repeat.for="player of division.Players">
+        <div repeat.for="player of division.players">
           <div class="pull-left">
-            <baseball-card id.one-way="'player-card-' + player.Id" player.bind="player" click.delegate="loadPlayerStats(player)"></baseball-card>
-            <button disabled.bind="division.selectedCount >= division.PlayerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
+            <baseball-card id.one-way="'player-card-' + player.id" player.bind="player" click.delegate="loadPlayerStats(player)"></baseball-card>
+            <button disabled.bind="division.selectedCount >= division.playerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
               class="btn btn-default btn-lg glyphicon" click.delegate="togglePlayer(division, player)"></button>
           </div>
         </div>
@@ -37,10 +37,10 @@
       <div id="myAffix">
 
         <div repeat.for="division of divisions">
-          <div class.bind="division.selectedCount == division.PlayerRequirement ? 'text-success' : ''">
-            <a href="#" click.delegate="scrollToAnchor('div-' + division.Id)">${division.Name}</a>: ${division.selectedCount
-            == null ? '0' : division.selectedCount}/${division.PlayerRequirement}
-            <span class="text-success glyphicon glyphicon-ok" if.bind="division.selectedCount == division.PlayerRequirement"></span>
+          <div class.bind="division.selectedCount == division.playerRequirement ? 'text-success' : ''">
+            <a href="#" click.delegate="scrollToAnchor('div-' + division.id)">${division.name}</a>: ${division.selectedCount
+            == null ? '0' : division.selectedCount}/${division.playerRequirement}
+            <span class="text-success glyphicon glyphicon-ok" if.bind="division.selectedCount == division.playerRequirement"></span>
           </div>
         </div>
         <hr/>

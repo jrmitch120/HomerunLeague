@@ -25,7 +25,7 @@ export class App {
 
     // Have Aurelia wait until we get the settings
     return this._api.getSettings().then(
-      settings => { this._api.year = settings.BaseballYear });
+      settings => { this._api.year = settings.baseballYear });
   }
 
   // Configure router
@@ -47,12 +47,12 @@ export class App {
   _getUpdateStatus() {
     return this._api.getEvents('TeamUpdate').then(results => {
       
-      if (this.lastTeamUpdate !== null && results.LeagueEvents[0].Completed !== this.lastTeamUpdate) {
+      if (this.lastTeamUpdate !== null && results.leagueEvents[0].completed !== this.lastTeamUpdate) {
         this._ea.publish('TeamUpdate');
         console.info('TeamUpdate event published');
       }
 
-      this.lastTeamUpdate = results.LeagueEvents[0].Completed;
+      this.lastTeamUpdate = results.leagueEvents[0].completed;
     });
   }
 }

@@ -1,85 +1,143 @@
 import { inject } from 'aurelia-framework';
 import { Api } from '../../services/api';
+import moment from 'moment';;
 
 @inject(Api)
 export class Details {
 
   _api;
 
+  _chartDataCache = {
+    gamelogs: [],
+    hrTotalsByMonth: [],
+    abTotalsByMonth: []
+  };
+
   player;
-  dynamicDoughnutData;
-  simpleLineData;
+  statsYear;
+  radarHrData;
+  radarAbData;
 
   constructor(api) {
     this._api = api;
 
-    this.resetPieData();
-    this.resetLineData();
+    this._setupRadarData();
   }
 
   activate(params, routeConfig) {
     this.routeConfig = routeConfig;
-    this.routeConfig.navModel.setTitle('Testing changing title');
-
-    console.info(`Player Details Id ${params.id}`)
 
     return this._api.getPlayer(params.id).then(response => {
-      this.player = response.Player
+      if (response.player) {
+        this.player = response.player;
+        this.routeConfig.navModel.setTitle(this.player.displayName);
+
+        if (this.player.playerTotals.length > 0) {
+          // Set the first playtotal as active
+          this.player.playerTotals[0].isSelected = true;
+
+          // Set statsYear to first playerTotal
+          this.statsYear = this.player.playerTotals[0].Year;
+
+          // Bind charts to statsYear
+          return this._bindChartDatasets(this.statsYear);
+        }
+      }
+      else
+        this.routeConfig.navModel.setTitle('Player Not Found');
     });
   }
 
-  resetPieData() {
-    this.dynamicDoughnutData = {
-      labels: ["Red", "Green", "Yellow"],
-      datasets: [
-        {
-          data: [300, 50, 100],
-          backgroundColor: [
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56"
-          ],
-          hoverBackgroundColor: [
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56"
-          ]
-        }]
-    };
+  _getGamelogs(year) {
+    if (this._chartDataCache.gamelogs[year] == undefined) {
+      return this._api.getGameLogsForPlayer(this.player.id, year).then(response => {
+        console.info('Fetching gamelogs from server...');
+        this._chartDataCache.gamelogs[year] = response.gameLogs;
+        return response.gameLogs;
+      });
+    }
+    else {
+      let gamelogs = this._chartDataCache.gamelogs[year];
+
+      return new Promise(function (resolve) {
+        console.info('Gamelogs cached...');
+        resolve(gamelogs);
+      });
+    }
   }
 
-  resetLineData() {
-    this.simpleLineData = {
-      labels: ["April", "May", "June", "July", "August", "September", "October"],
-      datasets: [
-        {
-          label: "Healthy People",
-          backgroundColor: "rgba(220,220,220,0.2)",
-          borderColor: "rgba(220,220,220,1)",
-          pointColor: "rgba(220,220,220,1)",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "rgba(220,220,220,1)",
-          data: [65, 59, 80, 81, 56, 55, 40]
-        },
-        {
-          label: "Ill People",
-          backgroundColor: "rgba(151,187,205,0.2)",
-          borderColor: "rgba(151,187,205,1)",
-          pointColor: "rgba(151,187,205,1)",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "rgba(151,187,205,1)",
-          data: [28, 48, 40, 19, 86, 27, 90]
+  _bindChartDatasets(year) {
+    return this._getGamelogs(year).then(gamelogs => {
+
+      // Calculate yearly gamelog totals if no cached.
+      if (this._chartDataCache.hrTotalsByMonth[year] == undefined) {
+
+        this._chartDataCache.hrTotalsByMonth[year] = [];
+        this._chartDataCache.abTotalsByMonth[year] = [];
+
+        // Reset monthly totals for March - October.
+        for (var i = 2; i < 10; i++) {
+          console.info(i);
+          this._chartDataCache.hrTotalsByMonth[year][i] = 0;
+          this._chartDataCache.abTotalsByMonth[year][i] = 0;
         }
-      ]
+
+        gamelogs.forEach(gamelog => {
+          let month = moment(gamelog.gameDate).month();
+          console.info(`Month: ${month}`);
+          this._chartDataCache.hrTotalsByMonth[year][month] += gamelog.hr;
+          this._chartDataCache.abTotalsByMonth[year][month] += gamelog.ab;
+        });
+      }
+
+      // Set chart dataset data
+      this.radarHrData.datasets[0].data.length = 0;
+      this.radarAbData.datasets[0].data.length = 0;
+      this._chartDataCache.hrTotalsByMonth[year].forEach(stat => { this.radarHrData.datasets[0].data.push(stat); });
+      this._chartDataCache.abTotalsByMonth[year].forEach(stat => { this.radarAbData.datasets[0].data.push(stat); });
+
+      console.info(this.radarHrData.datasets[0].data);
+    });
+  }
+
+  _setupRadarData() {
+    this.radarHrData = {
+      labels: ['March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
+      datasets: [{
+        label: 'Home Runs',
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        pointBackgroundColor: 'rgba(255,99,132,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(255,99,132,1)',
+        data: []
+      }]
+    };
+
+    this.radarAbData = {
+      labels: ['March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
+      datasets: [{
+        label: 'At Bats',
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        pointBackgroundColor: 'rgba(255,99,132,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(255,99,132,1)',
+        data: []
+      }]
     };
   }
 
-  addEntry() {
-    this.dynamicDoughnutData.labels.push("New Colour");
-    this.dynamicDoughnutData.datasets[0].data.push(50);
-    this.dynamicDoughnutData.datasets[0].backgroundColor.push("#B4FD5C");
-  };
+  bindCharts(playerTotal) {
+    // Row highlighting
+    this.player.playerTotals.forEach(x => x.isSelected = false);
+    this.statsYear = playerTotal.year;
 
+    playerTotal.isSelected = true;
+
+    // Bind the chart data
+    return this._bindChartDatasets(this.statsYear);
+  }
 }

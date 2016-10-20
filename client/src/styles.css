@@ -33,6 +33,10 @@ body {
   background-color: white;
 }
 
+.content {
+  padding: 10px;
+}
+
 .splash {
   text-align: center;
   margin: 10% 0 0 0;
@@ -386,6 +390,48 @@ p.list-lead-note {
   background-color: #002e6d; 
   margin-top: 20px; 
   display: inline-block;
+}
+
+.profile-bio-container {
+  display: flex;
+  align-items: center;
+}
+
+.profile-stat-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  width: 70px;
+  font-size: 32px;
+  margin: 10px 10px;
+  
+  box-shadow: 3px 3px 1px #888888;
+}
+
+.profile-stat-label {
+  color: azure;
+  background-color: #002e6d;
+}
+
+.profile-stat-stat {
+  color: #002e6d;
+  background-color: azure;
+  border: 2px solid #002e6d;
+}
+
+.profile-stat-spacer {
+  width: 20px;
+}
+
+.pointy {
+  cursor: pointer;
 }
 
 /* HEADINGS */
