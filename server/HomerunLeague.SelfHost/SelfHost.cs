@@ -57,6 +57,8 @@ namespace HomerunLeague.SelfHost
                 JsConfig<StatUpdateOptions>.IncludeTypeInfo = true;
                 JsConfig<TeamUpdateOptions>.IncludeTypeInfo = true;
 
+                JsConfig.EmitCamelCaseNames = true;
+
                 OrmLiteConfig.InsertFilter = (dbCmd, row) =>
                 {
                     var auditRow = row as IAudit;
