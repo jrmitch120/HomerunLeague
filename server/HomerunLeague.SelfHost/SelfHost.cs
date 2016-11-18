@@ -8,7 +8,8 @@ using HomerunLeague.ServiceInterface;
 using HomerunLeague.ServiceInterface.Authentication;
 using HomerunLeague.ServiceInterface.Validation;
 using HomerunLeague.ServiceModel.Types;
-
+using Mono.Unix;
+using Mono.Unix.Native;
 using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
@@ -22,7 +23,7 @@ namespace HomerunLeague.SelfHost
 		//Define the Web Services AppHost
 		public class AppHost : AppSelfHostBase {
 			public AppHost() 
-                : base("HttpListener Self-Host", typeof(PlayerServices).Assembly) {}
+                : base("Homerun League Self-Hosted Server", typeof(PlayerServices).Assembly) {}
 
 			public override void Configure(Container container)
 			{
@@ -30,15 +31,8 @@ namespace HomerunLeague.SelfHost
                 Plugins.Add(new ValidationFeature());
 			    Plugins.Add(new PostmanFeature());
 
-                // SqlServer
-                //container.Register<IDbConnectionFactory>(
-                //    new OrmLiteConnectionFactory(
-                //        @"Data Source=.\SQLEXPRESS;Initial Catalog=HomerunLeague;Integrated Security=True",
-                //        SqlServer2012Dialect.Provider));
-
-
                 // SQLite
-			    container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"leaguedata.sqlite",
+			    container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(@"data/leaguedata.sqlite",
 			        SqliteDialect.Provider));
 
                 container.Register<IKeys>(new ApiKeys(AppSettings.GetList("apiKeys"))); // API Keys
@@ -66,6 +60,7 @@ namespace HomerunLeague.SelfHost
                         auditRow.Created = auditRow.Modified = DateTime.UtcNow;
                 };
 
+			    // Update filter for IAudit
                 OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
                 {
                     var auditRow = row as IAudit;
@@ -73,15 +68,14 @@ namespace HomerunLeague.SelfHost
                         auditRow.Modified = DateTime.UtcNow;
                 };
 
+			    // Setup tables
                 using (var db = container.Resolve<IDbConnectionFactory>().Open())
                 {
-                    db.CreateTableIfNotExists(typeof(Team), typeof(Player), typeof(Division), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(TeamTotals), typeof(Setting));
-
-                    //db.DropTables(typeof(TeamTotals), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(Team), typeof(Player), typeof(Division), typeof(Setting));
-                    //db.CreateTables(true,typeof(Team), typeof(Player), typeof(Division), typeof(Teamate), typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals), typeof(TeamTotals), typeof(Setting));
-
-                    //db.Save(new Setting { Name = "RegistrationOpen", Value = "true" });
-                    //db.Save(new Setting { Name = "BaseballYear", Value = "2016" });
+                    db.CreateTableIfNotExists(
+                        typeof(Team), typeof(Player), typeof(Division), typeof(Teamate),
+                        typeof(DivisionalPlayer), typeof(LeagueEvent), typeof(GameLog), typeof(PlayerTotals),
+                        typeof(TeamTotals), typeof(Setting)
+                    );
                 }
 
                 var game = container.Resolve<LeagueEngine>();
@@ -91,9 +85,10 @@ namespace HomerunLeague.SelfHost
 		}
 
 		//Run it!
-		static void Main(string[] args)
-		{
-			var listeningOn = args.Length == 0 ? "http://*:9001/api/" : args[0];
+	    static void Main(string[] args)
+	    {
+	        var port = args.Length > 0 ? args[0] : "9001";
+	        var listeningOn = $"http://*:{port}/api/";
 
 			new AppHost()
 				.Init()
@@ -102,7 +97,31 @@ namespace HomerunLeague.SelfHost
 			Console.WriteLine("AppHost Created at {0}, listening on {1}", 
 				DateTime.Now, listeningOn);
 
-			Console.ReadKey();
+		    if (IsRunningOnMono())
+		    {
+		        var terminationSignals = GetUnixTerminationSignals();
+		        UnixSignal.WaitAny(terminationSignals);
+		    }
+		    else
+		    {
+		        Console.ReadLine();
+		    }
 		}
+
+	    private static bool IsRunningOnMono()
+	    {
+	        return Type.GetType("Mono.Runtime") != null;
+	    }
+
+	    private static UnixSignal[] GetUnixTerminationSignals()
+	    {
+	        return new[]
+	        {
+	            new UnixSignal(Signum.SIGINT),
+	            new UnixSignal(Signum.SIGTERM),
+	            new UnixSignal(Signum.SIGQUIT),
+	            new UnixSignal(Signum.SIGHUP)
+	        };
+	    }
 	}
 }
