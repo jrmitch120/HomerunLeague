@@ -15,6 +15,8 @@ using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Text;
 using ServiceStack.Validation;
+using ServiceStack.Logging;
+using ServiceStack.Logging.NLogger;
 
 namespace HomerunLeague.SelfHost
 {
@@ -27,7 +29,7 @@ namespace HomerunLeague.SelfHost
 
 			public override void Configure(Container container)
 			{
-                Plugins.Add(new CorsFeature());
+			    Plugins.Add(new CorsFeature());
                 Plugins.Add(new ValidationFeature());
 			    Plugins.Add(new PostmanFeature());
 
@@ -78,7 +80,14 @@ namespace HomerunLeague.SelfHost
                     );
                 }
 
-                var game = container.Resolve<LeagueEngine>();
+                // Log any exception coming out of the services.
+			    ServiceExceptionHandlers.Add((httpReq, request, exception) => {
+			        LogManager.GetLogger(request.GetType()).Error($"{request.ToJson()}|{exception}");
+
+			        return null; // continues default error handling
+			    });
+
+			    var game = container.Resolve<LeagueEngine>();
 
                 game.Start();
             }
@@ -89,6 +98,8 @@ namespace HomerunLeague.SelfHost
 	    {
 	        var port = args.Length > 0 ? args[0] : "9001";
 	        var listeningOn = $"http://*:{port}/api/";
+
+	        LogManager.LogFactory = new NLogFactory();
 
 			new AppHost()
 				.Init()
