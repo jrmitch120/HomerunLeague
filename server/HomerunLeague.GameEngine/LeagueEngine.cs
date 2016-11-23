@@ -9,6 +9,7 @@ using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 using HomerunLeague.ServiceModel.ViewModels;
 using ServiceStack;
+using ServiceStack.Logging;
 
 namespace HomerunLeague.GameEngine 
 {
@@ -25,7 +26,9 @@ namespace HomerunLeague.GameEngine
 
         private readonly Timer _timer;
         private volatile bool _running;
-        
+
+        private static ILog _logger = LogManager.GetLogger(typeof(LeagueEngine));
+
         public LeagueEngine(IBioData bioData, IStatData statData, Services services)
         {
             _bioData = bioData;
@@ -80,7 +83,7 @@ namespace HomerunLeague.GameEngine
             }
             catch (Exception ex)
             {
-                // TODO, excetion
+                _logger.Error(ex);
             }
             finally
             {

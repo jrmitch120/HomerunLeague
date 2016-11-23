@@ -14,8 +14,8 @@ namespace HomerunLeague.ServiceInterface
     public class PlayerServices : Service
 	{
         // Get Player by Id
-        public GetPlayerResponse Get(GetPlayer request) 
-		{
+        public GetPlayerResponse Get(GetPlayer request)
+        {
             var player = Db.LoadSingleById<Player>(request.Id);
 
             if (player == null)

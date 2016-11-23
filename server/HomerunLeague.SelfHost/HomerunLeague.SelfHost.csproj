@@ -34,6 +34,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Mono.Data.Sqlite.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\packages\Mono.Posix.4.0.0.0\lib\net40\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
+      <HintPath>..\packages\NLog.4.3.11\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Logging.NLog, Version=1.0.10.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\lib\ServiceStack.Logging.NLog.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.OrmLite.SqlServer">
       <HintPath>..\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
     </Reference>
@@ -83,8 +92,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sqlite3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="packages.config" />
   </ItemGroup>
 </Project>
