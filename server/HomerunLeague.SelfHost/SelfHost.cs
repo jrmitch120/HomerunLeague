@@ -96,8 +96,9 @@ namespace HomerunLeague.SelfHost
 		//Run it!
 	    static void Main(string[] args)
 	    {
-	        var port = args.Length > 0 ? args[0] : "9001";
-	        var listeningOn = $"http://*:{port}/api/";
+//	        var port = args.Length > 0 ? args[0] : "9001";
+//	        var listeningOn = $"http://*:{port}/api/";
+	        var listeningOn = $"http://*:9001/api/";
 
 	        LogManager.LogFactory = new NLogFactory();
 
