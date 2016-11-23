@@ -83,4 +83,9 @@ export class Api {
 	getTeams(page = 1) {
 		return this.http.fetch(`seasons/${this.year}/teams?page=${page}`);
 	}
+
+	// Get Teams
+	getTeam(teamId) {
+		return this.http.fetch(`seasons/${this.year}/teams/${teamId}`);
+	}
 }

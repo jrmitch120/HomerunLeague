@@ -1,70 +1,79 @@
 <template>
-  <require from="../../resources/elements/baseball-card"></require>
-  <div class="row">
-    <div class="content col-md-12 pad-top">
-      
-        <p class="lead">
-          So you think you've got what it takes to dominate the Homerun League? It's time to prove it. You will need to build a
-          team first. In order to do that, pick the required number of players from each division. Next, 
-          pick a team name (be creative!), fill out your email address, and confirm your lineup. Finally, all that
-          there's left to do is enjoy the baseball season and root for your team in the standings!
-        </p>
-      
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-10">
-      <div repeat.for="division of divisions">
-        <a name="div-${division.id}"></a>
-        <h2 class="division">${division.name} Division
-          <span class="requirement pull-right" class.bind="division.selectedCount == division.playerRequirement ? 'text-success' : 'text-danger'">
+	<require from="../../resources/elements/baseball-card"></require>
+	<div class="row">
+		<div class="content col-md-12 pad-top">
+
+			<p class="lead">
+				So you think you've got what it takes to dominate the Homerun League? It's time to prove it. You will need to build a team
+				first. In order to do that, pick the required number of players from each division. Next, pick a team name (be creative!),
+				fill out your email address, and confirm your lineup. Finally, all that there's left to do is enjoy the baseball season
+				and root for your team in the standings!
+			</p>
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10">
+			<div repeat.for="division of divisions">
+				<a name="div-${division.id}"></a>
+				<h2 class="division">${division.name} Division
+					<span class="requirement pull-right" class.bind="division.selectedCount == division.playerRequirement ? 'text-success' : 'text-danger'">
             Pick ${division.playerRequirement} players
            </span>
-          <span class="requirement valid text-success pull-right glyphicon glyphicon-ok" if.bind="division.selectedCount == division.playerRequirement"></span>
-        </h2>
+					<span class="requirement valid text-success pull-right glyphicon glyphicon-ok" if.bind="division.selectedCount == division.playerRequirement"></span>
+				</h2>
 
-        <div repeat.for="player of division.players">
-          <div class="pull-left">
-            <baseball-card id.one-way="'player-card-' + player.id" player.bind="player" click.delegate="loadPlayerStats(player)"></baseball-card>
-            <button disabled.bind="division.selectedCount >= division.playerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
-              class="btn btn-default btn-lg glyphicon" click.delegate="togglePlayer(division, player)"></button>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-      </div>
-    </div>
-    <div class="col-md-2">
-      <div id="myAffix">
-
-        <div repeat.for="division of divisions">
-          <div class.bind="division.selectedCount == division.playerRequirement ? 'text-success' : ''">
-            <a href="#" click.delegate="scrollToAnchor('div-' + division.id)">${division.name}</a>: ${division.selectedCount
-            == null ? '0' : division.selectedCount}/${division.playerRequirement}
-            <span class="text-success glyphicon glyphicon-ok" if.bind="division.selectedCount == division.playerRequirement"></span>
-          </div>
-        </div>
-        <hr/>
-        <form>
-          <div class="form-group">
-            <label class="sr-only" for="teamName">Team Name</label>
-            <input type="text" class="form-control" id="teamName" placeholder="Team Name" value.bind="name">
-          </div>
-          <div class="form-group">
-            <label class="sr-only" for="email">Password</label>
-            <input type="email" class="form-control" id="email" placeholder="Email Address" value.bind="email">
-          </div>
-          <div class="form-group">
-            <button disabled.bind="!validLineup" click.trigger="createTeam()" type="submit" class="btn btn-primary">Create Team</button>
-          </div>
-        </form>
-        <hr/>
-        <div>
-          Team creation placeholder. ${validLineup}
-        </div>
-        <div>
-          ${status}
-        </div>
-      </div>
-    </div>
-  </div>
+				<div repeat.for="player of division.players">
+					<div class="pull-left">
+						<a name="player-${player.id}"></a>
+						<baseball-card id.one-way="'player-card-' + player.id" player.bind="player" click.delegate="loadPlayerStats(player)"></baseball-card>
+						<button disabled.bind="division.selectedCount >= division.playerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
+							class="btn btn-default btn-lg glyphicon" click.delegate="togglePlayer(division, player)"></button>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="col-md-2">
+			<div id="myAffix">
+				<div repeat.for="division of divisions" style="margin-bottom: 3px;">
+					<div class.bind="division.selectedCount == division.playerRequirement ? 'text-success' : ''" style="display: inline-block; "></div>
+					<a href="#" style="font-size: 20px;" click.delegate="scrollToAnchor('div-' + division.id)">${division.name}</a>
+					<div class="division-container">
+						<div class="division-requirements">
+							<div class="division-requirement" repeat.for="i of division.playerRequirement">${i+1}</div>
+						</div>
+						<div class="division-players">
+							<div class="division-player" repeat.for="player of division.players" if.bind="player.selected">
+								<a href="#" click.delegate="scrollToAnchor('player-' + player.id)">
+									<img src="${player.playerImage}" style="width:15px; margin-bottom:5px;" title="${player.displayName}" alt="${player.displayName}" />
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr/>
+				<form>
+					<div class="form-group">
+						<label class="sr-only" for="teamName">Team Name</label>
+						<input type="text" class="form-control" id="teamName" placeholder="Team Name" value.bind="name">
+					</div>
+					<div class="form-group">
+						<label class="sr-only" for="email">Password</label>
+						<input type="email" class="form-control" id="email" placeholder="Email Address" value.bind="email">
+					</div>
+					<div class="form-group">
+						<button disabled.bind="!validLineup" click.trigger="createTeam()" type="submit" class="btn btn-primary">Create Team</button>
+					</div>
+				</form>
+				<hr/>
+				<div>
+					Team creation placeholder. ${validLineup}
+				</div>
+				<div>
+					${status}
+				</div>
+			</div>
+		</div>
+	</div>
 </template>

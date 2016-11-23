@@ -1,5 +1,5 @@
-import {inject} from 'aurelia-framework';
-import {Api} from '../../services/api';
+import { inject } from 'aurelia-framework';
+import { Api } from '../../services/api';
 import $ from 'bootstrap';
 import bootstrap from 'bootstrap';
 

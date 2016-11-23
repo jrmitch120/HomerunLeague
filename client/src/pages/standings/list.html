@@ -13,7 +13,9 @@
         <sup if.bind="team.totals.hrMovement > 0" class="text-success" style="position: absolute; font-size: 1.1em; top: 25px; left: 75px;">+${team.totals.hrMovement}</sup>
       </div>
       <div class="col-md-7">
-        <div class="list-lead">${team.name}</div>
+        <a class="" style="outline: none;" route-href="route: team; params.bind: {id:team.id}">
+          <div class="list-lead">${team.name}</div> 
+        </a>
         <p if.bind="teams[$index + 1].totals.hr == team.totals.hr || teams[$index - 1].totals.hr == team.totals.hr" class="list-lead-note">
           <span class="glyphicon glyphicon-option-horizontal"></span>&nbsp;
           <span class="text-info">Total AB: ${team.totals.ab.toLocaleString()}</span>

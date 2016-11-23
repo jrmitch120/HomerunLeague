@@ -1,5 +1,5 @@
-import {inject} from 'aurelia-framework';
-import {Api} from '../../services/api';
+import { inject } from 'aurelia-framework';
+import { Api } from '../../services/api';
 import $ from 'bootstrap';
 
 @inject(Api)
@@ -15,7 +15,7 @@ export class Activity {
       return this.api.getRecentHr(page).then(results => {
 
         this.recent = this.recent.concat(results.recentHrs);
-        
+
         if (results.meta.page < results.meta.totalPages)
           return loadRecent(results.meta.page + 1);
       });

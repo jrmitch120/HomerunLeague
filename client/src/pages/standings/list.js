@@ -1,5 +1,5 @@
-import {inject} from 'aurelia-framework';
-import {Api} from '../../services/api';
+import { inject } from 'aurelia-framework';
+import { Api } from '../../services/api';
 
 @inject(Api)
 export class List {
@@ -15,7 +15,7 @@ export class List {
     // Load all pages for now...
     let loadData = (page) => {
       return this._api.getTeams(page).then(results => {
-        
+
         this.teams = this.teams.concat(results.teams);
 
         if (results.meta.page < results.meta.totalPages)
