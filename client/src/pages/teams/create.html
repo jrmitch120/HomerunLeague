@@ -4,10 +4,10 @@
 		<div class="content col-md-12 pad-top">
 
 			<p class="lead">
-				So you think you've got what it takes to dominate the Homerun League? It's time to prove it. You will need to build a team
-				first. In order to do that, pick the required number of players from each division. Next, pick a team name (be creative!),
-				fill out your email address, and confirm your lineup. Finally, all that there's left to do is enjoy the baseball season
-				and root for your team in the standings!
+				So you think you've got what it takes to dominate the Homerun League? It's time to prove it. Pick the required number of 
+				players from each division. Next, pick a team name (be creative!), fill out your email address, league password, and 
+				confirm your lineup. Finally, all that there's left to do is enjoy the baseball season and root for your team in the 
+				standings!
 			</p>
 
 		</div>
@@ -59,17 +59,17 @@
 						<input type="text" class="form-control" id="teamName" placeholder="Team Name" value.bind="name">
 					</div>
 					<div class="form-group">
-						<label class="sr-only" for="email">Password</label>
+						<label class="sr-only" for="email">Email Address</label>
 						<input type="email" class="form-control" id="email" placeholder="Email Address" value.bind="email">
 					</div>
 					<div class="form-group">
-						<button disabled.bind="!validLineup" click.trigger="createTeam()" type="submit" class="btn btn-primary">Create Team</button>
+						<label class="sr-only" for="password">League Password</label>
+						<input type="password" class="form-control" id="password" placeholder="Registration Password" value.bind="password">
+					</div>
+					<div class="form-group">
+						<button disabled.bind="!validLineup || saving" click.trigger="createTeam()" type="submit" class="btn btn-primary">Create Team</button>
 					</div>
 				</form>
-				<hr/>
-				<div>
-					Team creation placeholder. ${validLineup}
-				</div>
 				<div>
 					${status}
 				</div>

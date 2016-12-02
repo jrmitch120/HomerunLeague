@@ -8,6 +8,10 @@ namespace HomerunLeague.ServiceModel.Operations
     /***********************
     *    GET OPERATIONS    *
     ***********************/
+
+    // Not routable
+    public class GetLeaguePasswordHash { }
+
     [Route("/admin/settings", "GET")]
     public class GetSettings { }
 

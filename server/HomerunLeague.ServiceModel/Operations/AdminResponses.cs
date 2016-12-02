@@ -13,6 +13,8 @@ namespace HomerunLeague.ServiceModel.Operations
 
         public bool RegistrationOpen { get; set; }
 
+        public bool PasswordProtected { get; set; }
+
         public ResponseStatus ResponseStatus { get; set; }
     }
 

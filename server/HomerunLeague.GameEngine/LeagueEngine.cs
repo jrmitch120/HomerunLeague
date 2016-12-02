@@ -27,7 +27,7 @@ namespace HomerunLeague.GameEngine
         private readonly Timer _timer;
         private volatile bool _running;
 
-        private static ILog _logger = LogManager.GetLogger(typeof(LeagueEngine));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(LeagueEngine));
 
         public LeagueEngine(IBioData bioData, IStatData statData, Services services)
         {
@@ -83,7 +83,7 @@ namespace HomerunLeague.GameEngine
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                Logger.Error(ex);
             }
             finally
             {
@@ -197,6 +197,7 @@ namespace HomerunLeague.GameEngine
                     var originalHr = team.Totals.Hr;
 
                     team.Totals.Hr = 0;
+                    team.Totals.Ab = 0;
 
                     foreach (var player in fullTeam.TeamLeaders)
                     {

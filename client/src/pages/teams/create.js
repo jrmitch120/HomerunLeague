@@ -9,8 +9,10 @@ export class Create {
   _api;
   name = 'Test Name';
   email = 'test@yahoo.com'
+  password;
   status = '';
   divisions = [];
+  saving = false;
 
   constructor(api) {
     this._api = api;
@@ -43,6 +45,7 @@ export class Create {
   createTeam() {
 
     this.status = 'Saving...';
+    this.saving = true;
 
     let playerIds = [];
 
@@ -52,9 +55,18 @@ export class Create {
           playerIds.push(player.id);
     }
 
-    this._api.createTeam({ name: this.name, email: this.email, playerIds: playerIds }).then(result => {
+    this._api.createTeam({ name: this.name, email: this.email, password: this.password, playerIds: playerIds }).then(result => {
       console.info(result);
-      this.status = 'Done!';
+      
+      if(result.team !== undefined)
+        this.status = 'Done!';
+      else
+        this.status = result.responseStatus.message;
+
+      this.saving = false;
+    }, error => {
+      this.status = error;
+      this.saving = false;
     });
   }
 

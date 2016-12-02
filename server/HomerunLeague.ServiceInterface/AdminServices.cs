@@ -13,6 +13,14 @@ namespace HomerunLeague.ServiceInterface
     [Secured(ApplyTo.Post | ApplyTo.Put | ApplyTo.Delete)]
     public class AdminServices : Service
     {
+        // Get league password.  Currently, this is unroutable from the outside
+        public string Get(GetLeaguePasswordHash request)
+        {
+            var settings = Db.Select<Setting>().ToDictionary(s => new KeyValuePair<string, string>(s.Name, s.Value));
+
+            return settings.ContainsKey("RegistrationPassword") ? settings["RegistrationPassword"] : string.Empty;
+        }
+
         // Get the game settings
         public GetSettingsResponse Get(GetSettings request)
         {
@@ -26,8 +34,11 @@ namespace HomerunLeague.ServiceInterface
                         : DateTime.UtcNow.Month < 5 ? DateTime.UtcNow.Year - 1 : DateTime.UtcNow.Year,
 
                 RegistrationOpen = settings.ContainsKey("RegistrationOpen")
-                        ? Convert.ToBoolean(settings["RegistrationOpen"])
-                        : DateTime.UtcNow.Month > 2 && DateTime.UtcNow.Month < 5
+                    ? Convert.ToBoolean(settings["RegistrationOpen"])
+                    : DateTime.UtcNow.Month > 2 && DateTime.UtcNow.Month < 5,
+
+                PasswordProtected =
+                    settings.ContainsKey("RegistrationPassword") && settings["RegistrationPassword"].Length > 0
             };
         }
 

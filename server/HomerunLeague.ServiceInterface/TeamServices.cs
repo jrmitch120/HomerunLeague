@@ -61,11 +61,15 @@ namespace HomerunLeague.ServiceInterface
             var query = // Need to join this way to get ordering correct using a nested complex object (TeamTotals)
                 Db.From<Team>()
                     .Join<Team, TeamTotals>()
-                    .Where(t => t.Year == request.Year)
-                    .OrderByDescending<TeamTotals>(tt => tt.Hr)
-                    .ThenBy<TeamTotals>(tt => tt.Ab)
-                    .ThenBy<Team>(t => t.Name)
-                    .PageTo(page);
+                    .Where(t => t.Year == request.Year);
+
+            if(!request.Name.IsNullOrEmpty())
+                query.And(t => t.Name.Contains(request.Name));
+
+            query.OrderByDescending<TeamTotals>(tt => tt.Hr)
+                .ThenBy<TeamTotals>(tt => tt.Ab)
+                .ThenBy<Team>(t => t.Name)
+                .PageTo(page);
 
             return new GetTeamsResponse
             {
@@ -84,7 +88,9 @@ namespace HomerunLeague.ServiceInterface
         // Create Team
         public HttpResult Post(CreateTeam request)
         {
-            if (!_adminSvc.Get(new GetSettings()).RegistrationOpen)
+            var settings = _adminSvc.Get(new GetSettings());
+
+            if (settings.RegistrationOpen == false)
                 throw new UnauthorizedAccessException("New team registration is currently closed.");
 
             var team = request.ConvertTo<Team>();

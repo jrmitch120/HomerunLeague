@@ -27,6 +27,10 @@ namespace HomerunLeague.ServiceModel.Operations
         [ApiMember(Name = "Year", Description = "Filter teams by year.",
         ParameterType = "path", DataType = "string", IsRequired = true)]
         public int Year { get; set; }
+
+        [ApiMember(Name = "Year", Description = "Filter teams by name.",
+             ParameterType = "query", DataType = "string", IsRequired = false)]
+        public string Name { get; set; }
     }
 
     /***********************
@@ -39,6 +43,8 @@ namespace HomerunLeague.ServiceModel.Operations
         public string Name { get; set; }
 
         public string Email { get; set; }
+
+        public string Password { get; set; }
 
         public int Year { get; set; }
 

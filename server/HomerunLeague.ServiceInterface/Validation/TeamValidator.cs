@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HomerunLeague.ServiceInterface.Extensions;
-using HomerunLeague.ServiceModel;
 using HomerunLeague.ServiceModel.Operations;
 using HomerunLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.FluentValidation;
+using ServiceStack.Logging;
 
 namespace HomerunLeague.ServiceInterface.Validation
 {
+
+
     public class TeamValidator : AbstractValidator<CreateTeam>
     {
         private readonly List<Division> _divisions;
@@ -16,6 +18,7 @@ namespace HomerunLeague.ServiceInterface.Validation
         public TeamValidator(DivisionServices divService, AdminServices adminService)
         {
             var settings = adminService.Get(new GetSettings());
+            var registrationPassword = adminService.Get(new GetLeaguePasswordHash());
 
             _divisions = divService.GetAll(new GetDivisions {Year = settings.BaseballYear});
 
@@ -25,10 +28,21 @@ namespace HomerunLeague.ServiceInterface.Validation
                 RuleFor(t => t.Email).EmailAddress();
                 RuleFor(t => t.Year)
                     .Equal(settings.BaseballYear)
-                    .WithMessage($"You can only create a team for {settings.BaseballYear}");
+                    .WithMessage($"You can only create a team for {settings.BaseballYear}.");
+
                 RuleFor(t => t.PlayerIds)
                     .Must(DivisionRequirmentsMet)
-                    .WithMessage("Your team does not fulfill the Division requirements");
+                    .WithMessage("Your team does not fulfill the Division requirements.");
+
+                // Check password if required
+                if (settings.PasswordProtected)
+                {
+
+                    RuleFor(t => t.Password)
+                        .NotNull()
+                        .Must(p => p.ToSha256String() == registrationPassword)
+                        .WithMessage("Your registration password is incorrect");
+                }
             });
         }
 
