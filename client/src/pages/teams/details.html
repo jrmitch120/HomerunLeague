@@ -11,6 +11,11 @@
       <div class="col-md-12">
         ${team.name}
       </div>
+      <div repeat.for="player of team.teamLeaders">
+        <div>
+          <u>${player.mlbId}</u> - <b>${player.displayName}</b>
+        </div>
+      </div>
     </div>
   </div>
 </template>

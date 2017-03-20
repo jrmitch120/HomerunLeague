@@ -24,11 +24,18 @@
 				</h2>
 
 				<div repeat.for="player of division.players">
-					<div class="pull-left">
+					<div class="pull-left text-center">
 						<a name="player-${player.id}"></a>
-						<baseball-card id.one-way="'player-card-' + player.id" player.bind="player" click.delegate="loadPlayerStats(player)"></baseball-card>
-						<button disabled.bind="division.selectedCount >= division.playerRequirement && !player.selected" class.bind="player.selected ? 'btn-success glyphicon-ok' : 'glyphicon-minus'"
-							class="btn btn-default btn-lg glyphicon" click.delegate="togglePlayer(division, player)"></button>
+						<baseball-card id.one-way="'player-card-' + player.id" 
+													player.bind="player" 
+													click.delegate="loadPlayerStats(player)">
+						</baseball-card>
+						<button disabled.bind="division.selectedCount >= division.playerRequirement && !player.selected" 
+								    class.bind="player.selected ? 'btn-success' : ''"
+										class="btn btn-default btn-lg" 
+										click.delegate="togglePlayer(division, player)">
+										${player.selected ? 'ON YOUR TEAM' : 'DRAFT PLAYER'}
+						</button>
 					</div>
 				</div>
 				<div class="clearfix"></div>
