@@ -7,9 +7,9 @@ import bootstrap from 'bootstrap';
 export class Create {
 
   _api;
-  name = 'Test Name';
-  email = 'test@yahoo.com'
-  password;
+  name = '';
+  email = '';
+  password = '';
   status = '';
   divisions = [];
   saving = false;
