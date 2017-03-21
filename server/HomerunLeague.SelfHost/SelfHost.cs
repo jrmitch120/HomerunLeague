@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
 using Funq;
 using HomerunLeague.GameEngine;
 using HomerunLeague.GameEngine.Bios;
@@ -12,12 +10,14 @@ using HomerunLeague.ServiceModel.Types;
 using Mono.Unix;
 using Mono.Unix.Native;
 using ServiceStack;
+using ServiceStack.Configuration;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Text;
 using ServiceStack.Validation;
 using ServiceStack.Logging;
 using ServiceStack.Logging.NLogger;
+using ServiceStack.OrmLite.Sqlite;
 
 namespace HomerunLeague.SelfHost
 {
@@ -33,18 +33,24 @@ namespace HomerunLeague.SelfHost
 
             public override void Configure(Container container)
             {
+                var settings = new AppSettings();
+
                 Plugins.Add(new CorsFeature());
                 Plugins.Add(new ValidationFeature());
                 Plugins.Add(new PostmanFeature());
 
-                // Build path for portability between win/linux
-                var dbPath =
-                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                        .CombineWith("data")
-                        .CombineWith("leaguedata.sqlite");
-
                 // SQLite
-                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(dbPath, SqliteDialect.Provider));
+                // Build path for portability between win/linux
+//                var dbPath =
+//                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+//                        .CombineWith("data")
+//                        .CombineWith("leaguedata.sqlite");
+
+//                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(dbPath, SqliteDialect.Provider));
+
+                // MSSQL
+                container.Register<IDbConnectionFactory>(
+                    new OrmLiteConnectionFactory(settings.Get("connectionString"), SqlServerDialect.Provider));
 
                 container.Register<IKeys>(new ApiKeys(AppSettings.GetList("apiKeys"))); // API Keys
 

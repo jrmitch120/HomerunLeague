@@ -52,6 +52,8 @@ namespace HomerunLeague.ServiceModel.Operations
 
         public int Order { get; set; }
 
+        public int Year { get; set; }
+
         public List<int> PlayerIds { get; set; }
     }
 

@@ -42,8 +42,8 @@ namespace HomerunLeague.GameEngine.Bios
 
                 if (teamsResult.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    player.MlbTeamId = teamsResult.Data.player_teams.queryResults.row[0].team_id;
-                    player.TeamName = teamsResult.Data.player_teams.queryResults.row[0].team;
+                    player.MlbTeamId = teamsResult.Data.player_teams.queryResults.row[0].org_id;
+                    player.TeamName = teamsResult.Data.player_teams.queryResults.row[0].org_full;
                 }
             }
         }
@@ -149,7 +149,7 @@ namespace HomerunLeague.GameEngine.Bios
         public string team { get; set; }
         public string league { get; set; }
         public string fielding_season { get; set; }
-        public string org_id { get; set; }
+        public int org_id { get; set; }
         public string class_id { get; set; }
         public string league_season { get; set; }
         public string pitching_season { get; set; }

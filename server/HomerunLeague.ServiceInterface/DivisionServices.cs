@@ -86,11 +86,8 @@ namespace HomerunLeague.ServiceInterface
         // Create Division
         public HttpResult Post(CreateDivision request)
         {
-            var baseballYear = _adminSvc.Get(new GetSettings()).BaseballYear;
-            
             // Mapping.
             var division = request.ConvertTo<Division>();
-            division.Year = baseballYear;
 
             request.PlayerIds.ForEach(playerId => division.Players.Add(new Player {Id = playerId}));
              

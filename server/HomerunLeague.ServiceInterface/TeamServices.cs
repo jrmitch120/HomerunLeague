@@ -98,6 +98,7 @@ namespace HomerunLeague.ServiceInterface
             team.ValidationToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
 
             // Testing
+            /*
             return
                new HttpResult(Get(new GetTeam { Id = 1 }))
                {
@@ -106,7 +107,7 @@ namespace HomerunLeague.ServiceInterface
                    {
                         {HttpHeaders.Location, new GetTeam {Id = team.Id}.ToGetUrl()}
                    }
-               };
+               };*/
 
             using (IDbTransaction trans = Db.OpenTransaction())
             {

@@ -37,8 +37,8 @@ export class Details {
           this.player.playerTotals[0].isSelected = true;
 
           // Set statsYear to first playerTotal
-          this.statsYear = this.player.playerTotals[0].Year;
-
+          this.statsYear = this.player.playerTotals[0].year;
+console.info(`year: ${this.player.playerTotals[0].year}`);
           // Bind charts to statsYear
           return this._bindChartDatasets(this.statsYear);
         }
