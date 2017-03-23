@@ -1,11 +1,17 @@
 <template>
   <div if.bind="!team">
-    <div class="row">
+    <div if.bind="!registrationOpen" class="row">
       <div class="col-md-12">
         <h1>Team Not Found</h1>
       </div>
     </div>
+    <div if.bind="registrationOpen" class="row"> 
+      <div class="col-md-12">
+        <h1>Team information will be available once the registration period ends.</h1>
+      </div>
+    </div>
   </div>
+
   <div if.bind="team">
     <div class="row">
       <div class="col-md-12">
