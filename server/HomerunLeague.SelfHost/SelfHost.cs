@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using Funq;
 using HomerunLeague.GameEngine;
 using HomerunLeague.GameEngine.Bios;
@@ -17,7 +19,6 @@ using ServiceStack.Text;
 using ServiceStack.Validation;
 using ServiceStack.Logging;
 using ServiceStack.Logging.NLogger;
-using ServiceStack.OrmLite.Sqlite;
 
 namespace HomerunLeague.SelfHost
 {
@@ -41,16 +42,12 @@ namespace HomerunLeague.SelfHost
 
                 // SQLite
                 // Build path for portability between win/linux
-//                var dbPath =
-//                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-//                        .CombineWith("data")
-//                        .CombineWith("leaguedata.sqlite");
+                var dbPath =
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                        .CombineWith("data")
+                        .CombineWith("leaguedata.sqlite");
 
-//                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(dbPath, SqliteDialect.Provider));
-
-                // MSSQL
-                container.Register<IDbConnectionFactory>(
-                    new OrmLiteConnectionFactory(settings.Get("connectionString"), SqlServerDialect.Provider));
+                container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(dbPath, SqliteDialect.Provider));
 
                 container.Register<IKeys>(new ApiKeys(AppSettings.GetList("apiKeys"))); // API Keys
 
