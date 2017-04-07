@@ -106,14 +106,14 @@ namespace HomerunLeague.GameEngine
 
         private void HeartBeat()
         {
-            // Automatic stat updates once every 12 hrs
+            // Automatic stat updates once every 24 hrs
             var lastStat =
                 _services.AdminSvc.Get(new GetLeagueEvents
                 {
                     Action = LeagueAction.StatUpdate,
                 }).LeagueEvents.FirstOrDefault();
 
-            if (lastStat == null || DateTime.UtcNow.AddHours(-12) > lastStat.Completed)
+            if (lastStat == null || DateTime.UtcNow.AddHours(-24) > lastStat.Completed)
                 _services.AdminSvc.Post(new CreateLeagueEvent
                 {
                     Action = LeagueAction.StatUpdate,
