@@ -55,7 +55,8 @@
       {
         "id": "web",
         "displayName": "Web",
-        "output": "scripts"
+        "output": "scripts",
+        "index": "index.html"
       }
     ],
     "loader": {
@@ -75,7 +76,8 @@
     },
     "options": {
       "minify": "stage & prod",
-      "sourcemaps": "dev & stage"
+      "sourcemaps": "dev & stage",
+      "rev": "true"
     },
     "bundles": [
       {

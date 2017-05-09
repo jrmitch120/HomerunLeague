@@ -30,6 +30,8 @@ export class NavBar {
 
 		let update = moment(this.lastTeamUpdate).toDate()
 
+		console.info('Last update: *' + update + '*');
+
 		this.updateStatus =  'Stats updated ' +
 			moment(moment.utc([update.getFullYear(),
 				update.getMonth(),

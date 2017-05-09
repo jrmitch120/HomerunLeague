@@ -22,6 +22,7 @@ export class Create {
       // Only fetch team information if registration is closed
       if (!this.registrationOpen) {
         return this._api.getTeam(params.id).then(response => {
+          console.info(response);
           if (response.team) {
             this.team = response.team;
             this.routeConfig.navModel.setTitle(this.team.name);

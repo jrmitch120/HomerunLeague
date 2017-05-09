@@ -1,26 +1,72 @@
 <template>
+  <require from="../../resources/elements/hot-cold"></require>
   <div if.bind="!team">
     <div if.bind="!registrationOpen" class="row">
       <div class="col-md-12">
         <h1>Team Not Found</h1>
       </div>
     </div>
-    <div if.bind="registrationOpen" class="row"> 
+    <div if.bind="registrationOpen" class="row">
       <div class="col-md-12">
         <h1>Team information will be available once the registration period ends.</h1>
       </div>
     </div>
   </div>
-
   <div if.bind="team">
     <div class="row">
-      <div class="col-md-12">
-        ${team.name}
+      <div class="col-md-offset-3 col-md-6 text-center">
+        <h1>${team.name}</h1>
       </div>
-      <div repeat.for="player of team.teamLeaders">
-        <div>
-          <u>${player.mlbId}</u> - <b>${player.displayName}</b>
+    </div>
+    <div class="row">
+      <div class="col-md-offset-3 col-md-6">
+        <div class="profile-stat-line">
+          <div class="profile-stat profile-stat-label">HR</div>
+          <div class="profile-stat profile-stat-stat">${team.totals.hr}</div>
+          <div class="profile-stat-spacer"></div>
+          <div class="profile-stat profile-stat-label">HR+</div>
+          <div class="profile-stat profile-stat-stat">${team.totals.hrMovement}</div>
+          <div class="profile-stat-spacer"></div>
+          <div class="profile-stat profile-stat-label">AB</div>
+          <div class="profile-stat profile-stat-stat">${team.totals.ab}</div>
         </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-offset-3 col-md-6 text-center">
+        <small>* <i>HR+ are the homeruns gained during the last stat update.</i></small>
+      </div>
+    </div>
+
+
+    <div repeat.for="player of team.teamLeaders">
+      <div class="list-row">
+        <div if.bind="team.teamLeaders[$index-1].hr != player.hr" class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <h2>
+              Players with <span class="text-info">${player.hr}</span> homeruns
+            </h2>
+            <hr/>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-1 col-md-offset-3">
+            <img src="${player.playerImage}" class="img-player img-responsive" />
+          </div>
+          <div class="col-md-6">
+            <div class="list-lead">
+              ${player.displayName}
+              <hot-cold player.bind="player"></hot-cold>
+            </div>
+            <p>
+              Division: ${player.divisionName}<br/> Last 7 days: ${player.hr7} | Last 14 days: ${player.hr14} | Last 30 days:
+              ${player.hr30}
+            </p>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

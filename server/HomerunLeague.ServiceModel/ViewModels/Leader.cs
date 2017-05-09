@@ -11,6 +11,10 @@ namespace HomerunLeague.ServiceModel.ViewModels
 
         public int DivisionId { get; set; }
 
+        public string DivisionName { get; set; }
+
+        public int DivisionOrder { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

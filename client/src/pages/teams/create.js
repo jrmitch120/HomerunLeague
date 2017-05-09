@@ -43,7 +43,6 @@ export class Create {
   }
 
   createTeam() {
-
     this.status = 'Saving...';
     this.saving = true;
 
@@ -56,10 +55,10 @@ export class Create {
     }
 
     this._api.createTeam({ name: this.name, email: this.email, password: this.password, playerIds: playerIds }).then(result => {
-      console.info(result);
-      
-      if(result.team !== undefined)
-        this.status = 'Done!';
+      if (result.team !== undefined) {
+        this.status = 'Your team has been entered.  Good luck!';
+        this._reset();
+      }
       else
         this.status = result.responseStatus.message;
 
@@ -96,6 +95,18 @@ export class Create {
     else {
       player.selected = true; // Works!
       division.selectedCount++;
+    }
+  }
+
+  _reset() {
+    this.name = '';
+    this.email = '';
+    this.password = '';
+
+    for (var division of this.divisions) {
+      for (var player of division.players)
+        if(player.selected)
+          this.togglePlayer(division, player);
     }
   }
 }   

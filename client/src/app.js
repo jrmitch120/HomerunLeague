@@ -1,6 +1,6 @@
-import {inject} from 'aurelia-framework';
-import {EventAggregator} from 'aurelia-event-aggregator';
-import {Api} from './services/api';
+import { inject } from 'aurelia-framework';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import { Api } from './services/api';
 
 @inject(EventAggregator, Api)
 export class App {
@@ -20,12 +20,14 @@ export class App {
 
   activate() {
     // Set into motion stat check every 60 seconds.
-    this._getUpdateStatus();
+
     setInterval(() => this._getUpdateStatus(), 60000);
 
     // Have Aurelia wait until we get the settings
-    return this._api.getSettings().then(
-      settings => { this._api.year = settings.baseballYear });
+    return Promise.all([
+      this._getUpdateStatus(),
+      this._api.getSettings().then(settings => { this._api.year = settings.baseballYear })
+    ]);
   }
 
   // Configure router
@@ -47,7 +49,7 @@ export class App {
   // Called every 60 seconds to check for + notify of TeamStat updates
   _getUpdateStatus() {
     return this._api.getEvents('TeamUpdate').then(results => {
-      
+
       if (this.lastTeamUpdate !== null && results.leagueEvents[0].completed !== this.lastTeamUpdate) {
         this._ea.publish('TeamUpdate');
         console.info('TeamUpdate event published');
