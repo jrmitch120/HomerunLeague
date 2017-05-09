@@ -36,4 +36,4 @@ bower_components/
 .DS_STORE
 dist/
 build/reports/
-scripts/*-bundle.*
+client/scripts/*-bundle.*
