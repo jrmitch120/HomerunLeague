@@ -12,7 +12,8 @@ namespace HomerunLeague.GameEngine.Stats
         public StatPull FetchStats(Player player, int year)
         {
             var playerStats = new StatPull();
-
+            decimal decimalStat;
+            
             var client =
                 new RestClient(
                     "http://m.mlb.com/lookup/json/named.sport_hitting_game_log_composed.bam?game_type='R'&league_list_id='mlb'&sit_code='1'&sit_code='2'&sit_code='3'&sit_code='4'&sit_code='5'&sit_code='6'&sit_code='7'&sit_code='8'&sit_code='9'&sit_code='10'&sit_code='11'&sit_code='12'");
@@ -21,7 +22,7 @@ namespace HomerunLeague.GameEngine.Stats
 
             if (result.StatusCode == HttpStatusCode.OK &&
                 result.Data.sport_hitting_game_log_composed.SportHittingGameLog.queryResults.totalSize > 0) // any data?
-            {
+            {               
                 foreach (
                     var stat in result.Data.sport_hitting_game_log_composed.SportHittingGameLog.queryResults.row)
                     playerStats.GameLogs.Add(new GameLog
@@ -29,7 +30,7 @@ namespace HomerunLeague.GameEngine.Stats
                         PlayerId = player.Id,
                         GameId = stat.game_id,
                         Ab = stat.ab,
-                        Avg = stat.avg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(stat.avg),
+                        Avg = decimal.TryParse(stat.avg, out decimalStat) ? decimalStat : decimal.Zero,
                         Bb = stat.bb,
                         Cs = stat.cs,
                         D = stat.d,
@@ -46,7 +47,7 @@ namespace HomerunLeague.GameEngine.Stats
                         Result = stat.team_result,
                         Sb = stat.sb,
                         Sf = stat.sf,
-                        Slg = stat.slg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(stat.slg),
+                        Slg = decimal.TryParse(stat.slg, out decimalStat) ? decimalStat : decimal.Zero,
                         So = stat.so,
                         T = stat.t,
                         Tb = stat.tb,
@@ -67,7 +68,7 @@ namespace HomerunLeague.GameEngine.Stats
                     PlayerId = player.Id,
                     G = season.g,
                     Ab = season.ab,
-                    Avg = season.avg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(season.avg),
+                    Avg = decimal.TryParse(season.avg, out decimalStat) ? decimalStat : decimal.Zero,
                     Bb = season.bb,
                     Cs = season.cs,
                     D = season.d,
@@ -82,7 +83,7 @@ namespace HomerunLeague.GameEngine.Stats
                     Rbi = season.rbi,
                     Sb = season.sb,
                     Sf = season.sf,
-                    Slg = season.slg.Equals(string.Empty) ? decimal.Zero : Convert.ToDecimal(season.slg),
+                    Slg = Decimal.TryParse(season.slg, out decimalStat) ? decimalStat : decimal.Zero,
                     So = season.so,
                     T = season.t,
                     Tb = season.tb,
