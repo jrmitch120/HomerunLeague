@@ -6,9 +6,11 @@ export class List {
 
   _api;
   teams = [];
-
+  year;
+  
   constructor(api) {
     this._api = api;
+    this.year = api.year;
   }
 
   activate(params) {
