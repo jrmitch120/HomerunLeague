@@ -1,6 +1,7 @@
-/*! flip - v1.1.1 - 2016-05-25
+/*! flip - v1.1.2 - 2016-10-20
 * https://github.com/nnattawat/flip
 * Copyright (c) 2016 Nattawat Nonsung; Licensed MIT */
+
 (function( $ ) {
   /*
    * Private attributes and method
@@ -172,7 +173,8 @@
       };
       var backElementCss = {
         "transform": rotateAxis + "(" + (self.setting.reverse ? "180deg" : "-180deg") + ")",
-        "z-index": "0"
+        "z-index": "0",
+        "position": "relative"
       };
       var faceElementCss = {
         "backface-visibility": "hidden",
@@ -199,11 +201,17 @@
         elementCss["-webkit-transform-style"] = "preserve-3d";
       }
 
+      // Fixed, see below....
+      // faces.css(faceElementCss).find('*').css({
+      //   "backface-visibility": "hidden"
+      // });
+
+      // JM - Fixes background bleeding on Chrome:
+      // https://github.com/nnattawat/flip/issues/141
+      faces.css(faceElementCss).css({ "backface-visibility": "hidden" });
+
       self.element.css(elementCss);
       self.backElement.css(backElementCss);
-      faces.css(faceElementCss).find('*').css({
-        "backface-visibility": "hidden"
-      });
 
       // #39
       // not forcing width/height may cause an initial flip to show up on
@@ -225,7 +233,7 @@
 
         // While this used to work with a setTimeout of zero, at some point that became
         // unstable and the initial flip returned. The reason for this is unknown but we
-        // will temporarily use a short delay of 20 to mitigate this issue. 
+        // will temporarily use a short delay of 20 to mitigate this issue.
       }, 20);
 
       self.attachEvents();
